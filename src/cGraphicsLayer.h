@@ -24,7 +24,7 @@ public:
 	cGraphicsLayer();
 	virtual ~cGraphicsLayer();
 
-	bool Init(HWND hWnd); 
+	bool Init(HWND hWnd,bool); 
 	void Finalize();
 	
 	void LoadData();

@@ -10,7 +10,7 @@ bool cGame::Init(HWND hWnd,HINSTANCE hInst,bool exclusive)
 	bool res;
 	cLog *Log = cLog::Instance();
 
-	res = Graphics.Init(hWnd);
+	res = Graphics.Init(hWnd, exclusive);
 	if(!res)
 	{
 		Log->Msg("Error initializing Graphics!");
@@ -43,19 +43,15 @@ void cGame::Finalize()
 bool cGame::Loop()
 {
 	bool res;
-
 	//Input
 	res = LoopInput();
-	if(!res) return false;
-	
+	//if(!res) return false;
 	//Process
 	res = LoopProcess();
-	if(!res) return false;
-
+	if (!res) return false;
 	//Output
 	res = LoopOutput();
-	if(!res) return false;
-	
+	//if(!res) return false;
 	return true;
 }
 
