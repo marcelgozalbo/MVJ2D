@@ -1,0 +1,6 @@
+bin/*
+src/Debug/*
+src/*.suo
+src/*.sdf
+src/*.opensdf
+src/log.txt
