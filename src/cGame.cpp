@@ -2,7 +2,26 @@
 #include "cGame.h"
 #include "cLog.h"
 
-cGame::cGame() {}
+cGame* cGame::_instance = 0;
+
+cGame* cGame::Instance()
+{
+	
+
+	if (_instance == 0)
+	{
+		_instance = new cGame;
+
+	}
+	return _instance;
+}
+
+cGame::cGame() 
+{
+	//Ja ni inicialitzar l'estat.. puta basura..
+	state = STATE_MAIN;
+
+}
 cGame::~cGame(){}
 
 bool cGame::Init(HWND hWnd,HINSTANCE hInst,bool exclusive)
@@ -114,17 +133,25 @@ bool cGame::Render()
 	return res;
 }
 
+
 void cGame::ProcessOrder()
 {
 	cMouse *Mouse;
+	cKeyboard *Keyboard;
 	int mx,my,msx,msy,p,cx,cy,x,y;
 	int s=5; //marge for directional pointers
 	int xo,xf,yo,yf;
 	int b4pointer;
 
 	Mouse = Input.GetMouse();
+	//Keyboard = Input.GetKeyboard();
 	b4pointer = Mouse->GetPointer();
 	Mouse->GetPosition(&mx,&my);
+
+	//Actualitzo el jugador
+//	Critter.Update();
+	
+
 
 	if(Mouse->ButtonDown(LEFT))
 	{
@@ -235,14 +262,7 @@ void cGame::ProcessOrder()
 			if((p>=MN)&&(p<=MSO))	Scene.Move(p);
 		}
 	}
-	if(Mouse->ButtonDown(RIGHT))
-	{
-		if(Critter.GetSelected())
-		{
-			Critter.SetSelected(false);
-			Mouse->SetPointer(NORMAL);
-		}
-	}
+	
 
 	if(b4pointer!=Mouse->GetPointer()) Mouse->InitAnim();
 }

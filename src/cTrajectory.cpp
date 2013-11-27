@@ -6,7 +6,7 @@
 cTrajectory::cTrajectory()
 {
 	dir=STOP;
-	
+	subdir = S;
 	nxf=-1;	//New direction initialization (false)
 	nyf=-1;
 }

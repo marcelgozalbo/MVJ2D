@@ -1,6 +1,6 @@
 #include <windows.h>
 #include "cGame.h"
-cGame Game;
+
 LRESULT CALLBACK WindowFunc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
@@ -50,8 +50,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevIntance, LPSTR lpszArgs, 
 	bool exclusive, res;
 	MSG msg;
 	HWND hWnd;
+	cGame *Game = cGame::Instance();
 	res = InitWindow(hInstance, &hWnd, &exclusive);
-	res = Game.Init(hWnd, hInstance, exclusive);
+	
+	res = Game->Init(hWnd, hInstance, exclusive);
 	if (res == true) {
 		while (1)
 		{
@@ -61,11 +63,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevIntance, LPSTR lpszArgs, 
 				DispatchMessage(&msg);
 			}
 			else {
-				if (!Game.Loop()) break;
+				if (!Game->Loop()) break;
 			}
 		}
 	}
-	Game.Finalize();
+	Game->Finalize();
 	return 0;
 }
 

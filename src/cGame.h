@@ -12,27 +12,31 @@
 class cGame
 {
 public:
-	cGame();
+	static cGame* Instance();
 	virtual ~cGame();
 
 	bool Init(HWND hWnd,HINSTANCE hInst,bool exclusive);
 	bool Loop(); 
 	void Finalize();
 
+	cInputLayer Input;
+	cScene Scene;
+	cGraphicsLayer Graphics;
+	cCritter Critter;
+	cSkeleton Skeleton;
+
 private:
+	cGame();
+	static cGame* _instance; //singleton
 	bool LoopInput();
 	bool LoopProcess();
 	bool LoopOutput();
 
-	cGraphicsLayer Graphics;
-	cInputLayer Input;
-	cScene Scene;
-	cCritter Critter;
-	cSkeleton Skeleton;
 	
 	int state;
 
 	void ProcessOrder();
+
 	bool Render();
 };
 
