@@ -14,58 +14,52 @@ cGraphicsLayer::cGraphicsLayer()
 
 cGraphicsLayer::~cGraphicsLayer(){}
 
-bool cGraphicsLayer::Init(HWND hWnd)
+bool cGraphicsLayer::Init(HWND hWnd, bool exclusive)
 {
 	cLog *Log = cLog::Instance();
 	HRESULT hr;
-
 	D3DVIEWPORT9 viewPort = { 0, 0, SCREEN_RES_X, SCREEN_RES_Y, 0.0f, 1.0f };
-
-	g_pD3D = Direct3DCreate9( D3D_SDK_VERSION );
-	if(g_pD3D==NULL)
+	g_pD3D = Direct3DCreate9(D3D_SDK_VERSION);
+	if (g_pD3D == NULL)
 	{
 		Log->Msg("Error creating Direct3D object");
 		return false;
 	}
-
-	D3DPRESENT_PARAMETERS d3dpp; 
-	ZeroMemory( &d3dpp, sizeof( d3dpp ) );
-
-	d3dpp.Windowed               = FALSE;
-	d3dpp.SwapEffect             = D3DSWAPEFFECT_DISCARD;	//Efficient page flipping
-	d3dpp.BackBufferWidth        = SCREEN_RES_X;
-    d3dpp.BackBufferHeight       = SCREEN_RES_Y;
-    d3dpp.BackBufferFormat       = D3DFMT_X8R8G8B8;
-
-	hr = g_pD3D->CreateDevice(	D3DADAPTER_DEFAULT, 
-								D3DDEVTYPE_HAL, 
-								hWnd,
-								D3DCREATE_SOFTWARE_VERTEXPROCESSING,
-								&d3dpp, 
-								&g_pD3DDevice );
-	if(FAILED(hr))
+	D3DPRESENT_PARAMETERS d3dpp;
+	ZeroMemory(&d3dpp, sizeof(d3dpp));
+	d3dpp.Windowed = !exclusive;
+	d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD; //Efficient page flipping
+	d3dpp.BackBufferWidth = SCREEN_RES_X;
+	d3dpp.BackBufferHeight = SCREEN_RES_Y;
+	d3dpp.BackBufferFormat = D3DFMT_X8R8G8B8;
+	hr = g_pD3D->CreateDevice(D3DADAPTER_DEFAULT,
+		D3DDEVTYPE_HAL,
+		hWnd, // exclusive ? hWnd : NULL,
+		D3DCREATE_SOFTWARE_VERTEXPROCESSING,
+		&d3dpp,
+		&g_pD3DDevice);
+	if (FAILED(hr))
 	{
-		Log->Error(hr,"Creating Direct3D device");
+		Log->Error(hr, "Creating Direct3D device");
 		return false;
 	}
-
-	// Configure for 2d operations
-    hr = g_pD3DDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
-    hr = g_pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 	hr = g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
-	if(FAILED(hr))
+	if (FAILED(hr))
 	{
-		Log->Error(hr,"Setting render state");
+		Log->Error(hr, "Setting render state");
 		return false;
 	}
-
 	hr = g_pD3DDevice->SetViewport(&viewPort);
-	if(FAILED(hr))
+	if (FAILED(hr))
 	{
-		Log->Error(hr,"Setting viewport");
+		Log->Error(hr, "Setting viewport");
 		return false;
 	}
-
+	if (FAILED(hr))
+	{
+		Log->Error(hr, "Creating Direct3D font");
+		return false;
+	}
 	return true;
 }
 
