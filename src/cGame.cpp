@@ -125,6 +125,7 @@ void cGame::ProcessOrder()
 	int s=5; //marge for directional pointers
 	int xo,xf,yo,yf;
 	int b4pointer;
+	static int release_and_press;
 
 	Mouse = Input.GetMouse();
 	b4pointer = Mouse->GetPointer();
@@ -141,18 +142,21 @@ void cGame::ProcessOrder()
 				//Select movement/attack
 				if(Critter.GetSelected())
 				{
-					//Attack
-					Skeleton.GetCell(&cx,&cy);
-					if(Mouse->InCell(&Scene,cx,cy))
+					if(release_and_press)
 					{
-						if(!Critter.GetShooting())
-							Critter.GoToEnemy(Scene.cx+cx,Scene.cx+cy);
-					}
-					//Movement
-					else
-					{
-						Mouse->GetCell(&cx,&cy);
-						Critter.GoToCell(Scene.cx+cx,Scene.cy+cy);
+						//Attack
+						Skeleton.GetCell(&cx,&cy);
+						if(Mouse->InCell(&Scene,cx,cy))
+						{
+							if(!Critter.GetShooting())
+								Critter.GoToEnemy(Scene.map,Scene.cx+cx,Scene.cx+cy);
+						}
+						//Movement
+						else
+						{
+							Mouse->GetCell(&cx,&cy);
+							Critter.GoToCell(Scene.map,Scene.cx+cx,Scene.cy+cy);
+						}
 					}
 				}
 				//Begin selection
@@ -167,10 +171,13 @@ void cGame::ProcessOrder()
 		{
 			if(Critter.GetSelected())
 			{
-				int radar_cell_x = (mx-RADAR_Xo) >> 2, //[672..799]/4=[0..31]
-					radar_cell_y = (my-RADAR_Yo) >> 2; //[ 60..187]/4=[0..31]
+				if(release_and_press)
+				{
+					int radar_cell_x = (mx-RADAR_Xo) >> 2, //[672..799]/4=[0..31]
+						radar_cell_y = (my-RADAR_Yo) >> 2; //[ 60..187]/4=[0..31]
 
-				Critter.GoToCell(radar_cell_x,radar_cell_y);
+					Critter.GoToCell(Scene.map,radar_cell_x,radar_cell_y);
+				}
 			}
 			else
 			{
@@ -178,9 +185,12 @@ void cGame::ProcessOrder()
 				Scene.MoveByRadar(mx,my);
 			}
 		}
+		release_and_press = false;
 	}
 	else if(Mouse->ButtonUp(LEFT))
 	{
+		release_and_press = true;
+
 		if(Mouse->GetSelection()==SELECT_SCENE)
 		{
 			Mouse->GetSelectionPoint(&msx,&msy);

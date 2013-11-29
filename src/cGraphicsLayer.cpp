@@ -198,7 +198,7 @@ bool cGraphicsLayer::DrawScene(cScene *Scene)
 		{
 			pantx = SCENE_Xo + ((x-Scene->cx)<<5);
 
-			n = Scene->map[y][x];
+			n = Scene->map[(y<<5)+x];
 			SetRect(&rc,n<<5,0,(n+1)<<5,32);
 			g_pSprite->Draw(texTiles,&rc,NULL, 
 							&D3DXVECTOR3(float(pantx),float(panty),0.0f), 

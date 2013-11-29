@@ -128,6 +128,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="cAStar.cpp" />
     <ClCompile Include="cCritter.cpp" />
     <ClCompile Include="cGame.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
@@ -151,6 +152,7 @@
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
     </ClCompile>
+    <ClCompile Include="cPath.cpp" />
     <ClCompile Include="cScene.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -166,6 +168,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="cAStar.h" />
     <ClInclude Include="cCritter.h" />
     <ClInclude Include="cGame.h" />
     <ClInclude Include="cGraphicsLayer.h" />
@@ -173,6 +176,7 @@
     <ClInclude Include="cKeyboard.h" />
     <ClInclude Include="cLog.h" />
     <ClInclude Include="cMouse.h" />
+    <ClInclude Include="cPath.h" />
     <ClInclude Include="cScene.h" />
     <ClInclude Include="cSkeleton.h" />
     <ClInclude Include="cSound.h" />
