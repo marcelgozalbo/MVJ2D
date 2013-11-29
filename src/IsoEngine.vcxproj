@@ -45,8 +45,8 @@
     <OutDir>..\bin\</OutDir>
     <IntDir>.\Debug\</IntDir>
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\lib\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\lib\Lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\Marcel\Desktop\MVJ Games\MVJ2D\lib\FMOD\inc;..\lib\DirectX9\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Marcel\Desktop\MVJ Games\MVJ2D\lib\FMOD\lib;..\lib\DirectX9\Lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>.\Release\</OutDir>
@@ -76,6 +76,7 @@
       <ProgramDatabaseFile>.\Debug/IsoEngine.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalDependencies>fmod_vc.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Midl>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -156,6 +157,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
     </ClCompile>
     <ClCompile Include="cSkeleton.cpp" />
+    <ClCompile Include="cSound.cpp" />
     <ClCompile Include="cTrajectory.cpp" />
     <ClCompile Include="Win32Main.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
@@ -173,6 +175,7 @@
     <ClInclude Include="cMouse.h" />
     <ClInclude Include="cScene.h" />
     <ClInclude Include="cSkeleton.h" />
+    <ClInclude Include="cSound.h" />
     <ClInclude Include="cTrajectory.h" />
   </ItemGroup>
   <ItemGroup>
