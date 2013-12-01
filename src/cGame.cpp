@@ -67,7 +67,7 @@ bool cGame::Loop()
 	//if(!res) return false;
 	//Process
 	res = LoopProcess();
-	if (!res) return false;
+	//if (!res) return false;
 	//Output
 	res = LoopOutput();
 	//if(!res) return false;
@@ -149,7 +149,7 @@ void cGame::ProcessOrder()
 	Mouse->GetPosition(&mx,&my);
 
 	//Actualitzo el jugador
-//	Critter.Update();
+	Critter.Update();
 	
 
 

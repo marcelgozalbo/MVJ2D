@@ -216,7 +216,12 @@ bool cGraphicsLayer::DrawUnits(cScene *Scene,cCritter *Critter,cSkeleton *Skelet
 	RECT rc;
 
 	//Draw Critter
-	Critter->GetCell(&cx,&cy);
+	Critter->GetRect(&rc, &posx, &posy, Scene);
+	Critter->GetPosition(&posx, &posy);
+	g_pSprite->Draw(texCharacters, &rc, NULL,
+		&D3DXVECTOR3(float(posx), float(posy), 0.0f),
+		0xFFFFFFFF);
+/*	Critter->GetCell(&cx,&cy);
 	if(Scene->Visible(cx,cy))
 	{
 		Critter->GetRect(&rc,&posx,&posy,Scene);
@@ -231,6 +236,7 @@ bool cGraphicsLayer::DrawUnits(cScene *Scene,cCritter *Critter,cSkeleton *Skelet
 							0xFFFFFFFF);
 		}
 	}
+*/
 	Critter->GetRectRadar(&rc,&posx,&posy);
 	g_pSprite->Draw(texTiles,&rc,NULL, 
 					&D3DXVECTOR3(float(posx),float(posy),0.0f), 

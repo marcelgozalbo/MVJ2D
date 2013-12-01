@@ -2,6 +2,11 @@
 #include "cCritter.h"
 #include "cTrajectory.h"
 #include "cScene.h"
+#include "cGame.h"
+
+
+static const int PIXELS_PER_FRAME = 5;
+
 
 cCritter::cCritter()
 {
@@ -21,6 +26,71 @@ cCritter::~cCritter()
 {
 
 }
+
+
+void cCritter::Update()
+{
+	cInputLayer  &input = cGame::Instance()->Input;
+	
+	int vecx = 0;
+	int vecy = 0;
+
+	//Miro si haig de moure'm
+	if (input.KeyDown(DIK_W))	vecy--;
+	if (input.KeyDown(DIK_S))	vecy++;
+	if (input.KeyDown(DIK_A))	vecx--;
+	if (input.KeyDown(DIK_D))	vecx++;
+	
+	//Si no m'he mogut FORA!
+	if (!vecy && !vecx)
+		return;
+	//xf = xo + v(t);
+	// Busco l'orientacio del moviment
+	if (vecy == 0)
+	{
+		if (vecx > 0)		m_orientation = ORIENTATION_E;
+		else if (vecx < 0)	m_orientation = ORIENTATION_O;
+	}
+	else if (vecy > 0)
+	{
+		if (vecx > 0)		m_orientation = ORIENTATION_SE;
+		else if (vecx < 0)	m_orientation = ORIENTATION_SO;
+		else				m_orientation = ORIENTATION_S;
+	}
+	else
+	{
+		if (vecx > 0)		m_orientation = ORIENTATION_NE;
+		else if (vecx < 0)	m_orientation = ORIENTATION_NO;
+		else				m_orientation = ORIENTATION_N;
+	}
+
+	/*
+	//Actualitzo el moviment segons orientacio
+	switch (m_orientation)
+	{
+	case ORIENTATION_N	: 
+		break;
+	case ORIENTATION_NE	: 
+		break;
+	case ORIENTATION_NO	: 
+		break;
+	case ORIENTATION_S	: 
+		break;
+	case ORIENTATION_SE	: 
+		break;
+	case ORIENTATION_SO	: 
+		break;
+	case ORIENTATION_E	: 
+		break;
+	case ORIENTATION_O	: 
+		break;
+	}
+
+
+	*/
+
+}
+
 
 void cCritter::GetRect(RECT *rc,int *posx,int *posy,cScene *Scene)
 {
