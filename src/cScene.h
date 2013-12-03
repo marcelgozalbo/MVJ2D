@@ -38,7 +38,7 @@ public:
 	void MoveByRadar(int x,int y);
 	bool Visible(int cellx,int celly);
 
-	int map[SCENE_AREA][SCENE_AREA];
+	int *map;
 	int cx,cy;
 };
 

@@ -48,10 +48,18 @@
     <ClCompile Include="Win32Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cRectangle.cpp">
+    <ClCompile Include="cSound.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
+    <ClCompile Include="cAStar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cPath.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cRectangle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>  </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cCritter.h">
       <Filter>Header Files</Filter>
@@ -83,10 +91,19 @@
     <ClInclude Include="cTrajectory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cRectangle.h">
+    <ClInclude Include="cSound.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
+    <ClInclude Include="cAStar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cPath.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+
+    <ClInclude Include="cRectangle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>  </ItemGroup>
   <ItemGroup>
     <Image Include="..\media\characters.png">
       <Filter>Resource Files</Filter>

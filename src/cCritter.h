@@ -4,6 +4,7 @@
 
 #include <windows.h>
 #include "cTrajectory.h"
+#include "cPath.h"
 
 class cScene;
 
@@ -29,10 +30,11 @@ public:
 	void SetPosition(int posx,int posy);
 	void GetPosition(int *posx,int *posy);
 
+	void GoToCell(int *map,int destcx,int destcy);
+	void GoToEnemy(int *map,int destcx,int destcy);
 
 	//USELESS
-	void GoToCell(int destcx,int destcy);
-	void GoToEnemy(int destcx,int destcy);
+	
 	void Move();
 	void GetRect(RECT *rc,int *posx,int *posy,cScene *Scene);
 	void GetRectLife(RECT *rc,int *posx,int *posy,cScene *Scene);
@@ -56,7 +58,7 @@ private:
 	int cx,cy;		//Cell position in total map
 	bool selected;	//Selected for move or attack
 
-	cTrajectory Trajectory;
+	cPath Trajectory;
 
 	int seq;		//Sequence animation control
 	int delay;		//Animation delay

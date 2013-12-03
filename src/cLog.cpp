@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <malloc.h>
+#include <iostream>
+
 
 cLog* cLog::_instance = 0;
 
@@ -14,7 +16,12 @@ cLog* cLog::Instance()
 	{
         _instance = new cLog;
 		
-		f=fopen("log.txt","w");
+		errno_t err=fopen_s(&f, "log.txt","w");
+		if (err)
+		{
+			std::cout << "Open file log.txt failed with errno: " << err << std::endl;
+			return nullptr;
+		}
 		fclose(f);
     }
     return _instance;
@@ -30,9 +37,32 @@ void cLog::Msg(char *msg)
 
 	ZeroMemory(s,sizeof(s));
 
-	sprintf(s,"%s\n",msg);
-	f=fopen("log.txt","a+");
+	sprintf_s(s,"%s\n",msg);
+	errno_t err = fopen_s(&f, "log.txt", "a+");
+	if (err)
+	{
+		std::cout << "Open file log.txt failed with errno: " << err << std::endl;
+		return;
+	}
 	fwrite(s,sizeof(char),strlen(s),f);
+	fclose(f);
+}
+
+void cLog::Msg(const std::string& aMsg)
+{
+	FILE *f;
+	char s[256];
+
+	ZeroMemory(s, sizeof(s));
+
+	sprintf_s(s, "%s\n", aMsg.c_str());
+	errno_t err = fopen_s(&f, "log.txt", "a+");
+	if (err)
+	{
+		std::cout << "Open file log.txt failed with errno: " << err << std::endl;
+		return;
+	}
+	fwrite(s, sizeof(char), strlen(s), f);
 	fclose(f);
 }
 
@@ -48,11 +78,16 @@ void cLog::Error(HRESULT hr, char *msg)
 
 	ZeroMemory(s,sizeof(s));
 
-	sprintf(s,"Error: %s\n",msg);
-	sprintf(s,"%sCode: %s\n",s,(char *)DXGetErrorString9(hr));
-	sprintf(s,"%sDescription: %s\n",s,DXGetErrorDescription9(hr));
+	sprintf_s(s, "Error: %s\n", msg);
+	sprintf_s(s, "%sCode: %s\n", s, (char *)DXGetErrorString9(hr));
+	sprintf_s(s, "%sDescription: %s\n", s, DXGetErrorDescription9(hr));
 	
-	f=fopen("log.txt","a+");
+	errno_t err = fopen_s(&f, "log.txt", "a+");
+	if (err)
+	{
+		std::cout << "Open file log.txt failed with errno: " << err << std::endl;
+		return;
+	}
 	fwrite(s,sizeof(char),strlen(s),f);
 	fclose(f);
 }

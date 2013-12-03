@@ -27,7 +27,8 @@ cCritter::~cCritter()
 
 }
 
-
+#define V_STRAIGHT 3
+#define V_DIAGONAL 2
 void cCritter::Update()
 {
 	cInputLayer  &input = cGame::Instance()->Input;
@@ -45,6 +46,9 @@ void cCritter::Update()
 	if (!vecy && !vecx)
 		return;
 	//xf = xo + v(t);
+	
+
+
 	// Busco l'orientacio del moviment
 	if (vecy == 0)
 	{
@@ -64,30 +68,42 @@ void cCritter::Update()
 		else				m_orientation = ORIENTATION_N;
 	}
 
-	/*
+	
 	//Actualitzo el moviment segons orientacio
 	switch (m_orientation)
 	{
-	case ORIENTATION_N	: 
+	case ORIENTATION_N	:
+		y -= V_STRAIGHT;
 		break;
 	case ORIENTATION_NE	: 
+		y -= V_DIAGONAL;
+		x += V_DIAGONAL;
 		break;
 	case ORIENTATION_NO	: 
+		y -= V_DIAGONAL;
+		x -= V_DIAGONAL;
 		break;
 	case ORIENTATION_S	: 
+		y += V_STRAIGHT;
 		break;
 	case ORIENTATION_SE	: 
+		y += V_DIAGONAL;
+		x += V_DIAGONAL;
 		break;
 	case ORIENTATION_SO	: 
+		y += V_DIAGONAL;
+		x -= V_DIAGONAL;
 		break;
 	case ORIENTATION_E	: 
+		x += V_STRAIGHT;
 		break;
 	case ORIENTATION_O	: 
+		x -= V_STRAIGHT;
 		break;
 	}
 
 
-	*/
+	
 
 }
 
@@ -166,21 +182,21 @@ void cCritter::GetRectRadar(RECT *rc,int *posx,int *posy)
 	SetRect(rc,80,32,84,36);
 }
 
-void cCritter::GoToCell(int destcx,int destcy)
+void cCritter::GoToCell(int *map,int destcx,int destcy)
 {
 	// "leave all we're doing"
 	attack=false;
 	shoot=false;
 
 	// Go
-	if(Trajectory.IsDone())	Trajectory.Make(cx,cy,destcx,destcy);
-	else					Trajectory.ReMake(destcx,destcy);
+	if(Trajectory.IsDone())	Trajectory.Make(map,cx,cy,destcx,destcy);
+	else					Trajectory.ReMake(map,destcx,destcy);
 }
 
-void cCritter::GoToEnemy(int destcx,int destcy)
+void cCritter::GoToEnemy(int *map,int destcx,int destcy)
 {
 	//(Only implemented attack right to left)
-	GoToCell(destcx+1,destcy);
+	GoToCell(map,destcx+1,destcy);
 
 	attack=true;
 	shoot=false;

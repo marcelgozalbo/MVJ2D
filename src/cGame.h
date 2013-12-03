@@ -5,6 +5,7 @@
 #include "cGraphicsLayer.h"
 #include "cInputLayer.h"
 #include "cScene.h"
+#include "cSound.h"
 
 #define STATE_MAIN	0
 #define STATE_GAME	1
@@ -32,6 +33,7 @@ private:
 	bool LoopProcess();
 	bool LoopOutput();
 
+	cSound Sound;
 	
 	int state;
 

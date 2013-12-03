@@ -2,6 +2,7 @@
 #include "cScene.h"
 #include "cMouse.h"
 #include <stdio.h>
+#include <iostream>
 
 
 cScene::cScene()
@@ -13,17 +14,25 @@ cScene::~cScene(){}
 
 void cScene::LoadMap(char *file)
 {
-	int i,j,n;
-	
+	int i, j, k, n;
+
+	map = (int *)malloc(sizeof(int)*(SCENE_AREA*SCENE_AREA));
+
 	FILE *f;
-	f=fopen("map.txt","r");
+	errno_t err = fopen_s(&f, file, "r");
+	if (err)
+	{
+		std::cout << "Open file log.txt failed with errno: " << err << std::endl;
+	}
+	k = 0;
 
 	for(i=0;i<SCENE_AREA;i++)
 	{
 		for(j=0;j<SCENE_AREA;j++)
 		{
-			fscanf(f,"%d",&n);
-			map[i][j]=n;
+			fscanf_s(f,"%d",&n);
+			map[k]=n;
+			k++;
 		}
 	}
 
