@@ -11,6 +11,7 @@ cScene::cScene()
 	cy=0;
 }
 cScene::~cScene(){}
+#include "cBaseEntity.h"
 
 void cScene::Render()
 {
@@ -20,8 +21,13 @@ void cScene::Render()
 	// TESTING SHIT
 	// TESTING SHIT
 	// TESTING SHIT
-	
-
+	cBaseEntity a;
+	a.SetTextureID(std::string("characters"));
+	a.EnableCollision();
+	//a.SetCollisionRectRelative(cRectangle(10, 10, 100, 100));
+	a.Render();
+	a.RenderCollisionRect();
+	/*
 	cRectangle rectangle3(0, 0, 256, 256);
 	cGame::Instance()->Graphics.DrawSprite(std::string("Mainmenu"), 0, 0,50, &rectangle3);
 	cRectangle rectangle4(0, 0, 128, 128);
@@ -33,7 +39,7 @@ void cScene::Render()
 
 	//cRectangle rectangle(0, 0, 256, 256);
 	cGame::Instance()->Graphics.DrawRect(rectangle3, D3DCOLOR(0x00FF0000),20);
-
+	*/
 }
 
 void cScene::LoadMap(char *file)
