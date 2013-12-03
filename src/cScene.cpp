@@ -3,7 +3,7 @@
 #include "cMouse.h"
 #include <stdio.h>
 #include <iostream>
-
+#include "cGame.h"
 
 cScene::cScene()
 {
@@ -11,6 +11,23 @@ cScene::cScene()
 	cy=0;
 }
 cScene::~cScene(){}
+
+void cScene::Render()
+{
+
+	cRectangle rectangle3(0, 0, 256, 256);
+	cGame::Instance()->Graphics.DrawSprite(std::string("Mainmenu"), 0, 0,50, &rectangle3);
+	cRectangle rectangle4(0, 0, 128, 128);
+	cGame::Instance()->Graphics.DrawSprite(std::string("GUI"), 0, 0,30, &rectangle4);
+
+	
+	//cRectangle rectangle2(32, 32, 128, 128);
+	cGame::Instance()->Graphics.DrawRect(rectangle4, D3DCOLOR(0x0000FF00),20);
+
+	//cRectangle rectangle(0, 0, 256, 256);
+	cGame::Instance()->Graphics.DrawRect(rectangle3, D3DCOLOR(0x00FF0000),10);
+
+}
 
 void cScene::LoadMap(char *file)
 {

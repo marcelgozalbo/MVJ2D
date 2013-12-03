@@ -5,8 +5,18 @@ cRectangle::cRectangle()
 {
 	x = y = w = h = 0;
 }
+cRectangle::cRectangle(const cRectangle &aRect)
+{
+	SetRect(aRect.x, aRect.y, aRect.w, aRect.h);
+}
+
 
 cRectangle::cRectangle(int _x, int _y, int _w, int _h)
+{
+	SetRect(_x, _y, _w, _h);
+}
+
+void	cRectangle::SetRect(int _x, int _y, int _w, int _h)
 {
 	x = _x;
 	y = _y;

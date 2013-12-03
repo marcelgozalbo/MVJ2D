@@ -1,6 +1,7 @@
 
 #include "cGame.h"
 #include "cLog.h"
+#include "cMouse.h"
 
 cGame* cGame::_instance = 0;
 
@@ -128,9 +129,10 @@ bool cGame::LoopOutput()
 
 bool cGame::Render()
 {
-	bool res;
-	res = Graphics.Render(state,Input.GetMouse(),&Scene,&Critter,&Skeleton);
-	return res;
+	Scene.Render();
+	Graphics.Render();
+	//res = Graphics.Render(state,Input.GetMouse(),&Scene,&Critter,&Skeleton);
+	return true;
 }
 
 

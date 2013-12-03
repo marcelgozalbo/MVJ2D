@@ -6,6 +6,8 @@
 #include "cInputLayer.h"
 #include "cScene.h"
 #include "cSound.h"
+#include "cCritter.h"
+#include "cSkeleton.h"
 
 #define STATE_MAIN	0
 #define STATE_GAME	1

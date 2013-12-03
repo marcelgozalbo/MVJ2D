@@ -33,10 +33,14 @@ public:
 	cScene();
 	virtual ~cScene();
 
+	void Render(); //<- Pintara l'escena!!!
+
 	void LoadMap(char *file);
 	void Move(int pointer);
 	void MoveByRadar(int x,int y);
 	bool Visible(int cellx,int celly);
+
+
 
 	int *map;
 	int cx,cy;

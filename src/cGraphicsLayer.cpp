@@ -127,223 +127,82 @@ void cGraphicsLayer::UnLoadData()
 	}
 }
 
-bool cGraphicsLayer::Render(int state,cMouse *Mouse,cScene *Scene,cCritter *Critter,cSkeleton *Skeleton)
+void cGraphicsLayer::Render()
 {
-	//HRESULT Draw( LPDIRECT3DTEXTURE9 pTexture, CONST RECT *pSrcRect,
-	//				CONST D3DXVECTOR3 *pCenter,  CONST D3DXVECTOR3 *pPosition,
-	//				D3DCOLOR Color);
-
-	g_pD3DDevice->Clear( 0, NULL, D3DCLEAR_TARGET, 0xFF000000, 0, 0 );
+	g_pD3DDevice->Clear(0, NULL, D3DCLEAR_TARGET , 0xFF000000, 1.0f, 0);
+	g_pD3DDevice->Clear(0, NULL, D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0.0f);
+	
 	g_pD3DDevice->BeginScene();
 
-		//--- SPRITES ---
-		g_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
+	//Start Rendering by Z order
+	for (auto &it_renderinfo : m_renderframeinfo)
+		// RENDER Z LEVEL
+		for (auto &it_Zlevel : it_renderinfo.second)
+			it_Zlevel->Render(g_pSprite,g_pD3DDevice);
+		
+	
 
-			switch(state)
-			{
-				case STATE_MAIN:
-					//g_pSprite->Draw(m_texturesmap["Mainmenu"], NULL, NULL, &D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0xFFFFFFFF);
-					DrawSprite(std::string("Mainmen"), 0.0, 0.0);
-								break;
+	//Clean the entire map for the next frame
+	for (auto &it_renderinfo : m_renderframeinfo)
+		for (auto &it_Zlevel : it_renderinfo.second)
+			delete it_Zlevel;
 
-				case STATE_GAME:
-								//Graphic User Interface
-							//	g_pSprite->Draw(texGame,NULL,NULL,&D3DXVECTOR3(0.0f,0.0f,0.0f),0xFFFFFFFF);
-							//	DrawScene(Scene);
-							//	DrawUnits(Scene,Critter,Skeleton);
-								break;
-			}
+	m_renderframeinfo.clear();
+	
+	
 
-		g_pSprite->End();
-
-		//DrawMouse(Mouse);
 
 	g_pD3DDevice->EndScene();
-	g_pD3DDevice->Present( NULL, NULL, NULL, NULL );
-
-	return true;
+	g_pD3DDevice->Present(NULL, NULL, NULL, NULL);
+	
+	
 }
 
-bool cGraphicsLayer::DrawScene(cScene *Scene)
-{
-	RECT rc;
-	int x,y,n,
-		fx,fy,
-		pantx,panty;
-
-	//Tile based map
-	fx=Scene->cx+SCENE_WIDTH;
-	fy=Scene->cy+SCENE_HEIGHT;
-
-	for(y=Scene->cy;y<fy;y++)
-	{
-		panty = SCENE_Yo + ((y-Scene->cy)<<5);
-
-		for(x=Scene->cx;x<fx;x++)
-		{
-			pantx = SCENE_Xo + ((x-Scene->cx)<<5);
-
-			n = Scene->map[(y<<5)+x];
-			SetRect(&rc,n<<5,0,(n+1)<<5,32);
-			g_pSprite->Draw(texTiles,&rc,NULL, 
-							&D3DXVECTOR3(float(pantx),float(panty),0.0f), 
-							0xFFFFFFFF);
-		}
-	}
-
-	//Draw radar
-	x=RADAR_Xo+(Scene->cx<<2);
-	y=RADAR_Yo+(Scene->cy<<2);
-	SetRect(&rc,0,32,80,100);
-	g_pSprite->Draw(texTiles,&rc,NULL, 
-					&D3DXVECTOR3(float(x),float(y),0.0f), 
-					0xFFFFFFFF);
-	return true;
-}
-
-void cGraphicsLayer::DrawSprite(std::string &text_id, float posx, float posy , cRectangle *Rect)
+void cGraphicsLayer::DrawSprite(std::string &text_id, float posx, float posy, int posz, cRectangle *Rect)
 {
 	auto text_it = m_texturesmap.find(text_id);
 
 	if (text_it == m_texturesmap.end())
 	{
 		cLog *Log = cLog::Instance();
-		Log->Msg(std::string("DRAWSPRITE Texture id: ")+text_id+std::string(" Not Found!"));
+		Log->Msg(std::string("DRAWSPRITE Texture id: ") + text_id + std::string(" Not Found!"));
 		return;
 	}
+
+	TextureRenderer *ptex = new TextureRenderer(text_it->second, posx, posy, Rect);
+	auto rendit = m_renderframeinfo.find(posz);
+	if (rendit  == m_renderframeinfo.end())
+	{
+		std::vector<IRender *> vec;
+		vec.push_back(ptex);
+		m_renderframeinfo.insert(std::pair < int, std::vector<IRender *>  >(posz, vec));
+	}
+	else
+	{
+		rendit->second.push_back(ptex);
+	}
 	
 
-	if (Rect == nullptr)
-	{
-		g_pSprite->Draw(text_it->second, NULL, NULL, &D3DXVECTOR3(float(posx), float(posy), 0.0f), 0xFFFFFFFF);
-	}
-	else
-	{
-		RECT rc;
-		SetRect(&rc, Rect->x, Rect->y, Rect->w, Rect->h);
-		g_pSprite->Draw(text_it->second, &rc, NULL, &D3DXVECTOR3(float(posx), float(posy), 0.0f), 0xFFFFFFFF);
-	}
-
-}
-
-bool cGraphicsLayer::DrawUnits(cScene *Scene,cCritter *Critter,cSkeleton *Skeleton)
-{
-	int cx,cy,posx,posy;
-	RECT rc;
-
-	//Draw Critter
-	Critter->GetRect(&rc, &posx, &posy, Scene);
-	Critter->GetPosition(&posx, &posy);
-	g_pSprite->Draw(texCharacters, &rc, NULL,
-		&D3DXVECTOR3(float(posx), float(posy), 0.0f),
-		0xFFFFFFFF);
-
-	Critter->GetRectRadar(&rc,&posx,&posy);
-	g_pSprite->Draw(texTiles,&rc,NULL, 
-					&D3DXVECTOR3(float(posx),float(posy),0.0f), 
-					0xFFFFFFFF);
-	//Draw Skeleton
-	Skeleton->GetCell(&cx,&cy);
-	if(Scene->Visible(cx,cy))
-	{
-		Skeleton->GetRect(&rc,&posx,&posy,Scene);
-		g_pSprite->Draw(texCharacters,&rc,NULL, 
-						&D3DXVECTOR3(float(posx),float(posy),0.0f), 
-						0xFFFFFFFF);
-	}
-	Skeleton->GetRectRadar(&rc,&posx,&posy);
-	g_pSprite->Draw(texTiles,&rc,NULL, 
-					&D3DXVECTOR3(float(posx),float(posy),0.0f), 
-					0xFFFFFFFF);
-	//Draw Fire
-	if(Critter->GetShooting())
-	{
-		if(Critter->IsFiring())
-		{
-			//Advance animation & draw
-			Critter->GetRectShoot(&rc,&posx,&posy,Scene);
-			g_pSprite->Draw(texCharacters,&rc,NULL, 
-							&D3DXVECTOR3(float(posx),float(posy),0.0f), 
-							0xFFFFFFFF);
-		}
-		else
-		{
-			//Advance animation
-			Critter->GetRectShoot(&rc,&posx,&posy,Scene);
-		}
-	}
-	return true;
-}
-
-bool cGraphicsLayer::DrawMouse(cMouse *Mouse)
-{
-	RECT rc;
-	int mx,my,posx,posy;
-
-	//Mouse selection box
-	Mouse->GetPosition(&mx,&my);
-
-	if(Mouse->GetSelection()==SELECT_SCENE)
-	{
-		int sx,sy;
-		Mouse->GetSelectionPoint(&sx,&sy);
-		SetRect(&rc,sx,sy,mx,my);
-		DrawRect(rc,0x0000ff00);
-	}
-
-	//Mouse
-	g_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
-		
-		Mouse->GetRect(&rc,&posx,&posy);
-		HRESULT hr = g_pSprite->Draw(texMouse,&rc,NULL,&D3DXVECTOR3(float(mx+posx),float(my+posy),0.0f),0xFFFFFFFF);
-		if(FAILED(hr))
-		{
-			cLog *Log = cLog::Instance();
-			Log->Error(hr,"mouse pointer");
-			return false;
-		}
-
-	g_pSprite->End();
-
-	return true;
-}
-
-bool cGraphicsLayer::DrawRect(RECT rc, D3DCOLOR color)
-{
-	RECT rect;
-	int xo,yo,xf,yf;
-
-	if((rc.left==rc.right)&&(rc.top==rc.bottom)) return false;
-
-	if(rc.left < rc.right)
-	{
-		xo = rc.left;	xf = rc.right;
-	}
-	else
-	{
-		xo = rc.right;	xf = rc.left;
-	}
-	if(rc.top < rc.bottom)
-	{
-		yo = rc.top;	yf = rc.bottom;
-	}
-	else
-	{
-		yo = rc.bottom;	yf = rc.top;
-	}
-
-	//Top
-	SetRect(&rect,xo,yo,xf+1,yo+1);
-	g_pD3DDevice->Clear(1,(D3DRECT *)&rect,D3DCLEAR_TARGET,color,1.0f,0);
-	//Bottom
-	SetRect(&rect,xo,yf,xf,yf+1);
-	g_pD3DDevice->Clear(1,(D3DRECT *)&rect,D3DCLEAR_TARGET,color,1.0f,0);
-	//Left
-	SetRect(&rect,xo,yo,xo+1,yf+1);
-	g_pD3DDevice->Clear(1,(D3DRECT *)&rect,D3DCLEAR_TARGET,color,1.0f,0);
-	//Right
-	SetRect(&rect,xf,yo,xf+1,yf+1);
-	g_pD3DDevice->Clear(1,(D3DRECT *)&rect,D3DCLEAR_TARGET,color,1.0f,0);
 	
-	return true;
+
 }
+
+void cGraphicsLayer::DrawRect(cRectangle &Rectangle, D3DCOLOR color, int posz)
+{
+	RectangleRenderer *ptex = new RectangleRenderer(Rectangle,color);
+	auto rendit = m_renderframeinfo.find(posz);
+	if (rendit == m_renderframeinfo.end())
+	{
+		std::vector<IRender *> vec;
+		vec.push_back(ptex);
+		m_renderframeinfo.insert(std::pair < int, std::vector<IRender *>  >(posz, vec));
+	}
+	else
+	{
+		rendit->second.push_back(ptex);
+	}
+	
+}
+
+
+
