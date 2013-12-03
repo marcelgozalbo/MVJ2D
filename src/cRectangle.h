@@ -10,7 +10,6 @@ public:
 	bool	IsEmpty() const;
 
 	~cRectangle();
-private:
 
 	int x;
 	int y;

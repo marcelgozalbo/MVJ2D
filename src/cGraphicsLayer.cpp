@@ -81,55 +81,45 @@ void cGraphicsLayer::LoadData()
 {
 	D3DXCreateSprite( g_pD3DDevice, &g_pSprite ); 
 
+	LPDIRECT3DTEXTURE9 buffer = nullptr;
+	
 	//Main menu
 	D3DXCreateTextureFromFileEx(g_pD3DDevice,"../media/main.png",0,0,1,0,D3DFMT_UNKNOWN,
 								D3DPOOL_DEFAULT,D3DX_FILTER_NONE,D3DX_FILTER_NONE,
-								NULL,NULL,NULL,&texMain);
+								NULL, NULL, NULL, &buffer);
+	m_texturesmap["Mainmenu"] = buffer;
+
 	//GUI game
 	D3DXCreateTextureFromFileEx(g_pD3DDevice,"../media/game.png",0,0,1,0,D3DFMT_UNKNOWN,
 								D3DPOOL_DEFAULT,D3DX_FILTER_NONE,D3DX_FILTER_NONE,
-								NULL,NULL,NULL,&texGame);
+								NULL, NULL, NULL, &buffer);
+	m_texturesmap["GUI"] = buffer;
+
 	//Tiles
 	D3DXCreateTextureFromFileEx(g_pD3DDevice,"../media/tiles.png",0,0,1,0,D3DFMT_UNKNOWN,
 								D3DPOOL_DEFAULT,D3DX_FILTER_NONE,D3DX_FILTER_NONE,
-								0x00ff00ff,NULL,NULL,&texTiles);
+								0x00ff00ff, NULL, NULL, &buffer);
+	m_texturesmap["tilemap"] = buffer;
+
 	//Characters
 	D3DXCreateTextureFromFileEx(g_pD3DDevice,"../media/characters.png",0,0,1,0,D3DFMT_UNKNOWN,
 								D3DPOOL_DEFAULT,D3DX_FILTER_NONE,D3DX_FILTER_NONE,
-								0x00ff00ff,NULL,NULL,&texCharacters);
+								0x00ff00ff, NULL, NULL, &buffer);
+	m_texturesmap["characters"] = buffer;
+
 	//Mouse pointers
 	D3DXCreateTextureFromFileEx(g_pD3DDevice,"../media/mouse.png",0,0,1,0,D3DFMT_UNKNOWN,
 								D3DPOOL_DEFAULT,D3DX_FILTER_NONE,D3DX_FILTER_NONE,
-								0x00ff00ff,NULL,NULL,&texMouse);
+								0x00ff00ff, NULL, NULL, &buffer);
+	m_texturesmap["mouse"] = buffer;
 }
 
 void cGraphicsLayer::UnLoadData()
 {
-	if(texMain)
-	{
-		texMain->Release();
-		texMain = NULL;
-	}
-	if(texGame)
-	{
-		texGame->Release();
-		texGame = NULL;
-	}
-	if(texTiles)
-	{
-		texTiles->Release();
-		texTiles = NULL;
-	}
-	if(texCharacters)
-	{
-		texCharacters->Release();
-		texCharacters = NULL;
-	}
-	if(texMouse)
-	{
-		texMouse->Release();
-		texMouse = NULL;
-	}
+	for(auto &p: m_texturesmap)
+		p.second->Release();
+
+
 	if(g_pSprite)
 	{
 		g_pSprite->Release();
@@ -152,20 +142,21 @@ bool cGraphicsLayer::Render(int state,cMouse *Mouse,cScene *Scene,cCritter *Crit
 			switch(state)
 			{
 				case STATE_MAIN:
-								g_pSprite->Draw(texMain,NULL,NULL,&D3DXVECTOR3(0.0f,0.0f,0.0f),0xFFFFFFFF);
+					//g_pSprite->Draw(m_texturesmap["Mainmenu"], NULL, NULL, &D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0xFFFFFFFF);
+					DrawSprite(std::string("Mainmen"), 0.0, 0.0);
 								break;
 
 				case STATE_GAME:
 								//Graphic User Interface
-								g_pSprite->Draw(texGame,NULL,NULL,&D3DXVECTOR3(0.0f,0.0f,0.0f),0xFFFFFFFF);
-								DrawScene(Scene);
-								DrawUnits(Scene,Critter,Skeleton);
+							//	g_pSprite->Draw(texGame,NULL,NULL,&D3DXVECTOR3(0.0f,0.0f,0.0f),0xFFFFFFFF);
+							//	DrawScene(Scene);
+							//	DrawUnits(Scene,Critter,Skeleton);
 								break;
 			}
 
 		g_pSprite->End();
 
-		DrawMouse(Mouse);
+		//DrawMouse(Mouse);
 
 	g_pD3DDevice->EndScene();
 	g_pD3DDevice->Present( NULL, NULL, NULL, NULL );
@@ -210,6 +201,31 @@ bool cGraphicsLayer::DrawScene(cScene *Scene)
 	return true;
 }
 
+void cGraphicsLayer::DrawSprite(std::string &text_id, float posx, float posy , cRectangle *Rect)
+{
+	auto text_it = m_texturesmap.find(text_id);
+
+	if (text_it == m_texturesmap.end())
+	{
+		cLog *Log = cLog::Instance();
+		Log->Msg(std::string("DRAWSPRITE Texture id: ")+text_id+std::string(" Not Found!"));
+		return;
+	}
+	
+
+	if (Rect == nullptr)
+	{
+		g_pSprite->Draw(text_it->second, NULL, NULL, &D3DXVECTOR3(float(posx), float(posy), 0.0f), 0xFFFFFFFF);
+	}
+	else
+	{
+		RECT rc;
+		SetRect(&rc, Rect->x, Rect->y, Rect->w, Rect->h);
+		g_pSprite->Draw(text_it->second, &rc, NULL, &D3DXVECTOR3(float(posx), float(posy), 0.0f), 0xFFFFFFFF);
+	}
+
+}
+
 bool cGraphicsLayer::DrawUnits(cScene *Scene,cCritter *Critter,cSkeleton *Skeleton)
 {
 	int cx,cy,posx,posy;
@@ -221,22 +237,7 @@ bool cGraphicsLayer::DrawUnits(cScene *Scene,cCritter *Critter,cSkeleton *Skelet
 	g_pSprite->Draw(texCharacters, &rc, NULL,
 		&D3DXVECTOR3(float(posx), float(posy), 0.0f),
 		0xFFFFFFFF);
-/*	Critter->GetCell(&cx,&cy);
-	if(Scene->Visible(cx,cy))
-	{
-		Critter->GetRect(&rc,&posx,&posy,Scene);
-		g_pSprite->Draw(texCharacters,&rc,NULL, 
-						&D3DXVECTOR3(float(posx),float(posy),0.0f), 
-						0xFFFFFFFF);
-		if(Critter->GetSelected())
-		{
-			Critter->GetRectLife(&rc,&posx,&posy,Scene);
-			g_pSprite->Draw(texMouse,&rc,NULL, 
-							&D3DXVECTOR3(float(posx),float(posy),0.0f), 
-							0xFFFFFFFF);
-		}
-	}
-*/
+
 	Critter->GetRectRadar(&rc,&posx,&posy);
 	g_pSprite->Draw(texTiles,&rc,NULL, 
 					&D3DXVECTOR3(float(posx),float(posy),0.0f), 

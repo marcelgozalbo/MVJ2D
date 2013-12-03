@@ -11,6 +11,9 @@
 
 #include <D3D9.h>
 #include <D3DX9.h>
+#include <string>
+#include <map>
+#include "cRectangle.h"
 #include "cScene.h"
 #include "cMouse.h"
 #include "cCritter.h"
@@ -29,6 +32,11 @@ public:
 	
 	void LoadData();
 	void UnLoadData();
+
+	void DrawSprite(std::string &text_id, float posx, float posy, cRectangle *Rect=nullptr);
+
+	
+	// USELESS
 	bool Render(int state,cMouse *Mouse,cScene *Scene,cCritter *Critter,cSkeleton *Skeleton);
 
 	bool DrawScene(cScene *Scene);
@@ -42,6 +50,7 @@ private:
 	LPDIRECT3DDEVICE9 g_pD3DDevice;
 	LPD3DXSPRITE g_pSprite;
 
+	std::map<std::string, LPDIRECT3DTEXTURE9>	m_texturesmap;
 	LPDIRECT3DTEXTURE9 texMain,texGame;
 	LPDIRECT3DTEXTURE9 texTiles,texCharacters,texMouse;
 };
