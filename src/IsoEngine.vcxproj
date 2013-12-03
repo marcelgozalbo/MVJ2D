@@ -129,6 +129,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="cAStar.cpp" />
+    <ClCompile Include="cBaseEntity.cpp" />
     <ClCompile Include="cCritter.cpp" />
     <ClCompile Include="cGame.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
@@ -170,6 +171,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cAStar.h" />
+    <ClInclude Include="cBaseEntity.h" />
     <ClInclude Include="cCritter.h" />
     <ClInclude Include="cGame.h" />
     <ClInclude Include="cGraphicsLayer.h" />
