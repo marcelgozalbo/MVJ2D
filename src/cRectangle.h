@@ -9,6 +9,7 @@ public:
 
 
 	void	SetRect(int _x, int _y, int _w, int _h);
+	void	SetRect(int _x);
 	bool	Intersects(const cRectangle &_rect_check);
 	bool	IsEmpty() const;
 

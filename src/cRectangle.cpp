@@ -24,6 +24,14 @@ void	cRectangle::SetRect(int _x, int _y, int _w, int _h)
 	h = _h;
 }
 
+void	cRectangle::SetRect(int _x)
+{
+	x = _x;
+	y = _x;
+	w = _x;
+	h = _x;
+}
+
 cRectangle::~cRectangle()
 {
 }
