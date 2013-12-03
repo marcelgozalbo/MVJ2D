@@ -130,16 +130,12 @@ void cGraphicsLayer::UnLoadData()
 void cGraphicsLayer::Render()
 {
 	g_pD3DDevice->Clear(0, NULL, D3DCLEAR_TARGET , 0xFF000000, 1.0f, 0);
-	g_pD3DDevice->Clear(0, NULL, D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0.0f);
-	
 	g_pD3DDevice->BeginScene();
 
 	//Start Rendering by Z order
-	for (auto &it_renderinfo : m_renderframeinfo)
-		// RENDER Z LEVEL
-		for (auto &it_Zlevel : it_renderinfo.second)
+	for (auto rit = m_renderframeinfo.rbegin(); rit != m_renderframeinfo.rend(); ++rit)
+		for (auto &it_Zlevel : rit->second) 	// RENDER Z entire Z-LEVEL
 			it_Zlevel->Render(g_pSprite,g_pD3DDevice);
-		
 	
 
 	//Clean the entire map for the next frame
@@ -148,9 +144,6 @@ void cGraphicsLayer::Render()
 			delete it_Zlevel;
 
 	m_renderframeinfo.clear();
-	
-	
-
 
 	g_pD3DDevice->EndScene();
 	g_pD3DDevice->Present(NULL, NULL, NULL, NULL);
@@ -181,10 +174,6 @@ void cGraphicsLayer::DrawSprite(std::string &text_id, float posx, float posy, in
 	{
 		rendit->second.push_back(ptex);
 	}
-	
-
-	
-
 }
 
 void cGraphicsLayer::DrawRect(cRectangle &Rectangle, D3DCOLOR color, int posz)

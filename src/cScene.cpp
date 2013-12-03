@@ -14,6 +14,13 @@ cScene::~cScene(){}
 
 void cScene::Render()
 {
+	// TESTING SHIT
+	// TESTING SHIT
+	// TESTING SHIT
+	// TESTING SHIT
+	// TESTING SHIT
+	// TESTING SHIT
+	
 
 	cRectangle rectangle3(0, 0, 256, 256);
 	cGame::Instance()->Graphics.DrawSprite(std::string("Mainmenu"), 0, 0,50, &rectangle3);
@@ -22,10 +29,10 @@ void cScene::Render()
 
 	
 	//cRectangle rectangle2(32, 32, 128, 128);
-	cGame::Instance()->Graphics.DrawRect(rectangle4, D3DCOLOR(0x0000FF00),20);
+	cGame::Instance()->Graphics.DrawRect(rectangle4, D3DCOLOR(0x0000FF00),10);
 
 	//cRectangle rectangle(0, 0, 256, 256);
-	cGame::Instance()->Graphics.DrawRect(rectangle3, D3DCOLOR(0x00FF0000),10);
+	cGame::Instance()->Graphics.DrawRect(rectangle3, D3DCOLOR(0x00FF0000),20);
 
 }
 
