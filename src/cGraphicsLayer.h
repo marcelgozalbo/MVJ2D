@@ -36,6 +36,8 @@ public:
 	void DrawSprite(std::string &text_id, float posx, float posy, int posz, cRectangle *Rect = nullptr);
 	void DrawRect(cRectangle &Rectangle, D3DCOLOR color, int posz);
 
+	void GetTextureSizes(std::string &text_id, int &h, int &w);
+
 	void Render();
 private:
 	class IRender

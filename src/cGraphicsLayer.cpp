@@ -114,6 +114,27 @@ void cGraphicsLayer::LoadData()
 	m_texturesmap["mouse"] = buffer;
 }
 
+void cGraphicsLayer::GetTextureSizes(std::string &text_id, int &h, int &w)
+{
+	auto text_it = m_texturesmap.find(text_id);
+
+	if (text_it == m_texturesmap.end())
+	{
+		cLog *Log = cLog::Instance();
+		Log->Msg(std::string("GetTextureInfo Texture id: ") + text_id + std::string(" Not Found!"));
+		h = 0;
+		w = 0;
+		return;
+	}
+
+	D3DSURFACE_DESC desc;
+	text_it->second->GetLevelDesc(0, &desc);
+
+	h = desc.Height;
+	w = desc.Width;
+
+}
+
 void cGraphicsLayer::UnLoadData()
 {
 	for(auto &p: m_texturesmap)
