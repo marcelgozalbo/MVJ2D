@@ -28,6 +28,7 @@ void cScene::Render()
 	// TESTING SHIT
 	// TESTING SHIT
 	// TESTING SHIT
+	m_map.render();
 	m_player.Render();
 	/*
 	cBaseEntity a;
