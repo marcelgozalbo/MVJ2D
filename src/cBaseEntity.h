@@ -7,6 +7,8 @@
 class cBaseEntity
 {
 public:
+	cBaseEntity(int x, int y, int z);
+	cBaseEntity(const std::string &texid, int x, int y, int z);
 	cBaseEntity();
 	
 	void Update();

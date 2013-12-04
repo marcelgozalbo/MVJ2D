@@ -2,14 +2,26 @@
 #include "cGame.h"
 #include "cLog.h"
 
+cBaseEntity::cBaseEntity(int x, int y, int z):
+cBaseEntity()
+{
+	SetPosition(x, y);
+	SetZIndex(z);
+}
+
+cBaseEntity::cBaseEntity(const std::string &texid, int x, int y, int z):
+cBaseEntity(x,y,z)
+{
+	SetTextureID(texid);
+}
+
 cBaseEntity::cBaseEntity()
 {
 	SetPosition(0,0);
 	SetZIndex(0);
 
-	SetTextureID(std::string(""));
-
-
+	SetTextureID("");
+	
 	SetCollisionRectRelative(cRectangle());
 	DisableCollision();
 
