@@ -30,6 +30,8 @@ bool cGame::Init(HWND hWnd,HINSTANCE hInst,bool exclusive)
 	bool res;
 	cLog *Log = cLog::Instance();
 
+	Log->Clear();
+
 	Graphics = new cGraphicsLayer();
 	res = Graphics->Init(hWnd, exclusive);
 	if(!res)

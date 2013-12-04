@@ -11,9 +11,10 @@ class cLog
 {
 public: 
     static cLog* Instance();
-	static void Msg(char *msg);
+	static void Msg(const char *format, ...);
 	static void Msg(const std::string& aMsg);
 	static void Error(HRESULT hr, char *msg);
+	static void Clear();
 
 private:
     static cLog* _instance;

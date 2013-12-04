@@ -1,5 +1,6 @@
 #include "cCell.h"
 #include "cGame.h"
+#include "cLog.h"
 
 cCell::cCell(int _row, int _col, int _cellId, bool _walkable) :
 	cBaseEntity("tilemap", _row * tileWidth, _col * tileHeight, 1),
@@ -13,6 +14,8 @@ cCell::cCell(int _row, int _col, int _cellId, bool _walkable) :
 		EnableCollision();
 		SetCollisionRectRelative(rec);
 	}
+
+	cLog::Instance()->Msg("Log test %d", 10);
 }
 
 cCell::~cCell()
