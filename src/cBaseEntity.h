@@ -27,7 +27,7 @@ public:
 	//COLLISION
 	void SetCollisionRectRelative(const cRectangle &_rec);
 	const cRectangle& GetCollisionRectRelative() const;
-	const cRectangle& GetCollisionRectAbsolute() const;
+	cRectangle GetCollisionRectAbsolute() const;
 	void SetTextureSizeToTextureRectRelative();
 
 	bool IsCollidable() const;

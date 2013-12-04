@@ -100,7 +100,7 @@ const cRectangle&  cBaseEntity::GetCollisionRectRelative() const
 	return m_rect_colision_rel;
 }
 
-const cRectangle&  cBaseEntity::GetCollisionRectAbsolute() const
+cRectangle  cBaseEntity::GetCollisionRectAbsolute() const
 {
 	cRectangle rect_absolute;
 	rect_absolute.SetRect(m_posx + m_rect_colision_rel.x,
