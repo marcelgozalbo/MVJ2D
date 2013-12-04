@@ -47,8 +47,6 @@ private:
 	
 	eGameStates _state;
 
-	void ProcessOrder();
-
 	bool Render();
 };
 

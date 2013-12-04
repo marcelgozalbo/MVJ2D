@@ -34,6 +34,7 @@ public:
 	virtual ~cScene();
 
 	void Render(); //<- Pintara l'escena!!!
+	void Update();
 
 	void LoadMap(char *file);
 	void Move(int pointer);
