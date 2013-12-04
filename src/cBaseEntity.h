@@ -9,8 +9,8 @@ class cBaseEntity
 public:
 	cBaseEntity();
 	
-	virtual void Update();
-	virtual void Render();
+	void Update();
+	void Render();
 
 	//SPATIAL POSITION
 	void SetPosition(int _x, int _y);
@@ -38,6 +38,9 @@ public:
 	//ANIMATION
 	void SetAnimationSteps(const std::vector<cRectangle> &_rect_steps);
 	void GetAnimationSteps(std::vector<cRectangle> &_rect_steps);
+	void SetAnimationFramesPerStep(const std::size_t _timeperstep);
+	std::size_t GetAnimationFramesPerStep() const;
+	const std::size_t GetAnimationFramesPerStep(const std::size_t _timeperstep);
 	std::size_t GetAnimationCurrentStep();
 	const cRectangle & GetAnimationCurrentStepRectangle() const;
 	void SetAnimationCurrentStep(const std::size_t &_anim_step);

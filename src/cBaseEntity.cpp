@@ -6,15 +6,21 @@ cBaseEntity::cBaseEntity()
 {
 	SetPosition(0,0);
 	SetZIndex(0);
+
 	SetTextureID(std::string(""));
+
+
 	SetCollisionRectRelative(cRectangle());
 	DisableCollision();
 
+	DisableAnimation();
+	StopAnimation();
+	SetAnimationFramesPerStep(1);
 }
 
 void cBaseEntity::Update()
 {
-	
+	UpdateAnimation();
 }
 
 void cBaseEntity::Render()
@@ -228,3 +234,15 @@ void cBaseEntity::UpdateAnimation()
 	}
 	
 }
+
+
+void cBaseEntity::SetAnimationFramesPerStep(const std::size_t _timeperstep)
+{
+	m_anim_time_frame = _timeperstep;
+}
+
+std::size_t cBaseEntity::GetAnimationFramesPerStep() const
+{
+	return m_anim_time_frame;
+}
+
