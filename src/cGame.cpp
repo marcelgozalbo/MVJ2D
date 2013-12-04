@@ -144,12 +144,12 @@ bool cGame::Render()
 void cGame::ProcessOrder()
 {
 	cMouse *Mouse;
-	cKeyboard *Keyboard;
-	int mx, my, msx, msy, p, cx, cy, x, y;
-	int s = 5; //marge for directional pointers
-	int xo, xf, yo, yf;
+	//cKeyboard *Keyboard;
+	int mx, my;
+	
+	
 	int b4pointer;
-	static int release_and_press;
+	
 
 	Mouse = Input.GetMouse();
 	if (Mouse)
