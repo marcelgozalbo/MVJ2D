@@ -1,7 +1,7 @@
 #pragma once
 
 #include "cBaseEntity.h"
-/*
+
 typedef enum
 {
 	ORIENTATION_N = 0,
@@ -13,8 +13,8 @@ typedef enum
 	ORIENTATION_E,
 	ORIENTATION_O,
 
-}CritterOrientation;
-*/
+}PlayerOrientation;
+
 class cPlayer: public cBaseEntity
 {
 public:
@@ -26,6 +26,9 @@ public:
 
 	virtual ~cPlayer();
 
+private:
+
+	PlayerOrientation m_orientation;
 	
 };
 
