@@ -39,7 +39,17 @@ public:
 	void SetAnimationSteps(const std::vector<cRectangle> &_rect_steps);
 	void GetAnimationSteps(std::vector<cRectangle> &_rect_steps);
 	std::size_t GetAnimationCurrentStep();
+	const cRectangle & GetAnimationCurrentStepRectangle() const;
 	void SetAnimationCurrentStep(const std::size_t &_anim_step);
+	void PlayAnimation();
+	void StopAnimation();
+	bool IsPlayingAnimation() const;
+	void ResetAnimation();
+	void UpdateAnimation();
+
+	bool IsAnimationEnabled() const;
+	void EnableAnimation();
+	void DisableAnimation();
 
 	//HELPERS
 	void RenderCollisionRect();
@@ -60,12 +70,14 @@ private:
 	//Colision Rectangle
 	bool m_collidable;
 	cRectangle m_rect_colision_rel; //Actuara com a offset desde m_posx/y
-	cRectangle m_rect_colision_abs; //Posicio absoluta real de la caixa de colisio
-	void UpdateColisionRectAbsolute(); //Actualitza el rect absolut
 
 	//Animation
 	std::vector<cRectangle>	m_anim_rect_bystep;
+	bool m_animation_enabled;
+	bool m_anim_run;
 	std::size_t m_curr_anim_step;
+	std::size_t m_anim_time_frame; //quantitat de frames que han de passar per canviar d'step
+	std::size_t m_anim_curr_time_frame; //quantitat de frames que han passat desde l'ultim canvi d'step
 	
 	
 	

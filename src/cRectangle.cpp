@@ -41,7 +41,7 @@ bool cRectangle::IsEmpty() const
 	return ((w <= 0) || (h <= 0)) ? true : false;
 }
 
-bool cRectangle::Intersects(const cRectangle &_rect_check)
+bool cRectangle::Intersects(const cRectangle &_rect_check) const
 {
 	
 
