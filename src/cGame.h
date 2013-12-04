@@ -8,9 +8,15 @@
 #include "cSound.h"
 #include "cCritter.h"
 #include "cSkeleton.h"
+#include "cMenu.h"
 
-#define STATE_MAIN	0
-#define STATE_GAME	1
+enum eGameStates
+{
+	STATE_MAIN,
+	STATE_GAME,
+	STATE_FINISHED,
+	STATE_NUMBER
+};
 
 class cGame
 {
@@ -21,12 +27,14 @@ public:
 	bool Init(HWND hWnd,HINSTANCE hInst,bool exclusive);
 	bool Loop(); 
 	void Finalize();
+	void SetState(eGameStates aState);
 
 	cInputLayer Input;
 	cScene *Scene;
 	cGraphicsLayer *Graphics;
 	cCritter Critter;
 	cSkeleton Skeleton;
+	cMenu Menu;
 
 private:
 	cGame();
@@ -37,7 +45,7 @@ private:
 
 	cSound Sound;
 	
-	int state;
+	eGameStates _state;
 
 	void ProcessOrder();
 

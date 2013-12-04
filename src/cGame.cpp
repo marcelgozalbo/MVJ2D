@@ -7,21 +7,16 @@ cGame* cGame::_instance = 0;
 
 cGame* cGame::Instance()
 {
-	
-
 	if (_instance == 0)
 	{
 		_instance = new cGame;
-
 	}
 	return _instance;
 }
 
-cGame::cGame() 
+cGame::cGame() :
+_state(STATE_MAIN)
 {
-	//Ja ni inicialitzar l'estat.. puta basura..
-	state = STATE_MAIN;
-
 }
 cGame::~cGame()
 {
@@ -43,7 +38,7 @@ bool cGame::Init(HWND hWnd,HINSTANCE hInst,bool exclusive)
 		return false;
 	}
 
-	res = Input.Init(hInst,hWnd,exclusive,USE_MOUSE|USE_KEYBOARD);
+	res = Input.Init(hInst,hWnd,exclusive,USE_KEYBOARD);
 	if(!res)
 	{
 		Log->Msg("Error initializing Input!");
@@ -56,6 +51,8 @@ bool cGame::Init(HWND hWnd,HINSTANCE hInst,bool exclusive)
 	Scene = new cScene();
 	Scene->LoadMap("../media/map.txt");
 
+	Menu.LoadData();
+
 	return true;
 }
 
@@ -67,8 +64,15 @@ void cGame::Finalize()
 	Input.Finalize();
 }
 
+void cGame::SetState(eGameStates aState)
+{
+	_state = aState;
+}
+
 bool cGame::Loop()
 {
+	if (_state == STATE_FINISHED)
+		return false;
 	bool res;
 	//Input
 	res = LoopInput();
@@ -98,25 +102,10 @@ bool cGame::LoopInput()
 
 bool cGame::LoopProcess()
 {
-	cMouse *Mouse;
-	Mouse = Input.GetMouse();
-
-	switch(state)
+	switch(_state)
 	{
 		case STATE_MAIN:
-						if(Mouse->ButtonDown(LEFT))
-						{
-							//Play button
-							if(Mouse->In(334,236,420,278))
-							{
-								state = STATE_GAME;
-							}
-							//Exit button
-							else if(Mouse->In(426,236,512,278))
-							{
-								return false;
-							}
-						}
+						Menu.Update();
 						break;
 
 		case STATE_GAME:
@@ -136,9 +125,18 @@ bool cGame::LoopOutput()
 
 bool cGame::Render()
 {
-	Scene->Render();
+	bool res = true;
+	switch (_state)
+	{
+	case STATE_MAIN:
+		Menu.Render();
+		break;
+
+	case STATE_GAME:
+		Scene->Render();
+		break;
+	}
 	Graphics->Render();
-	//res = Graphics.Render(state,Input.GetMouse(),&Scene,&Critter,&Skeleton);
 	return true;
 }
 
@@ -147,142 +145,21 @@ void cGame::ProcessOrder()
 {
 	cMouse *Mouse;
 	cKeyboard *Keyboard;
-	int mx,my,msx,msy,p,cx,cy,x,y;
-	int s=5; //marge for directional pointers
-	int xo,xf,yo,yf;
+	int mx, my, msx, msy, p, cx, cy, x, y;
+	int s = 5; //marge for directional pointers
+	int xo, xf, yo, yf;
 	int b4pointer;
 	static int release_and_press;
 
 	Mouse = Input.GetMouse();
-	//Keyboard = Input.GetKeyboard();
-	b4pointer = Mouse->GetPointer();
-	Mouse->GetPosition(&mx,&my);
-
-	//Actualitzo el jugador
-	Critter.Update();
-	
-
-	/*
-	if(Mouse->ButtonDown(LEFT))
+	if (Mouse)
 	{
-		Mouse->SetPointer(NORMAL);
-		
-		if(Mouse->In(SCENE_Xo,SCENE_Yo,SCENE_Xf,SCENE_Yf))
-		{
-			if(Mouse->GetSelection()!=SELECT_SCENE)
-			{
-				//Select movement/attack
-				if(Critter.GetSelected())
-				{
-					if(release_and_press)
-					{
-						//Attack
-						Skeleton.GetCell(&cx,&cy);
-						if(Mouse->InCell(&Scene,cx,cy))
-						{
-							if(!Critter.GetShooting())
-								Critter.GoToEnemy(Scene.map,Scene.cx+cx,Scene.cx+cy);
-						}
-						//Movement
-						else
-						{
-							Mouse->GetCell(&cx,&cy);
-							Critter.GoToCell(Scene.map,Scene.cx+cx,Scene.cy+cy);
-						}
-					}
-				}
-				//Begin selection
-				else
-				{
-					Mouse->SetSelection(SELECT_SCENE);
-					Mouse->SetSelectionPoint(mx,my);
-				}
-			}
-		}
-		else if(Mouse->In(RADAR_Xo,RADAR_Yo,RADAR_Xf,RADAR_Yf))
-		{
-			if(Critter.GetSelected())
-			{
-				if(release_and_press)
-				{
-					int radar_cell_x = (mx-RADAR_Xo) >> 2, //[672..799]/4=[0..31]
-						radar_cell_y = (my-RADAR_Yo) >> 2; //[ 60..187]/4=[0..31]
+		//Keyboard = Input.GetKeyboard();
+		b4pointer = Mouse->GetPointer();
+		Mouse->GetPosition(&mx, &my);
 
-					Critter.GoToCell(Scene.map,radar_cell_x,radar_cell_y);
-				}
-			}
-			else
-			{
-				Mouse->SetSelection(SELECT_RADAR);
-				Scene.MoveByRadar(mx,my);
-			}
-		}
-		release_and_press = false;
+		//Actualitzo el jugador
+		Critter.Update();
+
 	}
-	else if(Mouse->ButtonUp(LEFT))
-	{
-		release_and_press = true;
-
-		if(Mouse->GetSelection()==SELECT_SCENE)
-		{
-			Mouse->GetSelectionPoint(&msx,&msy);
-
-			xo = min(msx,mx)+(Scene.cx<<5)-SCENE_Xo;
-			xf = max(msx,mx)+(Scene.cx<<5)-SCENE_Xo;
-			yo = min(msy,my)+(Scene.cy<<5)-SCENE_Yo,
-			yf = max(msy,my)+(Scene.cy<<5)-SCENE_Yo;
-			
-			Critter.GetPosition(&x,&y);
-			if((xo<(x+32))&&(xf>=x)&&(yo<(y+32))&&(yf>=y))
-				Critter.SetSelected(true);
-		}
-		Mouse->SetSelection(SELECT_NOTHING);
-
-		//Mouse over Critter
-		Critter.GetCell(&cx,&cy);
-		if(Mouse->InCell(&Scene,cx,cy))
-		{
-			Mouse->SetPointer(SELECT);
-			return;
-		}
-		//Mouse over Enemy
-		Skeleton.GetCell(&cx,&cy);
-		if(Mouse->InCell(&Scene,cx,cy))
-		{
-			Mouse->SetPointer(ATTACK);
-		}
-		else if(Mouse->In(s,SCENE_Yo,SCENE_Xf,SCENE_Yf-s))
-		{
-			//Critter selected pointing, where to move
-			if(Critter.GetSelected())	Mouse->SetPointer(MOVE);
-			//Critter selected but mouse out map
-			else						Mouse->SetPointer(NORMAL);
-		}
-		else if(Mouse->In(RADAR_Xo,RADAR_Yo,RADAR_Xf,RADAR_Yf))
-		{
-			//Critter selected pointing, where to move trough radar
-			if(Critter.GetSelected())	Mouse->SetPointer(MOVE);
-		}
-		else
-		{	
-			//Arrow mouse pointers to move through scene
-			if	   (Mouse->In(             s,             s,SCREEN_RES_X-s,SCREEN_RES_Y-s)) Mouse->SetPointer(NORMAL);
-			else if(Mouse->In(             s,             0,SCREEN_RES_X-s,             s)) Mouse->SetPointer(MN);
-			else if(Mouse->In(             s,SCREEN_RES_Y-s,SCREEN_RES_X-s,  SCREEN_RES_Y)) Mouse->SetPointer(MS);
-			else if(Mouse->In(SCREEN_RES_X-s,             s,  SCREEN_RES_X,SCREEN_RES_Y-s)) Mouse->SetPointer(ME);
-			else if(Mouse->In(             0,             s,             s,SCREEN_RES_Y-s)) Mouse->SetPointer(MO);
-			else if(Mouse->In(             0,             0,             s,             s)) Mouse->SetPointer(MNO);
-			else if(Mouse->In(             0,SCREEN_RES_Y-s,             s,  SCREEN_RES_Y)) Mouse->SetPointer(MSO);
-			else if(Mouse->In(SCREEN_RES_X-s,             0,  SCREEN_RES_X,             s)) Mouse->SetPointer(MNE);
-			else if(Mouse->In(SCREEN_RES_X-s,SCREEN_RES_Y-s,  SCREEN_RES_X,  SCREEN_RES_Y)) Mouse->SetPointer(MSE);
-			else																			Mouse->SetPointer(NORMAL);
-
-			p = Mouse->GetPointer();
-			if((p>=MN)&&(p<=MSO))	Scene.Move(p);
-		}
-	}
-	
-
-	if(b4pointer!=Mouse->GetPointer()) Mouse->InitAnim();
-	*/
 }
