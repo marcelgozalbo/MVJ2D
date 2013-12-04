@@ -1,11 +1,11 @@
 #include "cCell.h"
 #include "cGame.h"
 
-cCell::cCell(int _row, int _col, bool _walkable) :
+cCell::cCell(int _row, int _col, int _cellId, bool _walkable) :
 	cBaseEntity("tilemap", _row * tileWidth, _col * tileHeight, 1),
 	m_walkable(_walkable)
 {
-	cRectangle rec(_row * tileWidth, _col * tileHeight, tileWidth, tileHeight);
+	cRectangle rec(_cellId * tileWidth, _cellId* tileHeight, tileWidth, tileHeight);
 	SetTextureRect(rec);
 
 	if (!m_walkable)

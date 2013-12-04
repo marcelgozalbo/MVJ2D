@@ -6,7 +6,7 @@
 class cCell : public cBaseEntity
 {
 public:
-	cCell(int _row, int _col, bool _walkable);
+	cCell(int _row, int _col, int _cellId, bool _walkable);
 	~cCell();
 
 	bool isWalkable() const;

@@ -2,8 +2,6 @@
 #include <string>
 #include <sstream>
 
-//#define ARRAY_SIZEOF(arr) (sizeof(arr)/sizeof(arr[0]))
-
 cMap::tWalkability cMap::walkability = { true, false, true, true };
 
 template <typename T>
@@ -54,7 +52,7 @@ void cMap::load(const std::string& _filePath)
 
 					if (cellId < walkability.size())
 					{
-						m_grid.back().push_back(new cCell(currentRow, currentCol, walkability[cellId]));
+						m_grid.back().push_back(new cCell(currentRow, currentCol, cellId, walkability[cellId]));
 					}
 					else
 					{
