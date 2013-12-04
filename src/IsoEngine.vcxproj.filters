@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="cCritter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="cGame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -37,9 +34,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cScene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="cSkeleton.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cTrajectory.cpp">
@@ -74,9 +68,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cCritter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="cGame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -96,9 +87,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cScene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="cSkeleton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cTrajectory.h">

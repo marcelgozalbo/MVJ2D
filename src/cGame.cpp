@@ -109,8 +109,7 @@ bool cGame::LoopProcess()
 						break;
 
 		case STATE_GAME:
-						ProcessOrder();
-						Critter.Move();
+						Scene->Update();
 						break;
 	}
 	return true;
@@ -140,26 +139,3 @@ bool cGame::Render()
 	return true;
 }
 
-
-void cGame::ProcessOrder()
-{
-	cMouse *Mouse;
-	//cKeyboard *Keyboard;
-	int mx, my;
-	
-	
-	int b4pointer;
-	
-
-	Mouse = Input.GetMouse();
-	if (Mouse)
-	{
-		//Keyboard = Input.GetKeyboard();
-		b4pointer = Mouse->GetPointer();
-		Mouse->GetPosition(&mx, &my);
-
-		//Actualitzo el jugador
-		Critter.Update();
-
-	}
-}

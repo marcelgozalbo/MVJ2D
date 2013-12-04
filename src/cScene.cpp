@@ -11,7 +11,14 @@ cScene::cScene()
 	cy=0;
 }
 cScene::~cScene(){}
-#include "cBaseEntity.h"
+
+
+void cScene::Update()
+{
+	m_player.Update();
+
+
+}
 
 void cScene::Render()
 {
