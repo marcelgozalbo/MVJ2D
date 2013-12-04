@@ -2,7 +2,7 @@
 #include <string>
 
 #include "cRectangle.h"
-
+#include <vector>
 
 class cBaseEntity
 {
@@ -11,11 +11,10 @@ public:
 	
 	virtual void Update();
 	virtual void Render();
-	void RenderCollisionRect();
 
 	//SPATIAL POSITION
-	void SetPosition(float _x, float _y);
-	void GetPosition(float &_x, float &_y);
+	void SetPosition(int _x, int _y);
+	void GetPosition(int &_x, int &_y);
 	void SetZIndex(int _z);
 	void GetZIndex(int &_z);
 	
@@ -36,8 +35,14 @@ public:
 	void DisableCollision(){ m_collidable = false; };
 	bool HasCollision(cBaseEntity &_baseentity);
 
+	//ANIMATION
+	void SetAnimationSteps(const std::vector<cRectangle> &_rect_steps);
+	void GetAnimationSteps(std::vector<cRectangle> &_rect_steps);
+	std::size_t GetAnimationCurrentStep();
+	void SetAnimationCurrentStep(const std::size_t &_anim_step);
 
 	//HELPERS
+	void RenderCollisionRect();
 	
 
 	~cBaseEntity();
@@ -45,12 +50,12 @@ public:
 private:
 	
 	//ABSOLUTE POSITION UPPER LEFT
-	float m_posx, m_posy;
+	int m_posx, m_posy;
 	int m_posz;
 
 	// texture id
 	std::string m_text_id;
-	cRectangle m_rect_texture;
+	cRectangle m_rect_texture; // Rect de seleccio de sprite dins de textura
 
 	//Colision Rectangle
 	bool m_collidable;
@@ -58,6 +63,12 @@ private:
 	cRectangle m_rect_colision_abs; //Posicio absoluta real de la caixa de colisio
 	void UpdateColisionRectAbsolute(); //Actualitza el rect absolut
 
+	//Animation
+	std::vector<cRectangle>	m_anim_rect_bystep;
+	std::size_t m_curr_anim_step;
+	
+	
+	
 
 
 };

@@ -1,5 +1,6 @@
 #include "cBaseEntity.h"
 #include "cGame.h"
+#include "cLog.h"
 
 cBaseEntity::cBaseEntity()
 {
@@ -36,13 +37,13 @@ cBaseEntity::~cBaseEntity()
 {
 }
 
-void cBaseEntity::SetPosition(float _x, float _y)
+void cBaseEntity::SetPosition(int _x, int _y)
 {
 	m_posx = _x;
 	m_posy = _y;
 }
 
-void cBaseEntity::GetPosition(float &_x, float &_y)
+void cBaseEntity::GetPosition(int &_x, int &_y)
 {
 	_x = m_posx;
 	_y = m_posy;
@@ -124,4 +125,42 @@ void cBaseEntity::SetTextureSizeToTextureRectRelative()
 	cRectangle rec;
 	cGame::Instance()->Graphics.GetTextureSizes(m_text_id, rec.h, rec.w);
 	SetCollisionRectRelative(rec);
+}
+
+void cBaseEntity::SetAnimationSteps(const std::vector<cRectangle> &_rect_steps)
+{
+	if (!_rect_steps.empty())
+	{
+		m_anim_rect_bystep = _rect_steps;
+		SetAnimationCurrentStep(0);
+		
+	}
+}
+
+
+void cBaseEntity::GetAnimationSteps(std::vector<cRectangle> &_rect_steps)
+{
+	_rect_steps = m_anim_rect_bystep;
+}
+
+std::size_t cBaseEntity::GetAnimationCurrentStep()
+{
+	return m_curr_anim_step;
+
+}
+
+void cBaseEntity::SetAnimationCurrentStep(const std::size_t &_anim_step)
+{
+	if (_anim_step < m_anim_rect_bystep.size() )
+	{
+		m_curr_anim_step = _anim_step;
+		m_rect_texture = m_anim_rect_bystep[m_curr_anim_step];
+	}
+	else
+	{
+		cLog *Log = cLog::Instance();
+		Log->Msg(std::string("SetAnimationCurrentStep out of range"));
+		return;
+	}
+
 }
