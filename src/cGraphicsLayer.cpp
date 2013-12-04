@@ -84,10 +84,10 @@ void cGraphicsLayer::LoadData()
 	LPDIRECT3DTEXTURE9 buffer = nullptr;
 	
 	//Main menu
-	D3DXCreateTextureFromFileEx(g_pD3DDevice,"../media/main.png",0,0,1,0,D3DFMT_UNKNOWN,
-								D3DPOOL_DEFAULT,D3DX_FILTER_NONE,D3DX_FILTER_NONE,
-								NULL, NULL, NULL, &buffer);
-	m_texturesmap["Mainmenu"] = buffer;
+	D3DXCreateTextureFromFileEx(g_pD3DDevice, "../media/main.jpg", 0, 0, 1, 0, D3DFMT_UNKNOWN,
+		D3DPOOL_DEFAULT, D3DX_FILTER_NONE, D3DX_FILTER_NONE,
+		NULL, NULL, NULL, &buffer);
+	m_texturesmap["mainmenu"] = buffer;
 
 	//GUI game
 	D3DXCreateTextureFromFileEx(g_pD3DDevice,"../media/game.png",0,0,1,0,D3DFMT_UNKNOWN,
@@ -112,6 +112,12 @@ void cGraphicsLayer::LoadData()
 								D3DPOOL_DEFAULT,D3DX_FILTER_NONE,D3DX_FILTER_NONE,
 								0x00ff00ff, NULL, NULL, &buffer);
 	m_texturesmap["mouse"] = buffer;
+
+	//Green arrow
+	D3DXCreateTextureFromFileEx(g_pD3DDevice, "../media/green_arrow.png", 0, 0, 1, 0, D3DFMT_UNKNOWN,
+								D3DPOOL_DEFAULT, D3DX_FILTER_NONE, D3DX_FILTER_NONE,
+								0x00ff00ff, NULL, NULL, &buffer);
+	m_texturesmap["green_arrow"] = buffer;
 }
 
 void cGraphicsLayer::GetTextureSizes(std::string &text_id, int &h, int &w)
@@ -154,7 +160,7 @@ void cGraphicsLayer::Render()
 	g_pD3DDevice->BeginScene();
 
 	//Start Rendering by Z order
-	for (auto rit = m_renderframeinfo.rbegin(); rit != m_renderframeinfo.rend(); ++rit)
+	for (auto rit = m_renderframeinfo.begin(); rit != m_renderframeinfo.end(); ++rit)
 		for (auto &it_Zlevel : rit->second) 	// RENDER Z entire Z-LEVEL
 			it_Zlevel->Render(g_pSprite,g_pD3DDevice);
 	
