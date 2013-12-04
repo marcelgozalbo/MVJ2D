@@ -39,6 +39,7 @@ public:
 	void GetTextureSizes(const std::string &text_id, int &h, int &w);
 
 	void Render();
+
 private:
 	class IRender
 	{

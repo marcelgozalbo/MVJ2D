@@ -147,6 +147,7 @@
     </ClCompile>
     <ClCompile Include="cKeyboard.cpp" />
     <ClCompile Include="cLog.cpp" />
+    <ClCompile Include="cMap.cpp" />
     <ClCompile Include="cMenu.cpp" />
     <ClCompile Include="cMouse.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
@@ -177,6 +178,7 @@
     <ClInclude Include="cInputLayer.h" />
     <ClInclude Include="cKeyboard.h" />
     <ClInclude Include="cLog.h" />
+    <ClInclude Include="cMap.h" />
     <ClInclude Include="cMenu.h" />
     <ClInclude Include="cMouse.h" />
     <ClInclude Include="cPath.h" />

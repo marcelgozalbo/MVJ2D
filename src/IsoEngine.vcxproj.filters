@@ -57,6 +57,9 @@
     <ClCompile Include="cBaseEntity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="cMap.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
     <ClCompile Include="cMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -102,6 +105,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cBaseEntity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cMenu.h">
