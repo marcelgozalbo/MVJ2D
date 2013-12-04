@@ -5,8 +5,8 @@
 #include "cMouse.h"
 #include <iostream>
 
-static const unsigned int TIME_ARROW_BLINK = 700;
-static const unsigned int TIME_ENABLE_INPUT = 200;
+static const int TIME_ARROW_BLINK = 700;
+static const int TIME_ENABLE_INPUT = 200;
 
 typedef std::chrono::duration<int, std::milli> millisecs_t;
 
@@ -14,8 +14,8 @@ cMenu::cMenu() :
 	_background(nullptr),
 	_greenArrows(nullptr),
 	_selection(cMenu::SELECTION_PLAY),
-	_start(),
-	_start2(),
+	_start(std::chrono::high_resolution_clock::now()),
+	_start2(std::chrono::high_resolution_clock::now()),
 	_blink(false)
 {
 }
