@@ -1,7 +1,7 @@
 
 #ifndef __SCENE_H__
 #define __SCENE_H__
-
+#include "cPlayer.h"
 //Resolution
 #define SCREEN_RES_X	800
 #define SCREEN_RES_Y	600
@@ -41,6 +41,7 @@ public:
 	bool Visible(int cellx,int celly);
 
 
+	cPlayer m_player;
 
 	int *map;
 	int cx,cy;
