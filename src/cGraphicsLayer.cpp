@@ -154,7 +154,7 @@ void cGraphicsLayer::Render()
 	g_pD3DDevice->BeginScene();
 
 	//Start Rendering by Z order
-	for (auto rit = m_renderframeinfo.rbegin(); rit != m_renderframeinfo.rend(); ++rit)
+	for (auto rit = m_renderframeinfo.begin(); rit != m_renderframeinfo.end(); ++rit)
 		for (auto &it_Zlevel : rit->second) 	// RENDER Z entire Z-LEVEL
 			it_Zlevel->Render(g_pSprite,g_pD3DDevice);
 	
