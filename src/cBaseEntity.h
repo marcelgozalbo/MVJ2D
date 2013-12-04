@@ -11,8 +11,8 @@ public:
 	cBaseEntity(const std::string &texid, int x, int y, int z);
 	cBaseEntity();
 	
-	void Update();
-	void Render();
+	virtual void Update();
+	virtual void Render();
 
 	//SPATIAL POSITION
 	void SetPosition(int _x, int _y);
@@ -30,7 +30,7 @@ public:
 	void SetCollisionRectRelative(const cRectangle &_rec);
 	const cRectangle& GetCollisionRectRelative() const;
 	cRectangle GetCollisionRectAbsolute() const;
-	void SetTextureSizeToTextureRectRelative();
+	void SetTextureSizeToCollisionRectRelative();
 
 	bool IsCollidable() const;
 	void EnableCollision(){	m_collidable = true;};
@@ -60,7 +60,7 @@ public:
 	void RenderCollisionRect();
 	
 
-	~cBaseEntity();
+	virtual ~cBaseEntity();
 
 private:
 	

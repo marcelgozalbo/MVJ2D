@@ -42,10 +42,10 @@ void cBaseEntity::Render()
 		if (IsAnimationEnabled())
 		{
 			cRectangle buff = GetAnimationCurrentStepRectangle();
-			cGame::Instance()->Graphics.DrawSprite(m_text_id, m_posx, m_posy, m_posz, &buff);
+			cGame::Instance()->Graphics->DrawSprite(m_text_id, m_posx, m_posy, m_posz, &buff);
 		}
 		else
-			cGame::Instance()->Graphics.DrawSprite(m_text_id, m_posx, m_posy, m_posz, &m_rect_texture);
+			cGame::Instance()->Graphics->DrawSprite(m_text_id, m_posx, m_posy, m_posz, &m_rect_texture);
 	}
 }
 
@@ -55,7 +55,7 @@ void cBaseEntity::RenderCollisionRect()
 	{
 		
 		//Renderitzo el rectangle a Z-1 perque surti per sobre la textura sempre
-		cGame::Instance()->Graphics.DrawRect(GetCollisionRectAbsolute(), 0x00FF00FF, m_posz - 1);
+		cGame::Instance()->Graphics->DrawRect(GetCollisionRectAbsolute(), 0x00FF00FF, m_posz - 1);
 	}
 }
 
@@ -90,7 +90,7 @@ void cBaseEntity::SetTextureID(const std::string &_str)
 {
 	m_text_id = _str;
 	SetTextureSizesToTextureRect();
-	SetTextureSizeToTextureRectRelative();
+	SetTextureSizeToCollisionRectRelative();
 }
 
 std::string& cBaseEntity::GetTextureID()
@@ -139,14 +139,14 @@ bool cBaseEntity::HasCollision(const cBaseEntity &_baseentity)
 void cBaseEntity::SetTextureSizesToTextureRect()
 {
 	m_rect_texture.SetRect(0);
-	cGame::Instance()->Graphics.GetTextureSizes(m_text_id, m_rect_texture.h, m_rect_texture.w);
+	cGame::Instance()->Graphics->GetTextureSizes(m_text_id, m_rect_texture.h, m_rect_texture.w);
 }
 
 
-void cBaseEntity::SetTextureSizeToTextureRectRelative()
+void cBaseEntity::SetTextureSizeToCollisionRectRelative()
 {
 	cRectangle rec;
-	cGame::Instance()->Graphics.GetTextureSizes(m_text_id, rec.h, rec.w);
+	cGame::Instance()->Graphics->GetTextureSizes(m_text_id, rec.h, rec.w);
 	SetCollisionRectRelative(rec);
 }
 
