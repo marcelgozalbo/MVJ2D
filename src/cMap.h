@@ -1,10 +1,9 @@
 #ifndef MPV2D_C_MAP_H_
 #define MPV2D_C_MAP_H_
 
-#include "cBaseEntity.h"
 #include <fstream>
-
-class ifstream;
+#include <array>
+#include "cCell.h"
 
 class cMap
 {
@@ -17,11 +16,15 @@ public:
 	void update();
 
 private:
-	typedef std::vector<int> tRow;
-	typedef std::vector<tRow> tGrid;
+	static const int tileCount = 2;
 
-	static const int tileWidth = 32;
-	static const int tileHeight = 32;
+	typedef std::vector<cCell*> tRow;
+	typedef std::vector<tRow> tGrid;
+	typedef std::array<bool, tileCount> tWalkability;
+
+	static tWalkability walkability;
+
+	void clear();
 
 	tGrid m_grid;
 };

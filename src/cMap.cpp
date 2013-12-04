@@ -1,6 +1,20 @@
 #include "cMap.h"
-#include <sstream>
 #include "cGame.h"
+#include <string>
+#include <sstream>
+
+//#define ARRAY_SIZEOF(arr) (sizeof(arr)/sizeof(arr[0]))
+
+cMap::tWalkability cMap::walkability = { true, false };
+
+template <typename T>
+std::string toString(T in)
+{
+	std::stringstream ss;
+
+	ss << in;
+	return ss.str();
+}
 
 cMap::cMap()
 {
@@ -16,10 +30,13 @@ void cMap::load(const std::string& _filePath)
 {
 	std::ifstream file;
 
+	clear();
 	file.open(_filePath.c_str(), std::ifstream::in);
 
 	if (file.good())
 	{
+		int currentRow = 0;
+		int currentCol = 0;
 		std::string line;
 
 		while (std::getline(file, line))
@@ -28,14 +45,25 @@ void cMap::load(const std::string& _filePath)
 
 			for (auto character : line)
 			{
-				int textureId;
+				unsigned int cellId;
 				std::stringstream ss;
 
 				ss << character;
-				ss >> textureId;
+				ss >> cellId;
 
-				m_grid.back().push_back(textureId);
+				if (cellId < walkability.size())
+				{
+					m_grid.back().push_back(new cCell(currentRow, currentCol, walkability[cellId]));
+				}
+				else
+				{
+					throw std::runtime_error("unknown cellId: " + toString(cellId) + "on row " + toString(currentRow) + " and column " + toString(currentCol));
+				}
+
+				currentCol++;
 			}
+
+			currentRow++;
 		}
 	}
 
@@ -48,9 +76,9 @@ void cMap::render()
 
 	for (auto& row : m_grid)
 	{
-		for (auto col : row)
+		for (auto* cell : row)
 		{
-			//DrawSprite("tilemap", 0, 0, 50, &rectangle3);
+			cell->Render();
 		}
 	}
 }
@@ -58,4 +86,15 @@ void cMap::render()
 void cMap::update()
 {
 
+}
+
+void cMap::clear()
+{
+	for (auto& row : m_grid)
+	{
+		for (auto* cell : row)
+		{
+			delete cell;
+		}
+	}
 }

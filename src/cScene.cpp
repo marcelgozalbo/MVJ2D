@@ -54,7 +54,7 @@ void cScene::Render()
 
 void cScene::LoadMap(char *file)
 {
-	m_map.load(file);
+//	m_map.load(file);
 }
 
 void cScene::Move(int pointer)
