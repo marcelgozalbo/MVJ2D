@@ -114,7 +114,7 @@ void cGraphicsLayer::LoadData()
 	m_texturesmap["mouse"] = buffer;
 }
 
-void cGraphicsLayer::GetTextureSizes(std::string &text_id, int &h, int &w)
+void cGraphicsLayer::GetTextureSizes(const std::string &text_id, int &h, int &w)
 {
 	auto text_it = m_texturesmap.find(text_id);
 
@@ -172,7 +172,7 @@ void cGraphicsLayer::Render()
 	
 }
 
-void cGraphicsLayer::DrawSprite(std::string &text_id, int posx, int posy, int posz, cRectangle *Rect)
+void cGraphicsLayer::DrawSprite(const std::string &text_id, int posx, int posy, int posz, cRectangle *Rect)
 {
 	auto text_it = m_texturesmap.find(text_id);
 
@@ -197,7 +197,7 @@ void cGraphicsLayer::DrawSprite(std::string &text_id, int posx, int posy, int po
 	}
 }
 
-void cGraphicsLayer::DrawRect(cRectangle &Rectangle, D3DCOLOR color, int posz)
+void cGraphicsLayer::DrawRect(const cRectangle &Rectangle, D3DCOLOR color, int posz)
 {
 	RectangleRenderer *ptex = new RectangleRenderer(Rectangle,color);
 	auto rendit = m_renderframeinfo.find(posz);
