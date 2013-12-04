@@ -2,6 +2,7 @@
 #ifndef __SCENE_H__
 #define __SCENE_H__
 #include "cPlayer.h"
+#include "cMap.h"
 //Resolution
 #define SCREEN_RES_X	800
 #define SCREEN_RES_Y	600
@@ -34,13 +35,14 @@ public:
 	virtual ~cScene();
 
 	void Render(); //<- Pintara l'escena!!!
+	void Update();
 
 	void LoadMap(char *file);
 	void Move(int pointer);
 	void MoveByRadar(int x,int y);
 	bool Visible(int cellx,int celly);
 
-
+	cMap m_map;
 	cPlayer m_player;
 
 	int *map;

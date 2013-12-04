@@ -6,8 +6,6 @@
 #include "cInputLayer.h"
 #include "cScene.h"
 #include "cSound.h"
-#include "cCritter.h"
-#include "cSkeleton.h"
 #include "cMenu.h"
 
 enum eGameStates
@@ -32,8 +30,7 @@ public:
 	cInputLayer Input;
 	cScene *Scene;
 	cGraphicsLayer *Graphics;
-	cCritter Critter;
-	cSkeleton Skeleton;
+
 	cMenu Menu;
 
 private:
@@ -46,8 +43,6 @@ private:
 	cSound Sound;
 	
 	eGameStates _state;
-
-	void ProcessOrder();
 
 	bool Render();
 };
