@@ -1,5 +1,4 @@
 #include "cMap.h"
-#include "cGame.h"
 #include <string>
 #include <sstream>
 
@@ -77,8 +76,6 @@ void cMap::load(const std::string& _filePath)
 
 void cMap::render()
 {
-	cGraphicsLayer* Graphics = cGame::Instance()->Graphics;
-
 	for (auto& row : m_grid)
 	{
 		for (auto* cell : row)
