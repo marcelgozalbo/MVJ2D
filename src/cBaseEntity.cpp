@@ -117,8 +117,8 @@ cRectangle  cBaseEntity::GetCollisionRectAbsolute() const
 	cRectangle rect_absolute;
 	rect_absolute.SetRect(m_posx + m_rect_colision_rel.x,
 		m_posy + m_rect_colision_rel.y,
-		m_rect_colision_rel.w,
-		m_rect_colision_rel.h
+		m_posx + m_rect_colision_rel.w,
+		m_posy + m_rect_colision_rel.h
 		);
 	return rect_absolute;
 }
