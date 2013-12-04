@@ -16,7 +16,7 @@ public:
 	void update();
 
 private:
-	static const int tileCount = 2;
+	static const int tileCount = 4;
 
 	typedef std::vector<cCell*> tRow;
 	typedef std::vector<tRow> tGrid;

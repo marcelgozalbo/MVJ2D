@@ -5,7 +5,7 @@
 
 //#define ARRAY_SIZEOF(arr) (sizeof(arr)/sizeof(arr[0]))
 
-cMap::tWalkability cMap::walkability = { true, false };
+cMap::tWalkability cMap::walkability = { true, false, true, true };
 
 template <typename T>
 std::string toString(T in)
@@ -45,25 +45,30 @@ void cMap::load(const std::string& _filePath)
 
 			for (auto character : line)
 			{
-				unsigned int cellId;
-				std::stringstream ss;
-
-				ss << character;
-				ss >> cellId;
-
-				if (cellId < walkability.size())
+				if (character != ' ')
 				{
-					m_grid.back().push_back(new cCell(currentRow, currentCol, walkability[cellId]));
-				}
-				else
-				{
-					throw std::runtime_error("unknown cellId: " + toString(cellId) + "on row " + toString(currentRow) + " and column " + toString(currentCol));
-				}
+					unsigned int cellId;
+					std::stringstream ss;
 
-				currentCol++;
+					ss << character;
+					ss >> cellId;
+
+					if (cellId < walkability.size())
+					{
+						m_grid.back().push_back(new cCell(currentRow, currentCol, walkability[cellId]));
+					}
+					else
+					{
+						std::string message = "unknown cellId: " + toString(cellId) + " on row " + toString(currentRow) + " and column " + toString(currentCol);
+						throw std::runtime_error(message);
+					}
+
+					currentCol++;
+				}
 			}
 
 			currentRow++;
+			currentCol = 0;
 		}
 	}
 
@@ -97,4 +102,6 @@ void cMap::clear()
 			delete cell;
 		}
 	}
+
+	m_grid.clear();
 }
