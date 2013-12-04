@@ -1,5 +1,6 @@
 #include "cMap.h"
 #include <sstream>
+#include "cGame.h"
 
 cMap::cMap()
 {
@@ -39,4 +40,22 @@ void cMap::load(const std::string& _filePath)
 	}
 
 	file.close();
+}
+
+void cMap::render()
+{
+	cGraphicsLayer* Graphics = cGame::Instance()->Graphics;
+
+	for (auto& row : m_grid)
+	{
+		for (auto col : row)
+		{
+			//DrawSprite("tilemap", 0, 0, 50, &rectangle3);
+		}
+	}
+}
+
+void cMap::update()
+{
+
 }

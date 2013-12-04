@@ -54,29 +54,7 @@ void cScene::Render()
 
 void cScene::LoadMap(char *file)
 {
-	int i, j, k, n;
-
-	map = (int *)malloc(sizeof(int)*(SCENE_AREA*SCENE_AREA));
-
-	FILE *f;
-	errno_t err = fopen_s(&f, file, "r");
-	if (err)
-	{
-		std::cout << "Open file log.txt failed with errno: " << err << std::endl;
-	}
-	k = 0;
-
-	for(i=0;i<SCENE_AREA;i++)
-	{
-		for(j=0;j<SCENE_AREA;j++)
-		{
-			fscanf_s(f,"%d",&n);
-			map[k]=n;
-			k++;
-		}
-	}
-
-	fclose(f);
+	m_map.load(file);
 }
 
 void cScene::Move(int pointer)
