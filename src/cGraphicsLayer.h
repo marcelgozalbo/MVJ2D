@@ -33,7 +33,7 @@ public:
 	void LoadData();
 	void UnLoadData();
 
-	void DrawSprite(std::string &text_id, float posx, float posy, int posz, cRectangle *Rect = nullptr);
+	void DrawSprite(std::string &text_id, int posx, int posy, int posz, cRectangle *Rect = nullptr);
 	void DrawRect(cRectangle &Rectangle, D3DCOLOR color, int posz);
 
 	void GetTextureSizes(std::string &text_id, int &h, int &w);
@@ -101,7 +101,7 @@ private:
 	class TextureRenderer : public IRender
 	{
 	public:
-		TextureRenderer(LPDIRECT3DTEXTURE9 _textureid, float _posx, float _posy, cRectangle *_rect) :
+		TextureRenderer(LPDIRECT3DTEXTURE9 _textureid, int _posx, int _posy, cRectangle *_rect) :
 			textureid(_textureid), posx(_posx), posy(_posy), rect(nullptr){
 			if (_rect != nullptr)	rect = new cRectangle(*_rect);
 		}
@@ -132,7 +132,7 @@ private:
 		}
 	private:
 
-		float posx, posy;
+		int posx, posy;
 		LPDIRECT3DTEXTURE9 textureid;
 		cRectangle  *rect;
 	};
