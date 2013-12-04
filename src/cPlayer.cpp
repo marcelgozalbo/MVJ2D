@@ -4,7 +4,11 @@
 cPlayer::cPlayer():
 cBaseEntity("characters",0, 0, 0)
 {
-	SetTextureRect(cRectangle(0, 0, 32, 32));
+	cRectangle rec(0, 0, 32, 32);
+	SetTextureRect(rec);
+	EnableCollision();
+	SetCollisionRectRelative(rec);
+	
 }
 
 
@@ -98,4 +102,5 @@ void cPlayer::Update()
 void cPlayer::Render()
 {
 	cBaseEntity::Render();
+	cBaseEntity::RenderCollisionRect();
 }
