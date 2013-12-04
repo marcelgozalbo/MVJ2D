@@ -78,14 +78,20 @@ void cMap::render()
 	{
 		for (auto* cell : row)
 		{
-			cell->Render();
+			cell->render();
 		}
 	}
 }
 
 void cMap::update()
 {
-
+	for (auto& row : m_grid)
+	{
+		for (auto* cell : row)
+		{
+			cell->update();
+		}
+	}
 }
 
 void cMap::clear()

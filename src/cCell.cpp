@@ -32,5 +32,5 @@ void cCell::render()
 
 void cCell::update()
 {
-
+	cBaseEntity::Update();
 }
