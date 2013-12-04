@@ -19,21 +19,21 @@ public:
 	void GetZIndex(int &_z);
 	
 	//TEXTURE
-	void SetTextureID(std::string &_str);
+	void SetTextureID(const std::string &_str);
 	std::string& GetTextureID();
-	void SetTextureRect(cRectangle &_rect);
+	void SetTextureRect(const cRectangle &_rect);
 	void SetTextureSizesToTextureRect();
 
 	//COLLISION
-	void SetCollisionRectRelative(cRectangle &_rec);
-	cRectangle& GetCollisionRectRelative();
-	cRectangle& GetCollisionRectAbsolute();
+	void SetCollisionRectRelative(const cRectangle &_rec);
+	const cRectangle& GetCollisionRectRelative() const;
+	const cRectangle& GetCollisionRectAbsolute() const;
 	void SetTextureSizeToTextureRectRelative();
 
-	bool IsCollidable();
+	bool IsCollidable() const;
 	void EnableCollision(){	m_collidable = true;};
 	void DisableCollision(){ m_collidable = false; };
-	bool HasCollision(cBaseEntity &_baseentity);
+	bool HasCollision(const cBaseEntity &_baseentity);
 
 	//ANIMATION
 	void SetAnimationSteps(const std::vector<cRectangle> &_rect_steps);

@@ -59,7 +59,7 @@ void cBaseEntity::GetZIndex(int &_z)
 	_z = m_posz;
 }
 
-void cBaseEntity::SetTextureID(std::string &_str)
+void cBaseEntity::SetTextureID(const std::string &_str)
 {
 	m_text_id = _str;
 	SetTextureSizesToTextureRect();
@@ -70,12 +70,12 @@ std::string& cBaseEntity::GetTextureID()
 {
 	return m_text_id;
 }
-void cBaseEntity::SetTextureRect(cRectangle &_rect)
+void cBaseEntity::SetTextureRect(const cRectangle &_rect)
 {
 	m_rect_texture = _rect;
 }
 
-void cBaseEntity::SetCollisionRectRelative(cRectangle &_rec)
+void cBaseEntity::SetCollisionRectRelative(const cRectangle &_rec)
 {
 	m_rect_colision_rel = _rec;
 	UpdateColisionRectAbsolute();
@@ -90,22 +90,22 @@ void cBaseEntity::UpdateColisionRectAbsolute()
 		);
 }
 
-cRectangle&  cBaseEntity::GetCollisionRectRelative()
+const cRectangle&  cBaseEntity::GetCollisionRectRelative() const
 {
 	return m_rect_colision_rel;
 }
 
-cRectangle&  cBaseEntity::GetCollisionRectAbsolute()
+const cRectangle&  cBaseEntity::GetCollisionRectAbsolute() const
 {
 	return m_rect_colision_abs;
 }
 
-bool cBaseEntity::IsCollidable()
+bool cBaseEntity::IsCollidable() const
 {
 	return m_collidable;
 }
 
-bool cBaseEntity::HasCollision(cBaseEntity &_baseentity)
+bool cBaseEntity::HasCollision(const cBaseEntity &_baseentity)
 {
 	if (IsCollidable() && _baseentity.IsCollidable())
 		return m_rect_colision_abs.Intersects(_baseentity.GetCollisionRectAbsolute());
