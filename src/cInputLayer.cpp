@@ -163,35 +163,53 @@ cMouse* cInputLayer::GetMouse()
 {
 	return m_pMouse;
 }
-bool cInputLayer::KeyDown(char key)
+bool cInputLayer::KeyDown(int key)
 {
 	return m_pKeyboard->KeyDown(key);
 }
-bool cInputLayer::KeyUp(char key)
-{
+bool cInputLayer::KeyUp(int key)
+{	
 	return m_pKeyboard->KeyUp(key);
 }
 bool cInputLayer::ButtonDown(int button)
 {
+	if (!m_pMouse)
+		return false;
+
 	return m_pMouse->ButtonDown(button);
 }
 bool cInputLayer::ButtonUp(int button)
 {
+	if (!m_pMouse)
+		return false;
+
 	return m_pMouse->ButtonUp(button);
 }
 void cInputLayer::GetMouseMovement(int *dx, int *dy)
 {
+	if (!m_pMouse)
+		return;
+
 	m_pMouse->GetMovement(dx, dy);
 }
 int	 cInputLayer::GetMouseWheelMovement()
 {
+	if (!m_pMouse)
+		return 0;
+
 	return m_pMouse->GetWheelMovement();
 }
 void cInputLayer::SetMousePosition(int xo, int yo)
 {
+	if (!m_pMouse)
+		return;
+
 	m_pMouse->SetPosition(xo,yo);
 }
 void cInputLayer::GetMousePosition(int *xpos, int *ypos)
 {
+	if (!m_pMouse)
+		return;
+
 	m_pMouse->GetPosition(xpos,ypos);
 }

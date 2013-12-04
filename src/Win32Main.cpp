@@ -20,7 +20,7 @@ bool InitWindow(HINSTANCE hInst, HWND *hWnd, bool *exclusive)
 	wcl.style = CS_HREDRAW | CS_VREDRAW;
 	wcl.hIcon = LoadIcon(NULL, IDI_APPLICATION);
 	wcl.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
-	wcl.hCursor = LoadCursor(NULL, IDC_ARROW);
+	wcl.hCursor = NULL;
 	wcl.lpszMenuName = NULL;
 	wcl.cbClsExtra = 0;
 	wcl.cbWndExtra = 0;
@@ -43,6 +43,9 @@ bool InitWindow(HINSTANCE hInst, HWND *hWnd, bool *exclusive)
 			0, 0, SCREEN_RES_X, SCREEN_RES_Y, NULL, NULL, hInst, NULL);
 		*exclusive = false;
 	}if(*hWnd == NULL) return false;
+	
+	// Amaguem el ratoli
+	SetCursor(NULL);
 	return true;
 }
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevIntance, LPSTR lpszArgs, int nWinMode)

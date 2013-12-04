@@ -30,8 +30,8 @@ public:
 	
 	bool	Read();
 
-	bool	KeyDown(char key);
-	bool	KeyUp(char key);
+	bool	KeyDown(int key);
+	bool	KeyUp(int key);
 
 	bool	ButtonDown(int button);
 	bool	ButtonUp(int button);
