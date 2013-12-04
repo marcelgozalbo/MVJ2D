@@ -14,6 +14,10 @@ public:
 	virtual void Update();
 	virtual void Render();
 
+	//VISIBILITY
+	bool IsVisible() const;
+	void SetVisible(bool aVisible);
+
 	//SPATIAL POSITION
 	void SetPosition(int _x, int _y);
 	void GetPosition(int &_x, int &_y);
@@ -64,6 +68,9 @@ public:
 
 private:
 	
+	//VISIBILITY
+	bool m_Visible;
+
 	//ABSOLUTE POSITION UPPER LEFT
 	int m_posx, m_posy;
 	int m_posz;

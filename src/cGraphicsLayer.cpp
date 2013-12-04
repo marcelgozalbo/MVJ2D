@@ -83,11 +83,11 @@ void cGraphicsLayer::LoadData()
 
 	LPDIRECT3DTEXTURE9 buffer = nullptr;
 	
-	//Main menu
+	//Main background
 	D3DXCreateTextureFromFileEx(g_pD3DDevice, "../media/main.jpg", 0, 0, 1, 0, D3DFMT_UNKNOWN,
-		D3DPOOL_DEFAULT, D3DX_FILTER_NONE, D3DX_FILTER_NONE,
-		NULL, NULL, NULL, &buffer);
-	m_texturesmap["mainmenu"] = buffer;
+								D3DPOOL_DEFAULT, D3DX_FILTER_NONE, D3DX_FILTER_NONE,
+								NULL, NULL, NULL, &buffer);
+	m_texturesmap["main"] = buffer;
 
 	//GUI game
 	D3DXCreateTextureFromFileEx(g_pD3DDevice,"../media/game.png",0,0,1,0,D3DFMT_UNKNOWN,
