@@ -23,8 +23,8 @@ public:
 	void Finalize();
 
 	cInputLayer Input;
-	cScene Scene;
-	cGraphicsLayer Graphics;
+	cScene *Scene;
+	cGraphicsLayer *Graphics;
 	cCritter Critter;
 	cSkeleton Skeleton;
 

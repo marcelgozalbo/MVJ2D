@@ -23,14 +23,20 @@ cGame::cGame()
 	state = STATE_MAIN;
 
 }
-cGame::~cGame(){}
+cGame::~cGame()
+{
+	delete Scene;
+	delete Graphics;
+
+}
 
 bool cGame::Init(HWND hWnd,HINSTANCE hInst,bool exclusive)
 {
 	bool res;
 	cLog *Log = cLog::Instance();
 
-	res = Graphics.Init(hWnd, exclusive);
+	Graphics = new cGraphicsLayer();
+	res = Graphics->Init(hWnd, exclusive);
 	if(!res)
 	{
 		Log->Msg("Error initializing Graphics!");
@@ -45,17 +51,18 @@ bool cGame::Init(HWND hWnd,HINSTANCE hInst,bool exclusive)
 	}
 	Input.SetMousePosition(SCREEN_RES_X >> 1,SCREEN_RES_Y >> 1);
 
-	Graphics.LoadData();
+	Graphics->LoadData();
 
-	Scene.LoadMap("../media/map.txt");
+	Scene = new cScene();
+	Scene->LoadMap("../media/map.txt");
 
 	return true;
 }
 
 void cGame::Finalize()
 {
-	Graphics.UnLoadData();
-	Graphics.Finalize();
+	Graphics->UnLoadData();
+	Graphics->Finalize();
 	Input.UnacquireAll();
 	Input.Finalize();
 }
@@ -129,8 +136,8 @@ bool cGame::LoopOutput()
 
 bool cGame::Render()
 {
-	Scene.Render();
-	Graphics.Render();
+	Scene->Render();
+	Graphics->Render();
 	//res = Graphics.Render(state,Input.GetMouse(),&Scene,&Critter,&Skeleton);
 	return true;
 }
@@ -155,7 +162,7 @@ void cGame::ProcessOrder()
 	Critter.Update();
 	
 
-
+	/*
 	if(Mouse->ButtonDown(LEFT))
 	{
 		Mouse->SetPointer(NORMAL);
@@ -277,4 +284,5 @@ void cGame::ProcessOrder()
 	
 
 	if(b4pointer!=Mouse->GetPointer()) Mouse->InitAnim();
+	*/
 }
