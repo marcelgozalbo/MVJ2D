@@ -4,6 +4,11 @@
 cPlayer::cPlayer():
 cBaseEntity("characters",0, 0, 0)
 {
+	cRectangle rec(0, 0, 32, 32);
+	SetTextureRect(rec);
+	EnableCollision();
+	SetCollisionRectRelative(rec);
+	
 }
 
 
@@ -13,7 +18,9 @@ cPlayer::~cPlayer()
 
 void cPlayer::Update()
 {
-	/*
+	int V_STRAIGHT = 3;
+	int V_DIAGONAL = 2;
+
 	cInputLayer  &input = cGame::Instance()->Input;
 
 	int vecx = 0;
@@ -51,6 +58,8 @@ void cPlayer::Update()
 		else				m_orientation = ORIENTATION_N;
 	}
 
+	int x, y;
+	GetPosition(x,y);
 
 	//Actualitzo el moviment segons orientacio
 	switch (m_orientation)
@@ -84,7 +93,8 @@ void cPlayer::Update()
 		x -= V_STRAIGHT;
 		break;
 	}
-	*/
+	
+	SetPosition(x, y);
 
 	cBaseEntity::Update();
 }
@@ -92,4 +102,5 @@ void cPlayer::Update()
 void cPlayer::Render()
 {
 	cBaseEntity::Render();
+	cBaseEntity::RenderCollisionRect();
 }
