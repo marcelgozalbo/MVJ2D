@@ -6,7 +6,7 @@ cCell::cCell(int _row, int _col, int _cellId, bool _walkable) :
 	cBaseEntity("tilemap", _row * tileWidth, _col * tileHeight, 1),
 	m_walkable(_walkable)
 {
-	cRectangle rec(_cellId * tileWidth, _cellId* tileHeight, tileWidth, tileHeight);
+	cRectangle rec(_cellId * tileWidth, 0, tileWidth, tileHeight);
 	SetTextureRect(rec);
 
 	if (!m_walkable)
@@ -15,7 +15,7 @@ cCell::cCell(int _row, int _col, int _cellId, bool _walkable) :
 		SetCollisionRectRelative(rec);
 	}
 
-	cLog::Instance()->Msg("Log test %d", 10);
+	cLog::Instance()->Msg("Creating cell pos:%u,%u ref:%u,%u", _row * tileWidth, _col * tileHeight, _cellId * tileWidth, 0);
 }
 
 cCell::~cCell()
