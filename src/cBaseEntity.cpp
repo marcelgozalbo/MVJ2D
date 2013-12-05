@@ -2,6 +2,11 @@
 #include "cGame.h"
 #include "cLog.h"
 
+
+bool cBaseEntity::m_debug_collision = false;
+
+
+
 cBaseEntity::cBaseEntity(int x, int y, int z):
 cBaseEntity()
 {
@@ -30,11 +35,21 @@ cBaseEntity::cBaseEntity()
 	DisableAnimation();
 	StopAnimation();
 	SetAnimationFramesPerStep(1);
+
+	
 }
 
 void cBaseEntity::Update()
 {
 	UpdateAnimation();
+
+
+	cInputLayer  &input = cGame::Instance()->Input;
+	if (input.KeyDown(DIK_F5))
+		EnableDebugMode();
+	else
+		DisableDebugMode();
+
 }
 
 void cBaseEntity::Render()
@@ -48,7 +63,11 @@ void cBaseEntity::Render()
 		}
 		else
 			cGame::Instance()->Graphics->DrawSprite(m_text_id, m_posx, m_posy, m_posz, &m_rect_texture);
+
 	}
+
+	if (m_debug_collision)
+		RenderCollisionRect();
 }
 
 bool cBaseEntity::IsVisible() const

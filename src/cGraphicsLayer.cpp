@@ -107,6 +107,12 @@ void cGraphicsLayer::LoadData()
 								0x00ff00ff, NULL, NULL, &buffer);
 	m_texturesmap["characters"] = buffer;
 
+	//Player
+	D3DXCreateTextureFromFileEx(g_pD3DDevice, "../media/Player.png", 0, 0, 1, 0, D3DFMT_UNKNOWN,
+								D3DPOOL_DEFAULT, D3DX_FILTER_NONE, D3DX_FILTER_NONE,
+								0x00ff00ff, NULL, NULL, &buffer);
+	m_texturesmap["player"] = buffer;
+
 	//Mouse pointers
 	D3DXCreateTextureFromFileEx(g_pD3DDevice,"../media/mouse.png",0,0,1,0,D3DFMT_UNKNOWN,
 								D3DPOOL_DEFAULT,D3DX_FILTER_NONE,D3DX_FILTER_NONE,
@@ -178,7 +184,7 @@ void cGraphicsLayer::Render()
 	
 }
 
-void cGraphicsLayer::DrawSprite(const std::string &text_id, int posx, int posy, int posz, cRectangle *Rect)
+void cGraphicsLayer::DrawSprite(const std::string &text_id, int posx, int posy, int posz, cRectangle *Rect, float scalex, float scaley, float scalez)
 {
 	auto text_it = m_texturesmap.find(text_id);
 
@@ -189,9 +195,9 @@ void cGraphicsLayer::DrawSprite(const std::string &text_id, int posx, int posy, 
 		return;
 	}
 
-	TextureRenderer *ptex = new TextureRenderer(text_it->second, posx, posy, Rect);
+	TextureRenderer *ptex = new TextureRenderer(text_it->second, posx, posy, Rect, scalex, scaley,scalez);
 	auto rendit = m_renderframeinfo.find(posz);
-	if (rendit  == m_renderframeinfo.end())
+	if (rendit == m_renderframeinfo.end())
 	{
 		std::vector<IRender *> vec;
 		vec.push_back(ptex);
@@ -202,6 +208,7 @@ void cGraphicsLayer::DrawSprite(const std::string &text_id, int posx, int posy, 
 		rendit->second.push_back(ptex);
 	}
 }
+
 
 void cGraphicsLayer::DrawRect(const cRectangle &Rectangle, D3DCOLOR color, int posz)
 {
