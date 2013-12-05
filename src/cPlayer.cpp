@@ -8,6 +8,7 @@ cBaseEntity("player",0, 0, 0)
 	SetTextureRect(rec);
 	EnableCollision();
 	SetCollisionRectRelative(rec);
+	SetTextureScale(4.0);
 	
 }
 
