@@ -56,7 +56,7 @@ bool cGame::Init(HWND hWnd,HINSTANCE hInst,bool exclusive)
 	Menu.LoadData();
 
 	int id = Sound.LoadSound("../media/back_music.mp3");
-	Sound.PlayGameSound(id, true);
+	//Sound.PlayGameSound(id, true);
 
 	return true;
 }

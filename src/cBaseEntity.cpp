@@ -28,6 +28,7 @@ cBaseEntity::cBaseEntity()
 	SetZIndex(0);
 
 	SetTextureID("");
+	SetTextureScale(1.0f);
 	
 	SetCollisionRectRelative(cRectangle());
 	DisableCollision();
@@ -35,7 +36,6 @@ cBaseEntity::cBaseEntity()
 	DisableAnimation();
 	StopAnimation();
 	SetAnimationFramesPerStep(1);
-
 	
 }
 
@@ -62,7 +62,7 @@ void cBaseEntity::Render()
 			cGame::Instance()->Graphics->DrawSprite(m_text_id, m_posx, m_posy, m_posz, &buff);
 		}
 		else
-			cGame::Instance()->Graphics->DrawSprite(m_text_id, m_posx, m_posy, m_posz, &m_rect_texture);
+			cGame::Instance()->Graphics->DrawSprite(m_text_id, m_posx, m_posy, m_posz, &m_rect_texture,scalex,scaley,scalez);
 
 	}
 
@@ -173,6 +173,15 @@ void cBaseEntity::SetTextureSizesToTextureRect()
 	cGame::Instance()->Graphics->GetTextureSizes(m_text_id, m_rect_texture.h, m_rect_texture.w);
 }
 
+void cBaseEntity::SetTextureScale(float _scale)
+{
+	SetTextureScale(_scale, _scale, _scale);
+}
+
+void cBaseEntity::SetTextureScale(float _scalex, float _scaley, float _scalez)
+{
+	scalex = _scalex; scaley = _scaley; scalez = _scalez;
+}
 
 void cBaseEntity::SetTextureSizeToCollisionRectRelative()
 {

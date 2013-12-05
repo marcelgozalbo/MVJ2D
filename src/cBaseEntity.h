@@ -29,6 +29,8 @@ public:
 	std::string& GetTextureID();
 	void SetTextureRect(const cRectangle &_rect);
 	void SetTextureSizesToTextureRect();
+	void SetTextureScale(float _scale);
+	void SetTextureScale(float _scalex, float _scaley, float _scalez);
 
 	//COLLISION
 	void SetCollisionRectRelative(const cRectangle &_rec);
@@ -80,6 +82,7 @@ private:
 	// texture id
 	std::string m_text_id;
 	cRectangle m_rect_texture; // Rect de seleccio de sprite dins de textura
+	float scalex, scaley, scalez;
 
 	//Colision Rectangle
 	bool m_collidable;
