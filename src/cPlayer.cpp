@@ -6,9 +6,10 @@ cBaseEntity("player",0, 0, 0)
 {
 	cRectangle rec(0, 0, 16,24);
 	SetTextureRect(rec);
+	SetZIndex(10);
 	EnableCollision();
 	SetCollisionRectRelative(rec);
-	SetTextureScale(4.0);
+	SetTextureScale(2.0);
 	
 }
 
