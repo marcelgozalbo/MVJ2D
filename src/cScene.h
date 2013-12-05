@@ -45,7 +45,6 @@ public:
 	cMap m_map;
 	cPlayer m_player;
 
-	int *map;
 	int cx,cy;
 };
 

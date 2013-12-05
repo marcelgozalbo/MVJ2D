@@ -22,6 +22,8 @@ cBaseEntity(x,y,z)
 
 cBaseEntity::cBaseEntity()
 {
+	SetVisible(true);
+
 	SetPosition(0,0);
 	SetZIndex(0);
 
@@ -52,7 +54,7 @@ void cBaseEntity::Update()
 
 void cBaseEntity::Render()
 {
-	if (!m_text_id.empty())
+	if (m_Visible && !m_text_id.empty())
 	{
 		if (IsAnimationEnabled())
 		{
@@ -66,6 +68,16 @@ void cBaseEntity::Render()
 
 	if (m_debug_collision)
 		RenderCollisionRect();
+}
+
+bool cBaseEntity::IsVisible() const
+{
+	return m_Visible;
+}
+
+void cBaseEntity::SetVisible(bool aVisible)
+{
+	m_Visible = aVisible;
 }
 
 void cBaseEntity::RenderCollisionRect()

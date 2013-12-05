@@ -3,6 +3,7 @@
 #define __MENU_H__
 
 #include "cBaseEntity.h"
+#include <chrono>
 
 class cMenu
 {
@@ -19,10 +20,18 @@ public:
 	void LoadData();
 	bool Update();
 	bool Render();
+
 private:
+	void UpdatePositionArrow();
+	void StartBlinkArrow();
+	void ToBlinkArrow();
+
 	cBaseEntity* _background;
 	cBaseEntity* _greenArrows;
 	eSelection _selection;
+	std::chrono::high_resolution_clock::time_point _start;
+	std::chrono::high_resolution_clock::time_point _start2;
+	bool _blink;
 };
 
 #endif 

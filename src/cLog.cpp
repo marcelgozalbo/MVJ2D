@@ -30,14 +30,23 @@ cLog* cLog::Instance()
 /**************************************************************************
 	msg
 **************************************************************************/
-void cLog::Msg(char *msg)
+void cLog::Msg(const char *format, ...)
 {
+	static const unsigned int LOG_MAX_SIZE = 1024;
+	char dest[LOG_MAX_SIZE];
+
+	va_list argptr;
+	va_start(argptr, format);
+	vsprintf_s(dest, format, argptr);
+	va_end(argptr);
+	printf(dest);
+
 	FILE *f;
 	char s[256];
 
 	ZeroMemory(s,sizeof(s));
 
-	sprintf_s(s,"%s\n",msg);
+	sprintf_s(s,"%s\n", dest);
 	errno_t err = fopen_s(&f, "log.txt", "a+");
 	if (err)
 	{
@@ -89,5 +98,18 @@ void cLog::Error(HRESULT hr, char *msg)
 		return;
 	}
 	fwrite(s,sizeof(char),strlen(s),f);
+	fclose(f);
+}
+
+void cLog::Clear()
+{
+	FILE *f;
+
+	errno_t err = fopen_s(&f, "log.txt", "w");
+	if (err)
+	{
+		std::cout << "Open file log.txt failed with errno: " << err << std::endl;
+		return;
+	}
 	fclose(f);
 }
