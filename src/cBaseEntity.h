@@ -62,6 +62,8 @@ public:
 
 	//HELPERS
 	void RenderCollisionRect();
+	void EnableDebugMode(){ m_debug_collision = true; };
+	void DisableDebugMode(){ m_debug_collision = false; };
 	
 
 	virtual ~cBaseEntity();
@@ -91,9 +93,7 @@ private:
 	std::size_t m_anim_time_frame; //quantitat de frames que han de passar per canviar d'step
 	std::size_t m_anim_curr_time_frame; //quantitat de frames que han passat desde l'ultim canvi d'step
 	
-	
-	
-
+	static bool m_debug_collision;
 
 };
 

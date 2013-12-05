@@ -2,9 +2,9 @@
 
 #include "cGame.h"
 cPlayer::cPlayer():
-cBaseEntity("characters",0, 0, 0)
+cBaseEntity("player",0, 0, 0)
 {
-	cRectangle rec(0, 0, 32, 32);
+	cRectangle rec(0, 0, 16,24);
 	SetTextureRect(rec);
 	EnableCollision();
 	SetCollisionRectRelative(rec);
@@ -34,73 +34,73 @@ void cPlayer::Update()
 
 	//Si no m'he mogut FORA!
 	if (!vecy && !vecx)
-		return;
-	//xf = xo + v(t);
-
-
-
-	// Busco l'orientacio del moviment
-	if (vecy == 0)
 	{
-		if (vecx > 0)		m_orientation = ORIENTATION_E;
-		else if (vecx < 0)	m_orientation = ORIENTATION_O;
-	}
-	else if (vecy > 0)
-	{
-		if (vecx > 0)		m_orientation = ORIENTATION_SE;
-		else if (vecx < 0)	m_orientation = ORIENTATION_SO;
-		else				m_orientation = ORIENTATION_S;
+
 	}
 	else
 	{
-		if (vecx > 0)		m_orientation = ORIENTATION_NE;
-		else if (vecx < 0)	m_orientation = ORIENTATION_NO;
-		else				m_orientation = ORIENTATION_N;
-	}
+		// Busco l'orientacio del moviment
+		if (vecy == 0)
+		{
+			if (vecx > 0)		m_orientation = ORIENTATION_E;
+			else if (vecx < 0)	m_orientation = ORIENTATION_O;
+		}
+		else if (vecy > 0)
+		{
+			if (vecx > 0)		m_orientation = ORIENTATION_SE;
+			else if (vecx < 0)	m_orientation = ORIENTATION_SO;
+			else				m_orientation = ORIENTATION_S;
+		}
+		else
+		{
+			if (vecx > 0)		m_orientation = ORIENTATION_NE;
+			else if (vecx < 0)	m_orientation = ORIENTATION_NO;
+			else				m_orientation = ORIENTATION_N;
+		}
 
-	int x, y;
-	GetPosition(x,y);
+		int x, y;
+		GetPosition(x,y);
 
-	//Actualitzo el moviment segons orientacio
-	switch (m_orientation)
-	{
-	case ORIENTATION_N:
-		y -= V_STRAIGHT;
-		break;
-	case ORIENTATION_NE:
-		y -= V_DIAGONAL;
-		x += V_DIAGONAL;
-		break;
-	case ORIENTATION_NO:
-		y -= V_DIAGONAL;
-		x -= V_DIAGONAL;
-		break;
-	case ORIENTATION_S:
-		y += V_STRAIGHT;
-		break;
-	case ORIENTATION_SE:
-		y += V_DIAGONAL;
-		x += V_DIAGONAL;
-		break;
-	case ORIENTATION_SO:
-		y += V_DIAGONAL;
-		x -= V_DIAGONAL;
-		break;
-	case ORIENTATION_E:
-		x += V_STRAIGHT;
-		break;
-	case ORIENTATION_O:
-		x -= V_STRAIGHT;
-		break;
-	}
+		//Actualitzo el moviment segons orientacio
+		switch (m_orientation)
+		{
+		case ORIENTATION_N:
+			y -= V_STRAIGHT;
+			break;
+		case ORIENTATION_NE:
+			y -= V_DIAGONAL;
+			x += V_DIAGONAL;
+			break;
+		case ORIENTATION_NO:
+			y -= V_DIAGONAL;
+			x -= V_DIAGONAL;
+			break;
+		case ORIENTATION_S:
+			y += V_STRAIGHT;
+			break;
+		case ORIENTATION_SE:
+			y += V_DIAGONAL;
+			x += V_DIAGONAL;
+			break;
+		case ORIENTATION_SO:
+			y += V_DIAGONAL;
+			x -= V_DIAGONAL;
+			break;
+		case ORIENTATION_E:
+			x += V_STRAIGHT;
+			break;
+		case ORIENTATION_O:
+			x -= V_STRAIGHT;
+			break;
+		}
 	
-	SetPosition(x, y);
-
+		SetPosition(x, y);
+	}
 	cBaseEntity::Update();
 }
 
 void cPlayer::Render()
 {
 	cBaseEntity::Render();
-	cBaseEntity::RenderCollisionRect();
+	
 }
