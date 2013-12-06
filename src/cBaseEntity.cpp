@@ -119,9 +119,12 @@ void cBaseEntity::GetZIndex(int &_z)
 
 void cBaseEntity::SetTextureID(const std::string &_str)
 {
-	m_text_id = _str;
-	SetTextureSizesToTextureRect();
-	SetTextureSizeToCollisionRectRelative();
+	if (!_str.empty())
+	{
+		m_text_id = _str;
+		SetTextureSizesToTextureRect();
+		SetTextureSizeToCollisionRectRelative();
+	}
 }
 
 std::string& cBaseEntity::GetTextureID()
