@@ -104,15 +104,14 @@ private:
 	{
 	public:
 		TextureRenderer(LPDIRECT3DTEXTURE9 _textureid, int _posx, int _posy, cRectangle *_rect, float _scalex, float _scaley, float _scalez) :
-			textureid(_textureid), posx(_posx), posy(_posy), scalex(_scalex), scaley(_scaley), scalez(_scalez), rect(nullptr){
-			if (_rect != nullptr)	rect = new cRectangle(*_rect);
+			textureid(_textureid), posx(_posx), posy(_posy), scalex(_scalex), scaley(_scaley), scalez(_scalez), rect(nullptr)
+		{
+			if (_rect != nullptr)	rect = _rect;
 		}
-		~TextureRenderer()	{
-			if (rect != nullptr)
-			{
-				delete rect;
-				rect = nullptr;
-			}
+
+		~TextureRenderer()	
+		{
+
 		}
 
 		void Render(LPD3DXSPRITE spr, LPDIRECT3DDEVICE9 dev)	{
