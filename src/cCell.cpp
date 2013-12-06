@@ -4,7 +4,7 @@
 #include "cLog.h"
 
 cCell::cCell(unsigned int _row, unsigned int _col, const sCellInfo& _cellInfo) :
-cBaseEntity("tilemap", _col * tileWidth, _row * tileHeight, 1),
+	cBaseEntity(_cellInfo.tileSet, _col * tileWidth, _row * tileHeight, 1),
 	m_walkable(_cellInfo.walkable)
 {
 	const tFrameVec& frameVec = _cellInfo.frameVec;

@@ -22,11 +22,12 @@ public:
 
 	struct sCellInfo
 	{
+		std::string tileSet;
 		tFrameVec frameVec;
 		bool walkable;
 
-		sCellInfo() : frameVec(), walkable(false) { }
-		sCellInfo(const tFrameVec& frames, bool w = true) : frameVec(frames), walkable(w) { }
+		sCellInfo() : tileSet(""), frameVec(), walkable(false) {}
+		sCellInfo(const std::string& tileSet, const tFrameVec& frames, bool w = true) : tileSet(tileSet), frameVec(frames), walkable(w) { }
 	};
 
 	static const unsigned int tileWidth = 32;

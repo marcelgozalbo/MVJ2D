@@ -90,6 +90,7 @@ void cMap::clear()
 void cMap::loadAnimations(std::ifstream& file)
 {
 	std::string line;
+	std::string tileSet;
 	bool finished = false;
 
 	while (!finished)
@@ -102,38 +103,45 @@ void cMap::loadAnimations(std::ifstream& file)
 			}
 			else
 			{
-				unsigned int cellId = charTo<unsigned int>(line[0]);
-				bool walkable = charTo<bool>(line[2]);
-				unsigned int frameCount = charTo<unsigned int>(line[4]);
-				unsigned int strIndex = 6;
-
-				cCell::tFrameVec frameVec;
-				frameVec.reserve(frameCount);
-				
-				for (unsigned int idx = 0; idx < frameCount; idx++)
+				if (line[0] == '>')
 				{
-					unsigned int framePosX = charTo<unsigned int>(line[strIndex]);
-					unsigned int framePosY = charTo<unsigned int>(line[strIndex + 2]);
-					unsigned int duration = charTo<unsigned int>(line[strIndex + 4]);
-					strIndex += 6;
-
-					frameVec.push_back(cCell::sFrameInfo(framePosX, framePosY, duration));
-				}
-
-				if (frameVec.empty())
-				{
-					fatalError("frame vector empty for cellId " + toString(cellId));
-				}
-
-				auto it = m_animations.find(cellId);
-
-				if (it == m_animations.end())
-				{
-					m_animations.emplace_hint(it, tAnimations::value_type(cellId, cCell::sCellInfo(frameVec, walkable)));
+					tileSet.assign(line.begin() + 1, line.end());
 				}
 				else
 				{
-					fatalError("cellId " + toString(cellId) + " is duplicated");
+					unsigned int cellId = charTo<unsigned int>(line[0]);
+					bool walkable = charTo<bool>(line[2]);
+					unsigned int frameCount = charTo<unsigned int>(line[4]);
+					unsigned int strIndex = 6;
+
+					cCell::tFrameVec frameVec;
+					frameVec.reserve(frameCount);
+
+					for (unsigned int idx = 0; idx < frameCount; idx++)
+					{
+						unsigned int framePosX = charTo<unsigned int>(line[strIndex]);
+						unsigned int framePosY = charTo<unsigned int>(line[strIndex + 2]);
+						unsigned int duration = charTo<unsigned int>(line[strIndex + 4]);
+						strIndex += 6;
+
+						frameVec.push_back(cCell::sFrameInfo(framePosX, framePosY, duration));
+					}
+
+					if (frameVec.empty())
+					{
+						fatalError("frame vector empty for cellId " + toString(cellId));
+					}
+
+					auto it = m_animations.find(cellId);
+
+					if (it == m_animations.end())
+					{
+						m_animations.emplace_hint(it, tAnimations::value_type(cellId, cCell::sCellInfo(tileSet, frameVec, walkable)));
+					}
+					else
+					{
+						fatalError("cellId " + toString(cellId) + " is duplicated");
+					}
 				}
 			}
 		}
