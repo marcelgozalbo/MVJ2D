@@ -123,6 +123,12 @@ bool cGame::LoopProcess()
 						Scene->Update();
 						break;
 	}
+
+	if (Input.KeyDown(DIK_ESCAPE))
+	{
+		_state = STATE_FINISHED;
+	}
+
 	return true;
 }
 
