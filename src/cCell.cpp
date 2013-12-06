@@ -27,7 +27,7 @@ cCell::cCell(unsigned int _row, unsigned int _col, const sCellInfo& _cellInfo) :
 		SetAnimationSteps(rectVec);
 		//// #todo: duracions variables d'animacio
 		//// #todo: animacions per temps i no per frame
-		SetAnimationFramesPerStep(_cellInfo.frameVec[0].duration * 60);
+		SetAnimationFramesPerStep(_cellInfo.frameVec[0].duration * 10);
 		EnableAnimation();
 		PlayAnimation();
 	}
