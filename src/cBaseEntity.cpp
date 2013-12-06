@@ -58,11 +58,10 @@ void cBaseEntity::Render()
 	{
 		if (IsAnimationEnabled())
 		{
-			cRectangle buff = GetAnimationCurrentStepRectangle();
-			cGame::Instance()->Graphics->DrawSprite(m_text_id, m_posx, m_posy, m_posz, &buff);
+			cGame::Instance()->Graphics->DrawSprite(m_text_id, m_posx, m_posy, m_posz, GetAnimationCurrentStepRectangle());
 		}
 		else
-			cGame::Instance()->Graphics->DrawSprite(m_text_id, m_posx, m_posy, m_posz, &m_rect_texture,scalex,scaley,scalez);
+			cGame::Instance()->Graphics->DrawSprite(m_text_id, m_posx, m_posy, m_posz, m_rect_texture,scalex,scaley,scalez);
 
 	}
 

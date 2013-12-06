@@ -15,9 +15,8 @@ cScene::~cScene(){}
 
 void cScene::Update()
 {
+	m_map.update();
 	m_player.Update();
-
-
 }
 
 void cScene::Render()

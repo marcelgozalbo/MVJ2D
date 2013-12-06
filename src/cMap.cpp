@@ -108,7 +108,7 @@ void cMap::loadAnimations(std::ifstream& file)
 				unsigned int frameCount = charTo<unsigned int>(line[4]);
 				unsigned int strIndex = 6;
 
-				tFrameVec frameVec;
+				cCell::tFrameVec frameVec;
 				frameVec.reserve(frameCount);
 				
 				for (unsigned int idx = 0; idx < frameCount; idx++)
@@ -117,20 +117,23 @@ void cMap::loadAnimations(std::ifstream& file)
 					double duration = charTo<double>(line[strIndex + 2]);
 					strIndex += 4;
 
-					frameVec.push_back(sFrameInfo(frameId, duration));
+					frameVec.push_back(cCell::sFrameInfo(frameId, duration));
+				}
+
+				if (frameVec.empty())
+				{
+					fatalError("frame vector empty for cellId " + toString(cellId));
 				}
 
 				auto it = m_animations.find(cellId);
 
 				if (it == m_animations.end())
 				{
-					m_animations.emplace_hint(it, tAnimations::value_type(cellId, sCellInfo(frameVec, walkable)));
+					m_animations.emplace_hint(it, tAnimations::value_type(cellId, cCell::sCellInfo(frameVec, walkable)));
 				}
 				else
 				{
-					std::string message = "cellId " + toString(cellId) + " is duplicated";
-					LOG(message);
-					throw std::runtime_error(message);
+					fatalError("cellId " + toString(cellId) + " is duplicated");
 				}
 			}
 		}
@@ -161,15 +164,13 @@ void cMap::loadMap(std::ifstream& file)
 
 				if (it != m_animations.end())
 				{
-					const sCellInfo& cellInfo = it->second;
+					const cCell::sCellInfo& cellInfo = it->second;
 
-					//#todo: walkability
-					m_grid.back().push_back(new cCell(currentRow, currentCol, cellId, true));
+					m_grid.back().push_back(new cCell(currentRow, currentCol, cellInfo));
 				}
 				else
 				{
-					std::string message = "unknown cellId: " + toString(cellId) + " on row " + toString(currentRow) + " and column " + toString(currentCol);
-					throw std::runtime_error(message);
+					fatalError("unknown cellId: " + toString(cellId) + " on row " + toString(currentRow) + " and column " + toString(currentCol));
 				}
 
 				currentCol++;
@@ -179,4 +180,10 @@ void cMap::loadMap(std::ifstream& file)
 		currentRow++;
 		currentCol = 0;
 	}
+}
+
+void cMap::fatalError(const std::string& errorText)
+{
+	LOG(errorText);
+	throw std::runtime_error(errorText);
 }

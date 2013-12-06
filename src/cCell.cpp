@@ -1,21 +1,41 @@
 #include "cCell.h"
+#include <stdexcept>
 #include "cGame.h"
 #include "cLog.h"
 
-cCell::cCell(int _row, int _col, int _cellId, bool _walkable) :
+cCell::cCell(unsigned int _row, unsigned int _col, const sCellInfo& _cellInfo) :
 	cBaseEntity("tilemap", _row * tileWidth, _col * tileHeight, 1),
-	m_walkable(_walkable)
+	m_walkable(_cellInfo.walkable)
 {
-	cRectangle rec(_cellId * tileWidth, 0, tileWidth, tileHeight);
-	SetTextureRect(rec);
+	const tFrameVec& frameVec = _cellInfo.frameVec;
+
+	// frameVec size already checked in map
+	SetTextureRect(cRectangle(_cellInfo.frameVec[0].frameId * tileWidth, 0, tileWidth, tileHeight));
+	
+	// animacio
+	if (frameVec.size() > 1)
+	{
+		std::vector<cRectangle> rectVec;
+		rectVec.reserve(frameVec.size());
+
+		for (auto& frameInfo : frameVec)
+		{
+			rectVec.push_back(cRectangle(frameInfo.frameId * tileWidth, 0, tileWidth, tileHeight));
+		}
+
+		SetAnimationSteps(rectVec);
+		//// #todo: duracions variables d'animacio
+		//// #todo: animacions per temps i no per frame
+		SetAnimationFramesPerStep(static_cast<std::size_t>(_cellInfo.frameVec[0].duration) * 60);
+		EnableAnimation();
+		PlayAnimation();
+	}
 
 	if (!m_walkable)
 	{
+		SetCollisionRectRelative(cRectangle(0, 0, tileWidth, tileHeight));
 		EnableCollision();
-		SetCollisionRectRelative(rec);
 	}
-
-	cLog::Instance()->Msg("Creating cell pos:%u,%u ref:%u,%u", _row * tileWidth, _col * tileHeight, _cellId * tileWidth, 0);
 }
 
 cCell::~cCell()

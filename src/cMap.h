@@ -17,35 +17,14 @@ public:
 	void update();
 
 private:
-	struct sFrameInfo;
-	struct sCellInfo;
-
 	typedef std::vector<cCell*> tRow;
 	typedef std::vector<tRow> tGrid;
-	typedef std::vector<sFrameInfo> tFrameVec;
-	typedef std::unordered_map<unsigned int, sCellInfo> tAnimations;
-
-	struct sFrameInfo
-	{
-		unsigned int frameId;
-		double duration;
-
-		sFrameInfo() : frameId(0), duration(0) { }
-		sFrameInfo(unsigned int fId, double d = 0) : frameId(fId), duration(d) { }
-	};
-
-	struct sCellInfo
-	{
-		tFrameVec frameVec;
-		bool walkable;
-
-		sCellInfo() : frameVec(), walkable (false) { }
-		sCellInfo(const tFrameVec& frames, bool w = true) : frameVec(frames), walkable(w) { }
-	};
+	typedef std::unordered_map<unsigned int, cCell::sCellInfo> tAnimations;
 
 	void clear();
 	void loadAnimations(std::ifstream& file);
 	void loadMap(std::ifstream& file);
+	void fatalError(const std::string& errorText);
 
 	tGrid m_grid;
 	tAnimations m_animations;

@@ -33,7 +33,7 @@ public:
 	void LoadData();
 	void UnLoadData();
 
-	void DrawSprite(const std::string &text_id, int posx, int posy, int posz, cRectangle *Rect = nullptr, float scalex = 1.0, float scaley = 1.0, float scalez = 1.0);
+	void DrawSprite(const std::string &text_id, int posx, int posy, int posz, const cRectangle& Rect, float scalex = 1.0, float scaley = 1.0, float scalez = 1.0);
 	void DrawRect(const cRectangle &Rectangle, D3DCOLOR color, int posz);
 
 	void GetTextureSizes(const std::string &text_id, int &h, int &w);
@@ -103,10 +103,10 @@ private:
 	class TextureRenderer : public IRender
 	{
 	public:
-		TextureRenderer(LPDIRECT3DTEXTURE9 _textureid, int _posx, int _posy, cRectangle *_rect, float _scalex, float _scaley, float _scalez) :
-			textureid(_textureid), posx(_posx), posy(_posy), scalex(_scalex), scaley(_scaley), scalez(_scalez), rect(nullptr)
+		TextureRenderer(LPDIRECT3DTEXTURE9 _textureid, int _posx, int _posy, const cRectangle& _rect, float _scalex, float _scaley, float _scalez) :
+			textureid(_textureid), posx(_posx), posy(_posy), scalex(_scalex), scaley(_scaley), scalez(_scalez), rect(_rect)
 		{
-			if (_rect != nullptr)	rect = _rect;
+
 		}
 
 		~TextureRenderer()	
@@ -125,16 +125,10 @@ private:
 
 			spr->SetTransform(&matrixscale);
 
-			if (rect == nullptr)
-			{
-				hr = spr->Draw(textureid, NULL, NULL, &D3DXVECTOR3(float(posx), float(posy), 0.0), 0xFFFFFFFF);
-			}
-			else
-			{
-				RECT rc;
-				SetRect(&rc, rect->x, rect->y, rect->x + rect->w, rect->y + rect->h);
-				hr = spr->Draw(textureid, &rc, NULL, &D3DXVECTOR3(float(posx), float(posy), 0.0), 0xFFFFFFFF);
-			}
+
+			RECT rc;
+			SetRect(&rc, rect.x, rect.y, rect.x + rect.w, rect.y + rect.h);
+			hr = spr->Draw(textureid, &rc, NULL, &D3DXVECTOR3(float(posx), float(posy), 0.0), 0xFFFFFFFF);
 
 			spr->End();
 		}
@@ -143,7 +137,7 @@ private:
 		int posx, posy;
 		float scalex, scaley, scalez;
 		LPDIRECT3DTEXTURE9 textureid;
-		cRectangle  *rect;
+		cRectangle rect;
 	};
 
 	typedef std::vector<IRender *> tZOrderVec;

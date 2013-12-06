@@ -182,7 +182,7 @@ void cGraphicsLayer::Render()
 	
 }
 
-void cGraphicsLayer::DrawSprite(const std::string &text_id, int posx, int posy, int posz, cRectangle *Rect, float scalex, float scaley, float scalez)
+void cGraphicsLayer::DrawSprite(const std::string &text_id, int posx, int posy, int posz, const cRectangle& Rect, float scalex, float scaley, float scalez)
 {
 	auto text_it = m_texturesmap.find(text_id);
 

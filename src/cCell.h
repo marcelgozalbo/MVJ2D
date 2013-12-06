@@ -6,7 +6,32 @@
 class cCell : public cBaseEntity
 {
 public:
-	cCell(int _row, int _col, int _cellId, bool _walkable);
+	struct sFrameInfo;
+
+	typedef std::vector<sFrameInfo> tFrameVec;
+
+	struct sFrameInfo
+	{
+		unsigned int frameId;
+		double duration;
+
+		sFrameInfo() : frameId(0), duration(0) { }
+		sFrameInfo(unsigned int fId, double d = 0) : frameId(fId), duration(d) { }
+	};
+
+	struct sCellInfo
+	{
+		tFrameVec frameVec;
+		bool walkable;
+
+		sCellInfo() : frameVec(), walkable(false) { }
+		sCellInfo(const tFrameVec& frames, bool w = true) : frameVec(frames), walkable(w) { }
+	};
+
+	static const unsigned int tileWidth = 32;
+	static const unsigned int tileHeight = 32;
+
+	cCell(unsigned int _row, unsigned int _col, const sCellInfo& _cellInfo);
 	~cCell();
 
 	bool isWalkable() const;
@@ -15,9 +40,6 @@ public:
 	void update();
 
 private:
-	static const int tileWidth = 32;
-	static const int tileHeight = 32;
-
 	bool m_walkable;
 };
 
