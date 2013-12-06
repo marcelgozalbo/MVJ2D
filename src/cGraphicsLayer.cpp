@@ -160,48 +160,21 @@ void cGraphicsLayer::UnLoadData()
 
 void cGraphicsLayer::Render()
 {
-	LOG("@@@@@@@@@@ render");
-
 	g_pD3DDevice->Clear(0, NULL, D3DCLEAR_TARGET , 0xFF000000, 1.0f, 0);
 	g_pD3DDevice->BeginScene();
 
 	//Start Rendering by Z order
-	for (tRenderFrameInfo::iterator it = m_renderframeinfo.begin(); it != m_renderframeinfo.end(); it++)
-	{
-		const tZOrderVec& zOrderVec = it->second;
+	for (auto rit = m_renderframeinfo.begin(); rit != m_renderframeinfo.end(); ++rit)
+		for (auto &it_Zlevel : rit->second) 	// RENDER Z entire Z-LEVEL
+			it_Zlevel->Render(g_pSprite, g_pD3DDevice);
+	
 
-		for (tZOrderVec::const_iterator zLevel = zOrderVec.begin(); zLevel != zOrderVec.end(); zLevel++)
-		{
-			IRender* render = *zLevel;
-			render->Render(g_pSprite, g_pD3DDevice);
-		}
-	}
-
-	for (tRenderFrameInfo::iterator it = m_renderframeinfo.begin(); it != m_renderframeinfo.end(); it++)
-	{
-		const tZOrderVec& zOrderVec = it->second;
-
-		for (tZOrderVec::const_iterator zLevel = zOrderVec.begin(); zLevel != zOrderVec.end(); zLevel++)
-		{
-			IRender* render = *zLevel;
-			delete render;
-		}
-	}
+	//Clean the entire map for the next frame
+	for (auto &it_renderinfo : m_renderframeinfo)
+		for (auto &it_Zlevel : it_renderinfo.second)
+			delete it_Zlevel;
 
 	m_renderframeinfo.clear();
-
-
-	//for (auto rit = m_renderframeinfo.begin(); rit != m_renderframeinfo.end(); ++rit)
-	//	for (auto &it_Zlevel : rit->second) 	// RENDER Z entire Z-LEVEL
-	//		it_Zlevel->Render();
-	//
-
-	////Clean the entire map for the next frame
-	//for (auto &it_renderinfo : m_renderframeinfo)
-	//	for (auto &it_Zlevel : it_renderinfo.second)
-	//		delete it_Zlevel;
-
-	//m_renderframeinfo.clear();
 
 	g_pD3DDevice->EndScene();
 	g_pD3DDevice->Present(NULL, NULL, NULL, NULL);
