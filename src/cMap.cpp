@@ -1,8 +1,9 @@
 #include "cMap.h"
 #include <string>
 #include <sstream>
+#include "cLog.h"
 
-cMap::tWalkability cMap::walkability = { true, false, true, true };
+//remove cMap::tWalkability cMap::walkability = { true, false, true, true };
 
 template <typename T>
 std::string toString(T in)
@@ -11,6 +12,18 @@ std::string toString(T in)
 
 	ss << in;
 	return ss.str();
+}
+
+template <typename T>
+T charTo(char in)
+{
+	std::stringstream ss;
+	T out;
+
+	ss << in;
+	ss >> out;
+
+	return out;
 }
 
 cMap::cMap()
@@ -32,41 +45,8 @@ void cMap::load(const std::string& _filePath)
 
 	if (file.good())
 	{
-		int currentRow = 0;
-		int currentCol = 0;
-		std::string line;
-
-		while (std::getline(file, line))
-		{
-			m_grid.push_back(tRow());
-
-			for (auto character : line)
-			{
-				if (character != ' ')
-				{
-					unsigned int cellId;
-					std::stringstream ss;
-
-					ss << character;
-					ss >> cellId;
-
-					if (cellId < walkability.size())
-					{
-						m_grid.back().push_back(new cCell(currentRow, currentCol, cellId, walkability[cellId]));
-					}
-					else
-					{
-						std::string message = "unknown cellId: " + toString(cellId) + " on row " + toString(currentRow) + " and column " + toString(currentCol);
-						throw std::runtime_error(message);
-					}
-
-					currentCol++;
-				}
-			}
-
-			currentRow++;
-			currentCol = 0;
-		}
+		loadAnimations(file);
+		loadMap(file);
 	}
 
 	file.close();
@@ -105,4 +85,98 @@ void cMap::clear()
 	}
 
 	m_grid.clear();
+	m_animations.clear();
+}
+
+void cMap::loadAnimations(std::ifstream& file)
+{
+	std::string line;
+	bool finished = false;
+
+	while (!finished)
+	{
+		if (std::getline(file, line))
+		{
+			if (line.empty())
+			{
+				finished = true;
+			}
+			else
+			{
+				unsigned int cellId = charTo<unsigned int>(line[0]);
+				bool walkable = charTo<bool>(line[2]);
+				unsigned int frameCount = charTo<unsigned int>(line[4]);
+				unsigned int strIndex = 6;
+
+				tFrameVec frameVec;
+				frameVec.reserve(frameCount);
+				
+				for (unsigned int idx = 0; idx < frameCount; idx++)
+				{
+					unsigned int frameId = charTo<unsigned int>(line[strIndex]);
+					double duration = charTo<double>(line[strIndex + 2]);
+					strIndex += 4;
+
+					frameVec.push_back(sFrameInfo(frameId, duration));
+				}
+
+				auto it = m_animations.find(cellId);
+
+				if (it == m_animations.end())
+				{
+					m_animations.emplace_hint(it, tAnimations::value_type(cellId, sCellInfo(frameVec, walkable)));
+				}
+				else
+				{
+					std::string message = "cellId " + toString(cellId) + " is duplicated";
+					LOG(message);
+					throw std::runtime_error(message);
+				}
+			}
+		}
+	}
+}
+
+void cMap::loadMap(std::ifstream& file)
+{
+	int currentRow = 0;
+	int currentCol = 0;
+	std::string line;
+
+	while (std::getline(file, line))
+	{
+		m_grid.push_back(tRow());
+
+		for (auto character : line)
+		{
+			if (character != ' ')
+			{
+				unsigned int cellId;
+				std::stringstream ss;
+
+				ss << character;
+				ss >> cellId;
+
+				tAnimations::iterator it = m_animations.find(cellId);
+
+				if (it != m_animations.end())
+				{
+					const sCellInfo& cellInfo = it->second;
+
+					//#todo: walkability
+					m_grid.back().push_back(new cCell(currentRow, currentCol, cellId, true));
+				}
+				else
+				{
+					std::string message = "unknown cellId: " + toString(cellId) + " on row " + toString(currentRow) + " and column " + toString(currentCol);
+					throw std::runtime_error(message);
+				}
+
+				currentCol++;
+			}
+		}
+
+		currentRow++;
+		currentCol = 0;
+	}
 }
