@@ -52,23 +52,23 @@ void cMap::update()
 	}
 }
 
-bool cMap::isWalkable(int x, int y) const
+bool cMap::isWalkableFor(const cBaseEntity& entity) const
 {
 	bool walkable = false;
-	unsigned int row = y / cCell::tileHeight;
-	unsigned int col = x / cCell::tileWidth;
+	//unsigned int row = y / cCell::tileHeight;
+	//unsigned int col = x / cCell::tileWidth;
 
-	if (row < m_grid.size())
-	{
-		const tRow& gridRow = m_grid[row];
+	//if (row < m_grid.size())
+	//{
+	//	const tRow& gridRow = m_grid[row];
 
-		if (col < gridRow.size())
-		{
-			cCell* const cell = gridRow[col];
+	//	if (col < gridRow.size())
+	//	{
+	//		cCell* const cell = gridRow[col];
 
-			walkable = cell->isWalkable();
-		}
-	}
+	//		walkable = cell->isWalkable();
+	//	}
+	//}
 
 	return walkable;
 }
@@ -112,11 +112,12 @@ void cMap::loadAnimations(std::ifstream& file)
 				
 				for (unsigned int idx = 0; idx < frameCount; idx++)
 				{
-					unsigned int frameId = charTo<unsigned int>(line[strIndex]);
-					unsigned int duration = charTo<unsigned int>(line[strIndex + 2]);
-					strIndex += 4;
+					unsigned int framePosX = charTo<unsigned int>(line[strIndex]);
+					unsigned int framePosY = charTo<unsigned int>(line[strIndex + 2]);
+					unsigned int duration = charTo<unsigned int>(line[strIndex + 4]);
+					strIndex += 6;
 
-					frameVec.push_back(cCell::sFrameInfo(frameId, duration));
+					frameVec.push_back(cCell::sFrameInfo(framePosX, framePosY, duration));
 				}
 
 				if (frameVec.empty())

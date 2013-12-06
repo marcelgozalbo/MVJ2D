@@ -12,11 +12,12 @@ public:
 
 	struct sFrameInfo
 	{
-		unsigned int frameId;
+		unsigned int framePosX;
+		unsigned int framePosY;
 		unsigned int duration;
 
-		sFrameInfo() : frameId(0), duration(0) { }
-		sFrameInfo(unsigned int fId, unsigned int d = 0) : frameId(fId), duration(d) { }
+		sFrameInfo() : framePosX(0), framePosY(0), duration(0) { }
+		sFrameInfo(unsigned int posx, unsigned int posy, unsigned int d = 0) : framePosX(posx), framePosY(posy), duration(d) { }
 	};
 
 	struct sCellInfo

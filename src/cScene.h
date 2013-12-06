@@ -41,7 +41,7 @@ public:
 	void Move(int pointer);
 	void MoveByRadar(int x,int y);
 	bool Visible(int cellx,int celly);
-	bool canWalkTo(int x, int y);
+	bool isWalkableFor(const cBaseEntity& entity) const;
 
 	cMap m_map;
 	cPlayer m_player;

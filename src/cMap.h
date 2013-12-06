@@ -15,7 +15,7 @@ public:
 	void load(const std::string& _filePath);
 	void render();
 	void update();
-	bool isWalkable(int x, int y) const;
+	bool isWalkableFor(const cBaseEntity& entity) const;
 
 private:
 	typedef std::vector<cCell*> tRow;

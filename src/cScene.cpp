@@ -105,7 +105,8 @@ bool cScene::Visible(int cellx,int celly)
 	return ((cellx>=cx)&&(cellx<cx+SCENE_WIDTH)&&(celly>=cy)&&(celly<cy+SCENE_HEIGHT)) ? 1 : 0;
 }
 
-bool cScene::canWalkTo(int x, int y)
+bool cScene::isWalkableFor(const cBaseEntity& entity) const
 {
-	return m_map.isWalkable(x, y);
+	return m_map.isWalkableFor(entity);
 }
+
