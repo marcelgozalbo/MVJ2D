@@ -3,8 +3,6 @@
 #include <sstream>
 #include "cLog.h"
 
-//remove cMap::tWalkability cMap::walkability = { true, false, true, true };
-
 template <typename T>
 std::string toString(T in)
 {
@@ -114,7 +112,7 @@ void cMap::loadAnimations(std::ifstream& file)
 				for (unsigned int idx = 0; idx < frameCount; idx++)
 				{
 					unsigned int frameId = charTo<unsigned int>(line[strIndex]);
-					double duration = charTo<double>(line[strIndex + 2]);
+					unsigned int duration = charTo<unsigned int>(line[strIndex + 2]);
 					strIndex += 4;
 
 					frameVec.push_back(cCell::sFrameInfo(frameId, duration));

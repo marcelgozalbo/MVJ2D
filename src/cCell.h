@@ -13,10 +13,10 @@ public:
 	struct sFrameInfo
 	{
 		unsigned int frameId;
-		double duration;
+		unsigned int duration;
 
 		sFrameInfo() : frameId(0), duration(0) { }
-		sFrameInfo(unsigned int fId, double d = 0) : frameId(fId), duration(d) { }
+		sFrameInfo(unsigned int fId, unsigned int d = 0) : frameId(fId), duration(d) { }
 	};
 
 	struct sCellInfo
