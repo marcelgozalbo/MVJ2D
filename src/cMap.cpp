@@ -20,7 +20,7 @@ cMap::cMap()
 
 cMap::~cMap()
 {
-
+	clear();
 }
 
 void cMap::load(const std::string& _filePath)

@@ -69,6 +69,7 @@ void cGame::Finalize()
 		Graphics->Finalize();
 		Input.UnacquireAll();
 		Input.Finalize();
+		cLog::Release();
 
 		delete _instance;
 	}

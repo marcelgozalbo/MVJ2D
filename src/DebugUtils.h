@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <crtdbg.h>
 
-// sobreescrivim l'operador new per afegir fitxer i linia
+// macro per fer servir l'operador new sobreescrit per afegir fitxer i linia
 #ifndef DBG_NEW
 #define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
 #define new DBG_NEW
@@ -18,5 +18,6 @@
 
 void leakDetectionInit();
 void leakDetectionStop();
+void breakOnAllocation(int _allocation);
 
 #endif

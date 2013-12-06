@@ -44,6 +44,7 @@ private:
 	class IRender
 	{
 	public:
+		virtual ~IRender() { }
 		virtual void Render(LPD3DXSPRITE spr, LPDIRECT3DDEVICE9 dev) = 0;
 	};
 
@@ -107,7 +108,7 @@ private:
 			if (_rect != nullptr)	rect = new cRectangle(*_rect);
 		}
 		~TextureRenderer()	{
-			if (rect == nullptr)
+			if (rect != nullptr)
 			{
 				delete rect;
 				rect = nullptr;
@@ -146,6 +147,8 @@ private:
 		cRectangle  *rect;
 	};
 
+	typedef std::vector<IRender *> tZOrderVec;
+	typedef std::map<int, tZOrderVec> tRenderFrameInfo;
 
 	// Variables
 
@@ -156,7 +159,7 @@ private:
 	std::map<std::string, LPDIRECT3DTEXTURE9>	m_texturesmap;
 
 	// Z, renderinfo
-	std::map<int, std::vector<IRender *> >	m_renderframeinfo;
+	tRenderFrameInfo	m_renderframeinfo;
 
 };
 

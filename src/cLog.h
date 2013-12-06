@@ -11,6 +11,7 @@ class cLog
 {
 public: 
     static cLog* Instance();
+	static void Release();
 	static void Msg(const char *format, ...);
 	static void Msg(const std::string& aMsg);
 	static void Error(HRESULT hr, char *msg);
@@ -19,5 +20,7 @@ public:
 private:
     static cLog* _instance;
 };
+
+#define LOG(text) cLog::Instance()->Msg(text);
 
 #endif
