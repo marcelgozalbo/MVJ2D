@@ -194,6 +194,7 @@
     <ClInclude Include="cSound.h" />
     <ClInclude Include="cTrajectory.h" />
     <ClInclude Include="DebugUtils.h" />
+    <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\media\characters.png" />

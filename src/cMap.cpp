@@ -2,27 +2,7 @@
 #include <string>
 #include <sstream>
 #include "cLog.h"
-
-template <typename T>
-std::string toString(T in)
-{
-	std::stringstream ss;
-
-	ss << in;
-	return ss.str();
-}
-
-template <typename T>
-T charTo(char in)
-{
-	std::stringstream ss;
-	T out;
-
-	ss << in;
-	ss >> out;
-
-	return out;
-}
+#include "Utils.h"
 
 cMap::cMap()
 {
