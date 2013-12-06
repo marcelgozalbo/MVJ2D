@@ -72,6 +72,27 @@ void cMap::update()
 	}
 }
 
+bool cMap::isWalkable(int x, int y) const
+{
+	bool walkable = false;
+	unsigned int row = y / cCell::tileHeight;
+	unsigned int col = x / cCell::tileWidth;
+
+	if (row < m_grid.size())
+	{
+		const tRow& gridRow = m_grid[row];
+
+		if (col < gridRow.size())
+		{
+			cCell* const cell = gridRow[col];
+
+			walkable = cell->isWalkable();
+		}
+	}
+
+	return walkable;
+}
+
 void cMap::clear()
 {
 	for (auto& row : m_grid)
