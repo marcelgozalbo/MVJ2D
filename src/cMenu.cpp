@@ -15,7 +15,6 @@ cMenu::cMenu() :
 	_greenArrows(nullptr),
 	_selection(cMenu::SELECTION_PLAY),
 	_start(std::chrono::high_resolution_clock::now()),
-	_start2(std::chrono::high_resolution_clock::now()),
 	_blink(false)
 {
 }
@@ -40,10 +39,9 @@ void cMenu::LoadData()
 bool cMenu::Update()
 {
 	bool returnValue = true;
-	static bool InputReaded = false;
 	cInputLayer  &input = cGame::Instance()->Input;
 
-	if (input.KeyDown(DIK_RETURN))
+	if (input.KeyUpDown(DIK_RETURN))
 	{
 		if (_selection == cMenu::SELECTION_PLAY)
 		{
@@ -54,22 +52,20 @@ bool cMenu::Update()
 			cGame::Instance()->SetState(STATE_FINISHED);
 		}
 	}
-	else if (input.KeyDown(DIK_DOWN) && !InputReaded)
+	else if (input.KeyUpDown(DIK_DOWN))
 	{
 		if (_selection < SELECTION_EXIT)
 		{
 			_selection = static_cast<cMenu::eSelection>(static_cast<char>(_selection)+1);
 			UpdatePositionArrow();
-			InputReaded = true;
 		}
 	}
-	else if (input.KeyDown(DIK_UP) && !InputReaded)
+	else if (input.KeyUpDown(DIK_UP))
 	{
 		if (_selection > SELECTION_PLAY)
 		{
 			_selection = static_cast<cMenu::eSelection>(static_cast<char>(_selection)-1);
 			UpdatePositionArrow();
-			InputReaded = true;
 		}
 	}
 
@@ -77,12 +73,6 @@ bool cMenu::Update()
 	{
 		ToBlinkArrow();
 		_start = std::chrono::high_resolution_clock::now();
-	}
-
-	if (millisecs_t(std::chrono::duration_cast<millisecs_t>(std::chrono::high_resolution_clock::now() - _start2)).count() > TIME_ENABLE_INPUT)
-	{
-		InputReaded = false;
-		_start2 = std::chrono::high_resolution_clock::now();
 	}
 
 	return returnValue;

@@ -32,6 +32,9 @@ public:
 
 	bool	KeyDown(int key);
 	bool	KeyUp(int key);
+	bool	KeyUpDown(int key);
+	bool	KeyDownUp(int key);
+	void	KeyClear(int key);
 
 	bool	ButtonDown(int button);
 	bool	ButtonUp(int button);
