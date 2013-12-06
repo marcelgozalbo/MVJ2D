@@ -1,9 +1,7 @@
-
 #include "cGraphicsLayer.h"
 #include "cGame.h"
 #include "cLog.h"
 #include <stdio.h>
-
 
 cGraphicsLayer::cGraphicsLayer()
 {

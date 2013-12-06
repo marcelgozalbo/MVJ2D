@@ -50,6 +50,8 @@ bool InitWindow(HINSTANCE hInst, HWND *hWnd, bool *exclusive)
 }
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevIntance, LPSTR lpszArgs, int nWinMode)
 {
+	leakDetectionInit();
+
 	bool exclusive, res;
 	MSG msg;
 	HWND hWnd;
@@ -71,6 +73,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevIntance, LPSTR lpszArgs, 
 		}
 	}
 	Game->Finalize();
+
+	leakDetectionStop();
+
 	return 0;
 }
 

@@ -7,6 +7,7 @@
 #include "cScene.h"
 #include "cSound.h"
 #include "cMenu.h"
+#include "DebugUtils.h"
 
 enum eGameStates
 {

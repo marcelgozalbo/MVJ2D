@@ -63,10 +63,15 @@ bool cGame::Init(HWND hWnd,HINSTANCE hInst,bool exclusive)
 
 void cGame::Finalize()
 {
-	Graphics->UnLoadData();
-	Graphics->Finalize();
-	Input.UnacquireAll();
-	Input.Finalize();
+	if (_instance)
+	{
+		Graphics->UnLoadData();
+		Graphics->Finalize();
+		Input.UnacquireAll();
+		Input.Finalize();
+
+		delete _instance;
+	}
 }
 
 void cGame::SetState(eGameStates aState)
