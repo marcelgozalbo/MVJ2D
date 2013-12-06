@@ -58,7 +58,7 @@ private:
 		{
 			RECT rect;
 			RECT rc;
-			SetRect(&rc, Rectangle.x, Rectangle.y, Rectangle.w, Rectangle.h);
+			SetRect(&rc, Rectangle.x, Rectangle.y, Rectangle.x + Rectangle.w, Rectangle.y + Rectangle.h);
 			int xo, yo, xf, yf;
 
 			if ((rc.left == rc.right) && (rc.top == rc.bottom)) return;
@@ -132,7 +132,7 @@ private:
 			else
 			{
 				RECT rc;
-				SetRect(&rc, rect->x, rect->y, rect->w, rect->h);
+				SetRect(&rc, rect->x, rect->y, rect->x + rect->w, rect->y + rect->h);
 				hr = spr->Draw(textureid, &rc, NULL, &D3DXVECTOR3(float(posx), float(posy), 0.0), 0xFFFFFFFF);
 			}
 
