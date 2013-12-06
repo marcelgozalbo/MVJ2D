@@ -4,13 +4,14 @@
 #include "cLog.h"
 
 cCell::cCell(unsigned int _row, unsigned int _col, const sCellInfo& _cellInfo) :
-cBaseEntity("tilemap", _col * tileWidth, _row * tileHeight, 1),
+	cBaseEntity(_cellInfo.tileSet, _col * tileWidth, _row * tileHeight, 1),
 	m_walkable(_cellInfo.walkable)
 {
 	const tFrameVec& frameVec = _cellInfo.frameVec;
+	const sFrameInfo& finfo = frameVec[0];
 
 	// frameVec size already checked in map
-	SetTextureRect(cRectangle(frameVec[0].frameId * tileWidth, 0, tileWidth, tileHeight));
+	SetTextureRect(cRectangle(frameVec[0].framePosX * tileWidth, frameVec[0].framePosY * tileHeight, tileWidth, tileHeight));
 	
 	// animacio
 	if (frameVec.size() > 1)
@@ -20,13 +21,13 @@ cBaseEntity("tilemap", _col * tileWidth, _row * tileHeight, 1),
 
 		for (auto& frameInfo : frameVec)
 		{
-			rectVec.push_back(cRectangle(frameInfo.frameId * tileWidth, 0, tileWidth, tileHeight));
+			rectVec.push_back(cRectangle(frameInfo.framePosX * tileWidth, frameInfo.framePosY * tileHeight, tileWidth, tileHeight));
 		}
 
 		SetAnimationSteps(rectVec);
 		//// #todo: duracions variables d'animacio
 		//// #todo: animacions per temps i no per frame
-		SetAnimationFramesPerStep(_cellInfo.frameVec[0].duration * 60);
+		SetAnimationFramesPerStep(_cellInfo.frameVec[0].duration * 10);
 		EnableAnimation();
 		PlayAnimation();
 	}

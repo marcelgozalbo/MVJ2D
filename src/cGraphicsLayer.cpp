@@ -94,10 +94,10 @@ void cGraphicsLayer::LoadData()
 	m_texturesmap["GUI"] = buffer;
 
 	//Tiles
-	D3DXCreateTextureFromFileEx(g_pD3DDevice,"../media/tiles.png",0,0,1,0,D3DFMT_UNKNOWN,
+	D3DXCreateTextureFromFileEx(g_pD3DDevice,"../media/tileset1.png",0,0,1,0,D3DFMT_UNKNOWN,
 								D3DPOOL_DEFAULT,D3DX_FILTER_NONE,D3DX_FILTER_NONE,
 								0x00ff00ff, NULL, NULL, &buffer);
-	m_texturesmap["tilemap"] = buffer;
+	m_texturesmap["tileset1"] = buffer;
 
 	//Characters
 	D3DXCreateTextureFromFileEx(g_pD3DDevice,"../media/characters.png",0,0,1,0,D3DFMT_UNKNOWN,

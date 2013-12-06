@@ -12,20 +12,22 @@ public:
 
 	struct sFrameInfo
 	{
-		unsigned int frameId;
+		unsigned int framePosX;
+		unsigned int framePosY;
 		unsigned int duration;
 
-		sFrameInfo() : frameId(0), duration(0) { }
-		sFrameInfo(unsigned int fId, unsigned int d = 0) : frameId(fId), duration(d) { }
+		sFrameInfo() : framePosX(0), framePosY(0), duration(0) { }
+		sFrameInfo(unsigned int posx, unsigned int posy, unsigned int d = 0) : framePosX(posx), framePosY(posy), duration(d) { }
 	};
 
 	struct sCellInfo
 	{
+		std::string tileSet;
 		tFrameVec frameVec;
 		bool walkable;
 
-		sCellInfo() : frameVec(), walkable(false) { }
-		sCellInfo(const tFrameVec& frames, bool w = true) : frameVec(frames), walkable(w) { }
+		sCellInfo() : tileSet(""), frameVec(), walkable(false) {}
+		sCellInfo(const std::string& tileSet, const tFrameVec& frames, bool w = true) : tileSet(tileSet), frameVec(frames), walkable(w) { }
 	};
 
 	static const unsigned int tileWidth = 32;
