@@ -61,6 +61,42 @@ cKeyboard::~cKeyboard()
 	}
 }
 
+bool cKeyboard::KeyDown(int key)
+{ 
+	if (key < 0 || key > 255)
+		return false;
+	return (m_keys[key] & 0x80) ? true : false; 
+}
+
+bool cKeyboard::KeyUp(int key)
+{ 
+	if (key < 0 || key > 255)
+		return false;
+	return (m_keys[key] & 0x80) ? false : true; 
+}
+
+void cKeyboard::KeyClear(int key)
+{
+	if (key < 0 || key > 255)
+		return;
+	m_keys[key] = 0x00;
+}
+
+bool cKeyboard::KeyUpDown(int key)
+{
+	if (key < 0 || key > 255)
+		return false;
+	return (m_keys[key] & 0x80 && !m_last_keys[key]);
+
+}
+
+bool cKeyboard::KeyDownUp(int key)
+{
+	if (key < 0 || key > 255)
+		return false;
+	return (!m_keys[key] && m_last_keys[key] & 0x80);
+}
+
 
 /*************************************************************************
 cKeyboard::Update()
@@ -72,22 +108,23 @@ bool cKeyboard::Read()
 	cLog *Log = cLog::Instance();
 	HRESULT hr;
 
+	memcpy(m_last_keys, m_keys, 256);
 	hr = m_pDIDev->GetDeviceState(sizeof(m_keys), (LPVOID)&m_keys);
 	if(FAILED(hr))
 	{
-		Log->Error(hr,"Getting keyboard device state");
+		//Log->Error(hr,"Getting keyboard device state");
 
 		hr = m_pDIDev->Acquire();
 		if(FAILED(hr))
 		{
-			Log->Error(hr,"Acquiring keyboard!");
+			//Log->Error(hr,"Acquiring keyboard!");
 			return false;
 		}
 
 		hr = m_pDIDev->GetDeviceState(sizeof(m_keys), (LPVOID)&m_keys);
 		if(FAILED(hr))
 		{
-			Log->Error(hr,"Getting keyboard device state");
+			//Log->Error(hr,"Getting keyboard device state");
 			return false;
 		}
 	}
@@ -95,6 +132,13 @@ bool cKeyboard::Read()
 
 	return true;
 }
+
+void cKeyboard::Clear()
+{ 
+	ZeroMemory(m_keys, 256 * sizeof(char));
+	ZeroMemory(m_last_keys, 256 * sizeof(char));
+}
+
 
 
 /***********************************************************************

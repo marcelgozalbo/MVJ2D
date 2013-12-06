@@ -79,7 +79,7 @@ void cSound::PlayGameSound(unsigned int aIdSound, bool aLoop)
 	sSound sound = GetSound(aIdSound);
 	if (sound.Sound)
 	{
-		//mFMODSystem->playSound(sound.Sound, nullptr, false, &sound.Channel);
+		mFMODSystem->playSound(sound.Sound, nullptr, false, &sound.Channel);
 		AssingChanelToSound(aIdSound, sound.Channel);
 		if (aLoop)
 			sound.Channel->setLoopCount(-1);

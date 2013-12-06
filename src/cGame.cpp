@@ -105,7 +105,7 @@ bool cGame::LoopInput()
 	res = Input.Read();
 	if(!res)
 	{
-		Log->Msg("Error reading Input!");
+		//Log->Msg("Error reading Input!");
 		return false;
 	}
 	return true;
@@ -121,8 +121,24 @@ bool cGame::LoopProcess()
 
 		case STATE_GAME:
 						Scene->Update();
+						if (Input.KeyUpDown(DIK_P))
+						{
+							_state = STATE_PAUSED;
+						}
+						break;
+		case STATE_PAUSED:
+						if (Input.KeyUpDown(DIK_P))
+						{
+							_state = STATE_GAME;
+						}
 						break;
 	}
+
+	if (Input.KeyDown(DIK_ESCAPE))
+	{
+		_state = STATE_FINISHED;
+	}
+
 	return true;
 }
 
@@ -141,7 +157,7 @@ bool cGame::Render()
 	case STATE_MAIN:
 		Menu.Render();
 		break;
-
+	case STATE_PAUSED:
 	case STATE_GAME:
 		Scene->Render();
 		break;

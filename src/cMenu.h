@@ -30,7 +30,6 @@ private:
 	cBaseEntity* _greenArrows;
 	eSelection _selection;
 	std::chrono::high_resolution_clock::time_point _start;
-	std::chrono::high_resolution_clock::time_point _start2;
 	bool _blink;
 };
 

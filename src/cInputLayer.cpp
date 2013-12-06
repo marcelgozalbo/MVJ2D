@@ -109,7 +109,7 @@ bool cInputLayer::Read()
 		res = m_pKeyboard->Read();
 		if(!res)
 		{
-			Log->Msg("Error reading from keyboard device!");
+			//Log->Msg("Error reading from keyboard device!");
 			return false;
 		}
 	}
@@ -118,7 +118,7 @@ bool cInputLayer::Read()
 		res = m_pMouse->Read();
 		if(!res)
 		{
-			Log->Msg("Error reading from mouse device!");
+			//Log->Msg("Error reading from mouse device!");
 			return false;
 		}
 	}
@@ -170,6 +170,19 @@ bool cInputLayer::KeyDown(int key)
 bool cInputLayer::KeyUp(int key)
 {	
 	return m_pKeyboard->KeyUp(key);
+}
+bool cInputLayer::KeyUpDown(int key)
+{
+	return (m_pKeyboard->KeyUpDown(key));
+
+}
+bool cInputLayer::KeyDownUp(int key)
+{
+	return (m_pKeyboard->KeyDownUp(key));
+}
+void cInputLayer::KeyClear(int key)
+{
+	return m_pKeyboard->KeyClear(key);
 }
 bool cInputLayer::ButtonDown(int button)
 {
