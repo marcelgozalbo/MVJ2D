@@ -101,7 +101,7 @@ void cMap::loadAnimations(std::ifstream& file)
 			{
 				finished = true;
 			}
-			else
+			else if (line[0] != '#')
 			{
 				if (line[0] == '>')
 				{
@@ -109,19 +109,19 @@ void cMap::loadAnimations(std::ifstream& file)
 				}
 				else
 				{
-					unsigned int cellId = charTo<unsigned int>(line[0]);
-					bool walkable = charTo<bool>(line[2]);
-					unsigned int frameCount = charTo<unsigned int>(line[4]);
-					unsigned int strIndex = 6;
+					unsigned int cellId = hexStrTo<unsigned int>(line, 0, 2);
+					bool walkable = hexCharTo<bool>(line[4]);
+					unsigned int frameCount = hexCharTo<unsigned int>(line[5]);
+					unsigned int strIndex = 7;
 
 					cCell::tFrameVec frameVec;
 					frameVec.reserve(frameCount);
 
 					for (unsigned int idx = 0; idx < frameCount; idx++)
 					{
-						unsigned int framePosX = charTo<unsigned int>(line[strIndex]);
-						unsigned int framePosY = charTo<unsigned int>(line[strIndex + 2]);
-						unsigned int duration = charTo<unsigned int>(line[strIndex + 4]);
+						unsigned int framePosX = hexCharTo<unsigned int>(line[strIndex]);
+						unsigned int framePosY = hexCharTo<unsigned int>(line[strIndex + 2]);
+						unsigned int duration = hexCharTo<unsigned int>(line[strIndex + 4]);
 						strIndex += 6;
 
 						frameVec.push_back(cCell::sFrameInfo(framePosX, framePosY, duration));
@@ -158,31 +158,23 @@ void cMap::loadMap(std::ifstream& file)
 	{
 		m_grid.push_back(tRow());
 
-		for (auto character : line)
+		for (unsigned int idx = 0; idx < line.size(); idx += 2)
 		{
-			if (character != ' ')
+			unsigned int cellId = hexStrTo<unsigned int>(line, idx, idx + 2);
+			tAnimations::iterator it = m_animations.find(cellId);
+
+			if (it != m_animations.end())
 			{
-				unsigned int cellId;
-				std::stringstream ss;
+				const cCell::sCellInfo& cellInfo = it->second;
 
-				ss << character;
-				ss >> cellId;
-
-				tAnimations::iterator it = m_animations.find(cellId);
-
-				if (it != m_animations.end())
-				{
-					const cCell::sCellInfo& cellInfo = it->second;
-
-					m_grid.back().push_back(new cCell(currentRow, currentCol, cellInfo));
-				}
-				else
-				{
-					fatalError("unknown cellId: " + toString(cellId) + " on row " + toString(currentRow) + " and column " + toString(currentCol));
-				}
-
-				currentCol++;
+				m_grid.back().push_back(new cCell(currentRow, currentCol, cellInfo));
 			}
+			else
+			{
+				fatalError("unknown cellId: " + toString(cellId) + " on row " + toString(currentRow) + " and column " + toString(currentCol));
+			}
+
+			currentCol++;
 		}
 
 		currentRow++;
