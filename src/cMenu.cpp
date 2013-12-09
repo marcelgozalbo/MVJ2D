@@ -82,6 +82,14 @@ bool cMenu::Render()
 {
 	_background->Render();
 	_greenArrows->Render();
+	/*
+	// Example font
+	cRectangle Rectangle;
+	Rectangle.SetRect(10);
+	Rectangle.w = 100;
+	Rectangle.h = 50;
+	cGame::Instance()->Graphics->DrawFont("arial", "puteruuuuuuuuuuuuuuuu", 100, Rectangle);// , 0xFF000000, DT_VCENTER);
+	*/
 	return true;
 }
 
