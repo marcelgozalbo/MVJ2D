@@ -35,6 +35,7 @@ public:
 
 	void DrawSprite(const std::string &text_id, int posx, int posy, int posz, const cRectangle& Rect, float scalex = 1.0, float scaley = 1.0, float scalez = 1.0);
 	void DrawRect(const cRectangle &Rectangle, D3DCOLOR color, int posz);
+	void DrawFont(const std::string &a_text_id, const std::string& a_text, int posz, const cRectangle& a_rect, D3DCOLOR a_color = 0xFFFFFFFF, DWORD a_format = DT_LEFT);
 
 	void GetTextureSizes(const std::string &text_id, int &h, int &w);
 
@@ -140,6 +141,39 @@ private:
 		cRectangle rect;
 	};
 
+	class FontRenderer : public IRender
+	{
+	public:
+		FontRenderer(LPD3DXFONT a_font, const std::string& aText, const cRectangle& a_rect, D3DCOLOR a_color = 0xFFFFFFFF, DWORD a_format = DT_LEFT) :
+			_font(a_font), _text(aText), _rect(a_rect), _color(a_color), _format(a_format)
+		{
+
+		}
+
+		~FontRenderer()
+		{
+
+		}
+
+		void Render(LPD3DXSPRITE spr, LPDIRECT3DDEVICE9 dev) override
+		{
+			HRESULT hr;
+			spr->Begin(D3DXSPRITE_ALPHABLEND);
+			RECT rc;
+			SetRect(&rc, _rect.x, _rect.y, _rect.x + _rect.w, _rect.y + _rect.h);
+			hr = _font->DrawText(spr, _text.c_str(), -1, &rc, _format, _color);
+			spr->End();
+		}
+	private:
+
+		LPD3DXFONT _font;
+		const std::string _text;
+		cRectangle _rect;
+		D3DCOLOR _color;
+		DWORD _format;
+
+	};
+
 	typedef std::vector<IRender *> tZOrderVec;
 	typedef std::map<int, tZOrderVec> tRenderFrameInfo;
 
@@ -150,6 +184,7 @@ private:
 	LPD3DXSPRITE g_pSprite;
 
 	std::map<std::string, LPDIRECT3DTEXTURE9>	m_texturesmap;
+	std::map<std::string, LPD3DXFONT>			m_fontsmap;
 
 	// Z, renderinfo
 	tRenderFrameInfo	m_renderframeinfo;
