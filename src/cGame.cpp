@@ -158,6 +158,7 @@ bool cGame::Render()
 		Menu.Render();
 		break;
 	case STATE_PAUSED:
+		cGame::Instance()->Graphics->DrawSprite("paused", 0, 0, 100, cRectangle(0,0,800,600));
 	case STATE_GAME:
 		Scene->Render();
 		break;

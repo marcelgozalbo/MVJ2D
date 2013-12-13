@@ -122,6 +122,21 @@ void cGraphicsLayer::LoadData()
 								D3DPOOL_DEFAULT, D3DX_FILTER_NONE, D3DX_FILTER_NONE,
 								0x00ff00ff, NULL, NULL, &buffer);
 	m_texturesmap["green_arrow"] = buffer;
+
+	//Paused
+	D3DXCreateTextureFromFileEx(g_pD3DDevice, "../media/paused.png", 0, 0, 1, 0, D3DFMT_UNKNOWN,
+								D3DPOOL_DEFAULT, D3DX_FILTER_NONE, D3DX_FILTER_NONE,
+								0x00ff00ff, NULL, NULL, &buffer);
+	m_texturesmap["paused"] = buffer;
+
+	LPD3DXFONT buffer_font = nullptr;
+
+	D3DXCreateFont(g_pD3DDevice, 12, 0, FW_BOLD, 0, FALSE,
+		DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY,
+		DEFAULT_PITCH | FF_DONTCARE, TEXT("Arial"),
+		&buffer_font);
+
+	m_fontsmap["arial"] = buffer_font;
 }
 
 void cGraphicsLayer::GetTextureSizes(const std::string &text_id, int &h, int &w)
@@ -164,10 +179,9 @@ void cGraphicsLayer::Render()
 	g_pD3DDevice->BeginScene();
 
 	//Start Rendering by Z order
-	for (auto rit = m_renderframeinfo.begin(); rit != m_renderframeinfo.end(); ++rit)
-		for (auto &it_Zlevel : rit->second) 	// RENDER Z entire Z-LEVEL
+	for (auto it = m_renderframeinfo.begin(); it != m_renderframeinfo.end(); ++it)
+		for (auto &it_Zlevel : it->second) 	// RENDER Z entire Z-LEVEL
 			it_Zlevel->Render(g_pSprite, g_pD3DDevice);
-	
 
 	//Clean the entire map for the next frame
 	for (auto &it_renderinfo : m_renderframeinfo)
@@ -223,6 +237,32 @@ void cGraphicsLayer::DrawRect(const cRectangle &Rectangle, D3DCOLOR color, int p
 		rendit->second.push_back(ptex);
 	}
 	
+}
+
+void cGraphicsLayer::DrawFont(const std::string &a_text_id, const std::string& a_text, int posz, const cRectangle& a_rect, D3DCOLOR a_color, DWORD a_format)
+{
+	auto text_it = m_fontsmap.find(a_text_id);
+
+	if (text_it == m_fontsmap.end())
+	{
+		cLog *Log = cLog::Instance();
+		Log->Msg(std::string("DRAWFONT Font id: ") + a_text_id + std::string(" Not Found!"));
+		return;
+	}
+
+	FontRenderer* pfont = new FontRenderer(text_it->second, a_text, a_rect, a_color, a_format);
+
+	auto rendit = m_renderframeinfo.find(posz);
+	if (rendit == m_renderframeinfo.end())
+	{
+		std::vector<IRender *> vec;
+		vec.push_back(pfont);
+		m_renderframeinfo.insert(std::pair < int, std::vector<IRender *> >(posz, vec));
+	}
+	else
+	{
+		rendit->second.push_back(pfont);
+	}
 }
 
 
