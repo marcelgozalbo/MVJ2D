@@ -58,7 +58,7 @@ void cBaseEntity::Render()
 	{
 		if (IsAnimationEnabled())
 		{
-			cGame::Instance()->Graphics->DrawSprite(m_text_id, m_posx, m_posy, m_posz, GetAnimationCurrentStepRectangle());
+			cGame::Instance()->Graphics->DrawSprite(m_text_id, m_posx, m_posy, m_posz, GetAnimationCurrentStepRectangle(),scalex, scaley, scalez);
 		}
 		else
 			cGame::Instance()->Graphics->DrawSprite(m_text_id, m_posx, m_posy, m_posz, m_rect_texture,scalex,scaley,scalez);

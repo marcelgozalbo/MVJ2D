@@ -9,7 +9,31 @@ cBaseEntity("player",0, 0, 0)
 	SetZIndex(10);
 	EnableCollision();
 	SetCollisionRectRelative(rec);
-	SetTextureScale(2.0);
+	SetTextureScale(3.0);
+
+	std::vector<cRectangle> Animations;
+	Animations.push_back(cRectangle(0, 0, 16, 24));
+	Animations.push_back(cRectangle(23,0, 16, 24));
+	Animations.push_back(cRectangle(47, 0, 16, 24));
+	Animations.push_back(cRectangle(70, 0, 16, 24));
+	Animations.push_back(cRectangle(93, 0, 16, 24));
+	Animations.push_back(cRectangle(117, 0, 16, 24));
+	Animations.push_back(cRectangle(140, 0, 16, 24));
+	
+	std::vector<cRectangle> DownShield;
+	DownShield.push_back(cRectangle(0, 30, 16, 24));
+	DownShield.push_back(cRectangle(23, 30, 16, 24));
+	DownShield.push_back(cRectangle(47, 30, 16, 24));
+	DownShield.push_back(cRectangle(70,30, 16, 24));
+	DownShield.push_back(cRectangle(93, 30, 16, 24));
+	DownShield.push_back(cRectangle(117, 30, 16, 24));
+	DownShield.push_back(cRectangle(140, 30, 16, 24));
+
+	SetAnimationSteps(DownShield);
+	SetAnimationFramesPerStep(5);
+	EnableAnimation();
+	PlayAnimation();
+
 	
 }
 
