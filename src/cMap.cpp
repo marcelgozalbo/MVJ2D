@@ -110,9 +110,11 @@ void cMap::loadAnimations(std::ifstream& file)
 				else
 				{
 					unsigned int cellId = hexStrTo<unsigned int>(line, 0, 2);
-					bool walkable = hexCharTo<bool>(line[4]);
-					unsigned int frameCount = hexCharTo<unsigned int>(line[5]);
-					unsigned int strIndex = 7;
+					bool walkable = hexCharTo<bool>(line[3]);
+					unsigned int duration = hexCharTo<unsigned int>(line[5]);
+					unsigned int z = hexCharTo<unsigned int>(line[7]);
+					unsigned int frameCount = hexCharTo<unsigned int>(line[9]);
+					unsigned int strIndex = 11;
 
 					cCell::tFrameVec frameVec;
 					frameVec.reserve(frameCount);
@@ -121,10 +123,9 @@ void cMap::loadAnimations(std::ifstream& file)
 					{
 						unsigned int framePosX = hexCharTo<unsigned int>(line[strIndex]);
 						unsigned int framePosY = hexCharTo<unsigned int>(line[strIndex + 2]);
-						unsigned int duration = hexCharTo<unsigned int>(line[strIndex + 4]);
-						strIndex += 6;
+						strIndex += 4;
 
-						frameVec.push_back(cCell::sFrameInfo(framePosX, framePosY, duration));
+						frameVec.push_back(cCell::sFrameInfo(framePosX, framePosY));
 					}
 
 					if (frameVec.empty())
@@ -136,7 +137,7 @@ void cMap::loadAnimations(std::ifstream& file)
 
 					if (it == m_animations.end())
 					{
-						m_animations.emplace_hint(it, tAnimations::value_type(cellId, cCell::sCellInfo(tileSet, frameVec, walkable)));
+						m_animations.emplace_hint(it, tAnimations::value_type(cellId, cCell::sCellInfo(tileSet, frameVec, walkable, duration, z)));
 					}
 					else
 					{

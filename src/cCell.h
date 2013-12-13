@@ -14,10 +14,9 @@ public:
 	{
 		unsigned int framePosX;
 		unsigned int framePosY;
-		unsigned int duration;
 
-		sFrameInfo() : framePosX(0), framePosY(0), duration(0) { }
-		sFrameInfo(unsigned int posx, unsigned int posy, unsigned int d = 0) : framePosX(posx), framePosY(posy), duration(d) { }
+		sFrameInfo() : framePosX(0), framePosY(0) { }
+		sFrameInfo(unsigned int posx, unsigned int posy) : framePosX(posx), framePosY(posy) { }
 	};
 
 	struct sCellInfo
@@ -25,9 +24,11 @@ public:
 		std::string tileSet;
 		tFrameVec frameVec;
 		bool walkable;
+		unsigned int duration;
+		unsigned int z;
 
-		sCellInfo() : tileSet(""), frameVec(), walkable(false) {}
-		sCellInfo(const std::string& tileSet, const tFrameVec& frames, bool w = true) : tileSet(tileSet), frameVec(frames), walkable(w) { }
+		sCellInfo() : tileSet(""), frameVec(), walkable(false), duration(0), z(1) {}
+		sCellInfo(const std::string& tileSet, const tFrameVec& frames, bool w = true, unsigned int d = 0, unsigned int cz = 1) : tileSet(tileSet), frameVec(frames), walkable(w), duration(d), z(cz) { }
 	};
 
 	static const unsigned int tileWidth = 32;
