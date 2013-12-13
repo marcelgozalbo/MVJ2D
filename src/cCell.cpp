@@ -4,7 +4,7 @@
 #include "cLog.h"
 
 cCell::cCell(unsigned int _row, unsigned int _col, const sCellInfo& _cellInfo) :
-	cBaseEntity(_cellInfo.tileSet, _col * tileWidth, _row * tileHeight, 1),
+	cBaseEntity(_cellInfo.tileSet, _col * tileWidth, _row * tileHeight, _cellInfo.z),
 	m_walkable(_cellInfo.walkable)
 {
 	const tFrameVec& frameVec = _cellInfo.frameVec;
@@ -25,9 +25,7 @@ cCell::cCell(unsigned int _row, unsigned int _col, const sCellInfo& _cellInfo) :
 		}
 
 		SetAnimationSteps(rectVec);
-		//// #todo: duracions variables d'animacio
-		//// #todo: animacions per temps i no per frame
-		SetAnimationFramesPerStep(_cellInfo.frameVec[0].duration * 10);
+		SetAnimationFramesPerStep(_cellInfo.duration * 10);
 		EnableAnimation();
 		PlayAnimation();
 	}
