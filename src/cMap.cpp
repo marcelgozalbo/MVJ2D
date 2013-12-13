@@ -55,22 +55,44 @@ void cMap::update()
 bool cMap::isWalkableFor(const cBaseEntity& entity) const
 {
 	bool walkable = false;
-	//unsigned int row = y / cCell::tileHeight;
-	//unsigned int col = x / cCell::tileWidth;
 
-	//if (row < m_grid.size())
-	//{
-	//	const tRow& gridRow = m_grid[row];
+	const cRectangle& collisionRect = entity.GetCollisionRectAbsolute();
+	const u32 firstRow = collisionRect.y / cCell::tileHeight;
+	const u32 firstCol = collisionRect.x / cCell::tileWidth;
+	const u32 lastRow = (collisionRect.y + collisionRect.h) / cCell::tileHeight;
+	const u32 lastCol = (collisionRect.x + collisionRect.w) / cCell::tileWidth;
 
-	//	if (col < gridRow.size())
-	//	{
-	//		cCell* const cell = gridRow[col];
+	for (u32 row = firstRow; row <= lastRow; row++)
+	{
+		if (row < m_grid.size())
+		{
+			for (u32 col = firstCol; col <= lastCol; col++)
+			{
+				const tRow& gridRow = m_grid[firstRow];
 
-	//		walkable = cell->isWalkable();
-	//	}
-	//}
+				if (col < gridRow.size())
+				{
+					cCell* const cell = gridRow[col];
+
+					walkable = walkable && cell->isWalkable();
+				}
+			}
+		}
+	}
 
 	return walkable;
+}
+
+u32 cMap::integer_div(u32 dividend, u32 divisor)
+{
+	u32 result = dividend / divisor;
+
+	if (dividend % divisor)
+	{
+		result++;
+	}
+
+	return result;
 }
 
 void cMap::clear()
@@ -109,20 +131,20 @@ void cMap::loadAnimations(std::ifstream& file)
 				}
 				else
 				{
-					unsigned int cellId = hexStrTo<unsigned int>(line, 0, 2);
+					u32 cellId = hexStrTo<u32>(line, 0, 2);
 					bool walkable = hexCharTo<bool>(line[3]);
-					unsigned int duration = hexCharTo<unsigned int>(line[5]);
-					unsigned int z = hexCharTo<unsigned int>(line[7]);
-					unsigned int frameCount = hexCharTo<unsigned int>(line[9]);
-					unsigned int strIndex = 11;
+					u32 duration = hexCharTo<u32>(line[5]);
+					u32 z = hexCharTo<u32>(line[7]);
+					u32 frameCount = hexCharTo<u32>(line[9]);
+					u32 strIndex = 11;
 
 					cCell::tFrameVec frameVec;
 					frameVec.reserve(frameCount);
 
-					for (unsigned int idx = 0; idx < frameCount; idx++)
+					for (u32 idx = 0; idx < frameCount; idx++)
 					{
-						unsigned int framePosX = hexCharTo<unsigned int>(line[strIndex]);
-						unsigned int framePosY = hexCharTo<unsigned int>(line[strIndex + 2]);
+						u32 framePosX = hexCharTo<u32>(line[strIndex]);
+						u32 framePosY = hexCharTo<u32>(line[strIndex + 2]);
 						strIndex += 4;
 
 						frameVec.push_back(cCell::sFrameInfo(framePosX, framePosY));
@@ -159,9 +181,9 @@ void cMap::loadMap(std::ifstream& file)
 	{
 		m_grid.push_back(tRow());
 
-		for (unsigned int idx = 0; idx < line.size(); idx += 2)
+		for (u32 idx = 0; idx < line.size(); idx += 2)
 		{
-			unsigned int cellId = hexStrTo<unsigned int>(line, idx, idx + 2);
+			u32 cellId = hexStrTo<u32>(line, idx, idx + 2);
 			tAnimations::iterator it = m_animations.find(cellId);
 
 			if (it != m_animations.end())
