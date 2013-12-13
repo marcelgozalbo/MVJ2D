@@ -4,6 +4,7 @@
 #include <fstream>
 #include <array>
 #include <unordered_map>
+#include "types.h"
 #include "cCell.h"
 
 class cMap
@@ -20,7 +21,9 @@ public:
 private:
 	typedef std::vector<cCell*> tRow;
 	typedef std::vector<tRow> tGrid;
-	typedef std::unordered_map<unsigned int, cCell::sCellInfo> tAnimations;
+	typedef std::unordered_map<u32, cCell::sCellInfo> tAnimations;
+
+	static u32 integer_div(u32 dividend, u32 divisor);
 
 	void clear();
 	void loadAnimations(std::ifstream& file);
