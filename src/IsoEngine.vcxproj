@@ -134,6 +134,8 @@
     <ClCompile Include="cAStar.cpp" />
     <ClCompile Include="cBaseEntity.cpp" />
     <ClCompile Include="cCell.cpp" />
+    <ClCompile Include="cCharacter.cpp" />
+    <ClCompile Include="cEnemy.cpp" />
     <ClCompile Include="cGame.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -179,6 +181,8 @@
     <ClInclude Include="cAStar.h" />
     <ClInclude Include="cBaseEntity.h" />
     <ClInclude Include="cCell.h" />
+    <ClInclude Include="cCharacter.h" />
+    <ClInclude Include="cEnemy.h" />
     <ClInclude Include="cGame.h" />
     <ClInclude Include="cGraphicsLayer.h" />
     <ClInclude Include="cInputLayer.h" />
