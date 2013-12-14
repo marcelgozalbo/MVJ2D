@@ -111,6 +111,12 @@ void cGraphicsLayer::LoadData()
 								0x00ff00ff, NULL, NULL, &buffer);
 	m_texturesmap["player"] = buffer;
 
+	//Enemies
+	D3DXCreateTextureFromFileEx(g_pD3DDevice, "../media/enemies.png", 0, 0, 1, 0, D3DFMT_UNKNOWN,
+								D3DPOOL_DEFAULT, D3DX_FILTER_NONE, D3DX_FILTER_NONE,
+								0x000080ff, NULL, NULL, &buffer);
+	m_texturesmap["enemies"] = buffer;
+
 	//Mouse pointers
 	D3DXCreateTextureFromFileEx(g_pD3DDevice,"../media/mouse.png",0,0,1,0,D3DFMT_UNKNOWN,
 								D3DPOOL_DEFAULT,D3DX_FILTER_NONE,D3DX_FILTER_NONE,
