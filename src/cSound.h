@@ -11,15 +11,17 @@ public:
 	cSound();
 	~cSound();
 
+	typedef unsigned int tSoundId;
+
 	void Init();
 	void Update();
 	void Release();
 
-	unsigned int LoadSound(const std::string&);
-	void PlayGameSound(unsigned int aIdSound, bool aLoop = false);
-	void PauseSound(unsigned int aIdSound);
-	void ToggleSound(unsigned int aIdSound);
-	void SetVolumeSound(unsigned int aIdSound, float aVolume);
+	tSoundId LoadSound(const std::string&);
+	void PlayGameSound(tSoundId aIdSound, bool aLoop = false);
+	void PauseSound(tSoundId aIdSound);
+	void ToggleSound(tSoundId aIdSound);
+	void SetVolumeSound(tSoundId aIdSound, float aVolume);
 
 private:
 
@@ -34,13 +36,13 @@ private:
 	};
 
 	bool CheckError(std::string aFunctionName, FMOD_RESULT aResult);
-	sSound GetSound(unsigned int aIdSound) const;
-	void AssingChanelToSound(unsigned int aIdSound, FMOD::Channel* aChannel);
+	sSound GetSound(tSoundId aIdSound) const;
+	void AssingChanelToSound(tSoundId aIdSound, FMOD::Channel* aChannel);
 
 	static FMOD::System* mFMODSystem;
 
-	unsigned int mNewId;
-	typedef std::map<unsigned int, sSound> tSoundMap;
+	tSoundId mNewId;
+	typedef std::map<tSoundId, sSound> tSoundMap;
 	tSoundMap mSounds;
 };
 

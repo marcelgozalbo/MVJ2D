@@ -3,8 +3,13 @@
 #include <sstream>
 #include "cLog.h"
 #include "Utils.h"
+#include "cGame.h"
 
-cMap::cMap()
+using namespace util;
+
+cMap::cMap() :
+	m_visibleRect(0, 0, SCREEN_RES_X, SCREEN_RES_Y),
+	m_movementRect(m_visibleRect.w / 4, m_visibleRect.h / 4, m_visibleRect.w / 2, m_visibleRect.h / 2)
 {
 
 }
@@ -30,6 +35,20 @@ void cMap::load(const std::string& _filePath)
 	file.close();
 }
 
+void cMap::update()
+{
+	// #todo: solo logica de los visibles?
+	for (auto& row : m_grid)
+	{
+		for (auto* cell : row)
+		{
+			cell->update();
+		}
+	}
+
+//	cRectangle playerRect = cGame::Instance()->Scene->m_player.GetCollisionRectAbsolute();
+}
+
 void cMap::render()
 {
 	for (auto& row : m_grid)
@@ -41,15 +60,22 @@ void cMap::render()
 	}
 }
 
-void cMap::update()
+std::string cMap::getCellDebugString(u32 row, u32 col)
 {
-	for (auto& row : m_grid)
+	cCell* const cell = getCell(row, col);
+
+	if (!cell)
 	{
-		for (auto* cell : row)
-		{
-			cell->update();
-		}
+		fatalError("getCellDebugString: row " + util::toString(row) + " col " + util::toString(col) + " out of bounds");
 	}
+
+	return cell->toString();
+}
+
+void cMap::toCellCoord(s32 x, s32 y, s32* row, s32* col)
+{
+	*row = y / cCell::tileHeight;
+	*col = x / cCell::tileWidth;
 }
 
 bool cMap::isWalkable(const cRectangle& position) const
@@ -61,20 +87,17 @@ bool cMap::isWalkable(const cRectangle& position) const
 	const u32 lastRow = (position.y + position.h) / cCell::tileHeight;
 	const u32 lastCol = (position.x + position.w) / cCell::tileWidth;
 
-	for (u32 row = firstRow; row <= lastRow; row++)
+	for (u32 row = firstRow; walkable && row <= lastRow; row++)
 	{
-		if (row < m_grid.size())
+		for (u32 col = firstCol; walkable && col <= lastCol; col++)
 		{
-			for (u32 col = firstCol; col <= lastCol; col++)
+			if (cCell* const cell = getCell(row, col))
 			{
-				const tRow& gridRow = m_grid[firstRow];
-
-				if (col < gridRow.size())
-				{
-					cCell* const cell = gridRow[col];
-
-					walkable = walkable && cell->isWalkable();
-				}
+				walkable = walkable && cell->isWalkable();
+			}
+			else
+			{
+				walkable = false;
 			}
 		}
 	}
@@ -208,4 +231,21 @@ void cMap::fatalError(const std::string& errorText)
 {
 	LOG(errorText);
 	throw std::runtime_error(errorText);
+}
+
+cCell* cMap::getCell(u32 row, u32 col) const
+{
+	cCell* cell = nullptr;
+
+	if (row < m_grid.size())
+	{
+		const tRow& gridRow = m_grid[row];
+
+		if (col < gridRow.size())
+		{
+			cell = gridRow[col];
+		}
+	}
+
+	return cell;
 }

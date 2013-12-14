@@ -37,10 +37,10 @@ public:
 	cCell(unsigned int _row, unsigned int _col, const sCellInfo& _cellInfo);
 	~cCell();
 
-	bool isWalkable() const;
-
 	void render();
 	void update();
+	bool isWalkable() const;
+	std::string toString() const;
 
 private:
 	bool m_walkable;

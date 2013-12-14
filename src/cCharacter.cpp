@@ -56,7 +56,7 @@ void cCharacter::Move(s32 xAmount, s32 yAmount)
 		}
 
 		int x, y;
-		GetPosition(x, y);
+		GetAbsolutePosition(x, y);
 
 		//Actualitzo el moviment segons orientacio
 		switch (m_orientation)
@@ -95,9 +95,14 @@ void cCharacter::Move(s32 xAmount, s32 yAmount)
 		destRect.x = x;
 		destRect.y = y;
 
-		if (cGame::Instance()->Scene->m_map.isWalkable(destRect))
+		cGame* game = cGame::Instance();
+
+		if (game->globals.limits.inside(x, y))
 		{
-			SetPosition(x, y);
+			if (game->Scene->m_map.isWalkable(destRect))
+			{
+				SetAbsolutePosition(x, y);
+			}
 		}
 	}
 }

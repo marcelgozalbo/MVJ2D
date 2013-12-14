@@ -5,44 +5,46 @@
 #include <sstream>
 #include <stdexcept>
 
-template <typename T>
-std::string toString(T in)
+namespace util
 {
-	std::stringstream ss;
-
-	ss << in;
-	return ss.str();
-}
-
-template <typename T>
-T hexCharTo(char in)
-{
-	std::stringstream ss;
-	T out;
-
-	ss << std::hex << in;
-	ss >> out;
-
-	return out;
-}
-
-template <typename T>
-T hexStrTo(const std::string& in, unsigned int beginPos = 0, unsigned int endPos = in.size())
-{
-	if (beginPos > endPos || beginPos > in.size() || endPos > in.size())
+	template <typename T>
+	std::string toString(T in)
 	{
-		throw std::runtime_error("hexStrto begin/end invalid values");
+		std::stringstream ss;
+
+		ss << in;
+		return ss.str();
 	}
 
-	std::stringstream ss;
-	std::string input(in.substr(0 + beginPos, 0 + endPos));
-	T out;
+	template <typename T>
+	T hexCharTo(char in)
+	{
+		std::stringstream ss;
+		T out;
 
-	ss << std::hex << input;
-	ss >> out;
+		ss << std::hex << in;
+		ss >> out;
 
-	return out;
+		return out;
+	}
+
+	template <typename T>
+	T hexStrTo(const std::string& in, unsigned int beginPos = 0, unsigned int endPos = in.size())
+	{
+		if (beginPos > endPos || beginPos > in.size() || endPos > in.size())
+		{
+			throw std::runtime_error("hexStrto begin/end invalid values");
+		}
+
+		std::stringstream ss;
+		std::string input(in.substr(0 + beginPos, 0 + endPos));
+		T out;
+
+		ss << std::hex << input;
+		ss >> out;
+
+		return out;
+	}
 }
-
 
 #endif

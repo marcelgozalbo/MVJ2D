@@ -5,6 +5,7 @@
 #include "cPlayer.h"
 #include "cMap.h"
 #include "cEnemyPersecutor.h"
+#include "cFont.h"
 
 //Resolution
 #define SCREEN_RES_X	800
@@ -48,8 +49,13 @@ public:
 	cMap m_map;
 	cPlayer m_player;
 	cEnemyPersecutor m_enemy; // just to test: we will have more than one enemy
+	cFont m_debugFont;
+	cFont m_debugCellFont;
 
 	int cx,cy;
+
+private:
+
 };
 
 

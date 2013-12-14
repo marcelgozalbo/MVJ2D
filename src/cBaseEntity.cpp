@@ -2,7 +2,6 @@
 #include "cGame.h"
 #include "cLog.h"
 
-
 bool cBaseEntity::m_debug_collision = false;
 
 
@@ -84,8 +83,8 @@ void cBaseEntity::RenderCollisionRect()
 	if (IsCollidable())
 	{
 		
-		//Renderitzo el rectangle a Z-1 perque surti per sobre la textura sempre
-		cGame::Instance()->Graphics->DrawRect(GetCollisionRectAbsolute(), 0x00FF00FF, m_posz - 1);
+		//Renderitzo el rectangle a Z+1 perque surti per sobre la textura sempre
+		cGame::Instance()->Graphics->DrawRect(GetCollisionRectAbsolute(), 0x00FF00FF, m_posz + 1);
 	}
 }
 
@@ -100,10 +99,22 @@ void cBaseEntity::SetPosition(int _x, int _y)
 	m_posy = _y;
 }
 
+void cBaseEntity::SetAbsolutePosition(int _x, int _y)
+{
+	m_posx = static_cast<s32>(_x / scalex);
+	m_posy = static_cast<s32>(_y / scaley);
+}
+
 void cBaseEntity::GetPosition(int &_x, int &_y)
 {
 	_x = m_posx;
 	_y = m_posy;
+}
+
+void cBaseEntity::GetAbsolutePosition(int& _x, int& _y) const
+{
+	_x = static_cast<s32>(m_posx * scalex);
+	_y = static_cast<s32>(m_posy * scaley);
 }
 
 void cBaseEntity::SetZIndex(int _z)
@@ -148,10 +159,11 @@ const cRectangle&  cBaseEntity::GetCollisionRectRelative() const
 cRectangle  cBaseEntity::GetCollisionRectAbsolute() const
 {
 	cRectangle rect_absolute;
-	rect_absolute.SetRect((m_posx + m_rect_colision_rel.x) * scalex,
-		(m_posy + m_rect_colision_rel.y) * scaley,
-		(m_rect_colision_rel.w) * scalex,
-		(m_rect_colision_rel.h) * scaley
+	rect_absolute.SetRect(
+		static_cast<s32>((m_posx + m_rect_colision_rel.x) * scalex),
+		static_cast<s32>((m_posy + m_rect_colision_rel.y) * scaley),
+		static_cast<s32>((m_rect_colision_rel.w) * scalex),
+		static_cast<s32>((m_rect_colision_rel.h) * scaley)
 		);
 	return rect_absolute;
 }

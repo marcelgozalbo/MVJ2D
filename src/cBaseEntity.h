@@ -20,7 +20,9 @@ public:
 
 	//SPATIAL POSITION
 	void SetPosition(int _x, int _y);
+	void SetAbsolutePosition(int _x, int _y);
 	void GetPosition(int &_x, int &_y);
+	void GetAbsolutePosition(int& _x, int& _y) const;
 	void SetZIndex(int _z);
 	void GetZIndex(int &_z);
 	

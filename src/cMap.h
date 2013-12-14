@@ -14,9 +14,13 @@ public:
 	~cMap();
 
 	void load(const std::string& _filePath);
-	void render();
 	void update();
+	void render();
 	bool isWalkable(const cRectangle& position) const;
+
+	//debug
+	std::string getCellDebugString(u32 row, u32 col);
+	void toCellCoord(s32 x, s32 y, s32* row, s32* col);
 
 private:
 	typedef std::vector<cCell*> tRow;
@@ -29,9 +33,13 @@ private:
 	void loadAnimations(std::ifstream& file);
 	void loadMap(std::ifstream& file);
 	void fatalError(const std::string& errorText);
+	cCell* getCell(u32 row, u32 col) const;
 
 	tGrid m_grid;
 	tAnimations m_animations;
+	cRectangle m_visibleRect;
+	cRectangle m_movementRect;
+	cRectangle m_lastPlayerPos;
 };
 
 #endif
