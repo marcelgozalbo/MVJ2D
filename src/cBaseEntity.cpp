@@ -100,10 +100,22 @@ void cBaseEntity::SetPosition(int _x, int _y)
 	m_posy = _y;
 }
 
+void cBaseEntity::SetAbsolutePosition(int _x, int _y)
+{
+	m_posx = static_cast<s32>(_x / scalex);
+	m_posy = static_cast<s32>(_y / scaley);
+}
+
 void cBaseEntity::GetPosition(int &_x, int &_y)
 {
 	_x = m_posx;
 	_y = m_posy;
+}
+
+void cBaseEntity::GetAbsolutePosition(int& _x, int& _y) const
+{
+	_x = static_cast<s32>(m_posx * scalex);
+	_y = static_cast<s32>(m_posy * scaley);
 }
 
 void cBaseEntity::SetZIndex(int _z)

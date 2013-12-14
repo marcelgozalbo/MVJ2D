@@ -1,12 +1,13 @@
-
 #include "cScene.h"
 #include "cMouse.h"
 #include <stdio.h>
 #include <iostream>
 #include "cGame.h"
+#include "Utils.h"
 
 cScene::cScene() :
-	m_debugFont("arial", "", 100, cRectangle(0, 0, 300, 100), 0xFFFFFFFF, cFont::ALIGN_LEFT)
+	m_debugFont("arial", "", 100, cRectangle(0, 0, 300, 100), 0xFFFFFFFF, cFont::ALIGN_LEFT),
+	m_debugCellFont("arial", "", 100, cRectangle(0, 30, 300, 100), 0xFFFFFFFF, cFont::ALIGN_LEFT)
 {
 	cx=0;
 	cy=0;
@@ -24,7 +25,21 @@ void cScene::Update()
 	m_map.update();
 	m_player.Update();
 	m_enemy.Update();
-	m_debugFont.setText("playerRect -> " + m_player.GetCollisionRectAbsolute().toString());
+
+	// update debug font
+	cRectangle playerRect = m_player.GetCollisionRectAbsolute();
+	cRectangle debugRect = playerRect;
+	debugRect.w = playerRect.x + playerRect.w;
+	debugRect.h = playerRect.y + playerRect.h;
+	s32 row, col, lastRow, lastCol;
+	m_map.toCellCoord(playerRect.x, playerRect.y, &row, &col);
+	m_map.toCellCoord(debugRect.w, debugRect.h, &lastRow, &lastCol);
+
+	m_debugFont.setText(debugRect.toString() + " r: " + util::toString(row) + " c:" + util::toString(col) + " lr:" + util::toString(lastRow) + " lc:" + util::toString(lastCol)
+		+ " wk:" + util::toString(m_map.isWalkable(playerRect)));
+
+	// update debug cell font
+	m_debugCellFont.setText(m_map.getCellDebugString(0, 3));
 }
 
 void cScene::Render()
@@ -38,7 +53,9 @@ void cScene::Render()
 	m_map.render();
 	m_player.Render();
 	m_enemy.Render();
+
 	m_debugFont.render();
+	m_debugCellFont.render();
 	
 	/*
 	cBaseEntity a;

@@ -50,6 +50,7 @@ public:
 	cPlayer m_player;
 	cEnemyPersecutor m_enemy; // just to test: we will have more than one enemy
 	cFont m_debugFont;
+	cFont m_debugCellFont;
 
 	int cx,cy;
 

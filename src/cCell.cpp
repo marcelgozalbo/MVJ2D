@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include "cGame.h"
 #include "cLog.h"
+#include "Utils.h"
 
 cCell::cCell(unsigned int _row, unsigned int _col, const sCellInfo& _cellInfo) :
 	cBaseEntity(_cellInfo.tileSet, _col * tileWidth, _row * tileHeight, _cellInfo.z),
@@ -42,11 +43,6 @@ cCell::~cCell()
 
 }
 
-bool cCell::isWalkable() const
-{
-	return m_walkable;
-}
-
 void cCell::render()
 {
 	cBaseEntity::Render();
@@ -55,4 +51,16 @@ void cCell::render()
 void cCell::update()
 {
 	cBaseEntity::Update();
+}
+
+bool cCell::isWalkable() const
+{
+	return m_walkable;
+}
+
+std::string cCell::toString() const
+{
+	cRectangle rect = GetCollisionRectAbsolute();
+
+	return std::string("r:" + util::toString(rect.y / tileHeight) + " c:" + util::toString(rect.x / tileWidth) + " wk:" + util::toString(m_walkable) + " " + rect.toString());
 }

@@ -18,6 +18,10 @@ public:
 	void update();
 	bool isWalkable(const cRectangle& position) const;
 
+	//debug
+	std::string getCellDebugString(u32 row, u32 col);
+	void toCellCoord(s32 x, s32 y, s32* row, s32* col);
+
 private:
 	typedef std::vector<cCell*> tRow;
 	typedef std::vector<tRow> tGrid;
@@ -29,6 +33,7 @@ private:
 	void loadAnimations(std::ifstream& file);
 	void loadMap(std::ifstream& file);
 	void fatalError(const std::string& errorText);
+	cCell* getCell(u32 row, u32 col) const;
 
 	tGrid m_grid;
 	tAnimations m_animations;
