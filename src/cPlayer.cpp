@@ -69,7 +69,7 @@ cPlayer::cPlayer():
 	m_LeftShield.push_back(cRectangle(141, 209, 17, 24));
 
 	SetAnimationSteps(m_LeftShield);
-	SetAnimationFramesPerStep(30);
+	SetAnimationFramesPerStep(5);
 	EnableAnimation();
 	PlayAnimation();	
 
@@ -103,37 +103,44 @@ void cPlayer::Update()
 		//CAnvio l'animacio segons l'orientacio
 		if (GetLastOrientation() != GetCurrentOrientation())
 		{
+			/*{
+			int x, y, z;
+			GetPosition(x, y);
+			GetZIndex(z);
+			cGame::Instance()->Graphics->DrawFont("arial", "SET O", z + 1, cRectangle(x - 40, y, 0, 0));
+			}
+			*/
 			auto orient = GetCurrentOrientation();
 			switch (orient)
 			{
-			case ORIENTATION_N:
-			case ORIENTATION_NE:
-			case ORIENTATION_NO:
-				SetAnimationSteps(m_Up);
-				break;
-			case ORIENTATION_S:
-			case ORIENTATION_SE:
-			case ORIENTATION_SO:
-				SetAnimationSteps(m_Down);
-				break;
-			case ORIENTATION_E:
-				SetAnimationSteps(m_Right);
-				break;
-			case ORIENTATION_O:
-				SetAnimationSteps(m_Left);
-				break;
+				case ORIENTATION_N:
+				case ORIENTATION_NE:
+				case ORIENTATION_NO:
+					SetAnimationSteps(m_Up);
+					break;
+				case ORIENTATION_S:
+				case ORIENTATION_SE:
+				case ORIENTATION_SO:
+					SetAnimationSteps(m_Down);
+					break;
+				case ORIENTATION_E:
+					SetAnimationSteps(m_Right);
+					break;
+				case ORIENTATION_O:
+					SetAnimationSteps(m_Left);
+					break;
+				default:
+					break;
 			}
-			
+			ResetAnimation();
 
 		}
-		else
-		{
-
-		}
+		
 		PlayAnimation();
 	}
 	else
 	{
+		ResetAnimation();
 		StopAnimation();
 	}
 	
