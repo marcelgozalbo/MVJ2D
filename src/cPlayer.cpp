@@ -95,8 +95,51 @@ void cPlayer::Update()
 	if (input.KeyDown(DIK_A))	vecx--;
 	if (input.KeyDown(DIK_D))	vecx++;
 
-	Move(vecx, vecy);
-	auto orientation = GetCurrentOrientation();
+	// Si m'haig de moure
+	if (vecx || vecy)
+	{
+		Move(vecx, vecy);
+
+		//CAnvio l'animacio segons l'orientacio
+		if (GetLastOrientation() != GetCurrentOrientation())
+		{
+			auto orient = GetCurrentOrientation();
+			switch (orient)
+			{
+			case ORIENTATION_N:
+			case ORIENTATION_NE:
+			case ORIENTATION_NO:
+				SetAnimationSteps(m_Up);
+				break;
+			case ORIENTATION_S:
+			case ORIENTATION_SE:
+			case ORIENTATION_SO:
+				SetAnimationSteps(m_Down);
+				break;
+			case ORIENTATION_E:
+				SetAnimationSteps(m_Right);
+				break;
+			case ORIENTATION_O:
+				SetAnimationSteps(m_Left);
+				break;
+			}
+			
+
+		}
+		else
+		{
+
+		}
+		PlayAnimation();
+	}
+	else
+	{
+		StopAnimation();
+	}
+	
+
+
+	
 
 	
 	cBaseEntity::Update();
