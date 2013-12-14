@@ -125,7 +125,7 @@ private:
 			
 			D3DXMATRIX matrixscale, matrixtranslation,matrixtransform;
 			
-			D3DXMatrixTranslation(&matrixtranslation, posx, posy, 0.0);
+			D3DXMatrixTranslation(&matrixtranslation, (float)posx,(float) posy, 0.0);
 			D3DXMatrixScaling(&matrixscale, scalex, scaley, scalez);
 			D3DXMatrixMultiply(&matrixtransform, &matrixscale, &matrixtranslation);
 			
