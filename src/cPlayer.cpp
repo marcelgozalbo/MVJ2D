@@ -52,7 +52,7 @@ cPlayer::cPlayer():
 	m_RightShield.push_back(cRectangle(120, 150, 17, 24));
 	m_RightShield.push_back(cRectangle(142, 150, 18, 24));
 
-	m_Left.push_back(cRectangle(6, 179, 17, 24));
+	m_Left.push_back(cRectangle(3, 179, 17, 24));
 	m_Left.push_back(cRectangle(26, 179, 16, 24));
 	m_Left.push_back(cRectangle(50, 179, 16, 24));
 	m_Left.push_back(cRectangle(74, 179, 16, 24));
@@ -132,7 +132,6 @@ void cPlayer::Update()
 				default:
 					break;
 			}
-			ResetAnimation();
 
 		}
 		
@@ -143,11 +142,6 @@ void cPlayer::Update()
 		ResetAnimation();
 		StopAnimation();
 	}
-	
-
-
-	
-
 	
 	cBaseEntity::Update();
 }
