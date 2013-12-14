@@ -164,6 +164,15 @@ private:
 		{
 			HRESULT hr;
 			spr->Begin(D3DXSPRITE_ALPHABLEND);
+
+			D3DXMATRIX matrixscale, matrixtranslation, matrixtransform;
+
+			D3DXMatrixTranslation(&matrixtranslation,(float) _rect.x,(float) _rect.y, 0.0);
+			D3DXMatrixScaling(&matrixscale, 1.0,1.0,1.0);
+			D3DXMatrixMultiply(&matrixtransform, &matrixscale, &matrixtranslation);
+
+			spr->SetTransform(&matrixtransform);
+
 			RECT rc;
 			SetRect(&rc, _rect.x, _rect.y, _rect.x + _rect.w, _rect.y + _rect.h);
 			hr = _font->DrawText(spr, _text.c_str(), -1, &rc, _format, _color);
