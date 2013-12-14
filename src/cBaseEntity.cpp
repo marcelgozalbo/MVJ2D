@@ -365,7 +365,7 @@ std::size_t cBaseEntity::GetAnimationFramesPerStep() const
 
 void cBaseEntity::RenderAnimInfoDebug()
 {
-	std::string text("AnimInfo[" + util::toString(m_curr_anim_step) +"]\n"+ m_anim_rect_bystep[m_curr_anim_step].toString());
+	std::string text("AnimInfo[" + util::toString(m_curr_anim_step) + "]\n" + m_anim_rect_bystep[m_anim_steps_order[m_curr_anim_step]].toString());
 	auto rec = GetCollisionRectAbsolute();
 	rec.x += rec.w + 2;
 	rec.w = 0;
