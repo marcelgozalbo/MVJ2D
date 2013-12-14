@@ -47,9 +47,9 @@ public:
 	bool HasCollision(const cBaseEntity &_baseentity);
 
 	//ANIMATION
-	void SetAnimationSteps(const std::vector<cRectangle> &_rect_steps);
-	void SetAnimationStepOrder(const std::vector<u32> &_steps_order);
-	void GetAnimationSteps(std::vector<cRectangle> &_rect_steps);
+	void SetAnimationRects(const std::vector<cRectangle> &_rect_steps);
+	void SetAnimationOrderSteps(const std::vector<u32> &_steps_order);
+	void GetAnimationRects(std::vector<cRectangle> &_rect_steps);
 	void SetAnimationFramesPerStep(const std::size_t _timeperstep);
 	std::size_t GetAnimationFramesPerStep() const;
 	const std::size_t GetAnimationFramesPerStep(const std::size_t _timeperstep);
@@ -69,19 +69,24 @@ public:
 	//HELPERS
 	void EnableDebugMode(){ m_debug_mode = true; };
 	void DisableDebugMode(){ m_debug_mode = false; };
+	bool IsDebugMode(){ return m_debug_mode; };
 
 
 	void RenderCollisionRect();
 	void EnableColDebugMode(){ m_debug_collision = true; };
 	void DisableColDebugMode(){ m_debug_collision = false; };
+	bool IsColDebugMode(){ return m_debug_collision; };
 
 	void RenderAnimInfoDebug();
 	void EnableDebugAnimMode(){ m_debug_anim = true; };
 	void DisableDebugAnimMode(){ m_debug_anim = false; };
+	bool IsDebugAnimMode(){ return m_debug_anim; };
 
 	void RenderPosInfoDebug();
 	void EnableDebugPosMode(){ m_debug_pos = true; };
 	void DisableDebugPosMode(){ m_debug_pos = false; };
+	bool IsDebugPosMode(){ return m_debug_pos; };
+
 	virtual ~cBaseEntity();
 
 private:

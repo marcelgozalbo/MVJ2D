@@ -27,7 +27,7 @@ _movement(M_DOWN)
 	_right_animation.push_back(cRectangle(71, 273, 26, 30));
 	_right_animation.push_back(cRectangle(100, 273, 26, 30));
 	
-	SetAnimationSteps(_down_animation);
+	SetAnimationRects(_down_animation);
 	SetAnimationFramesPerStep(2);
 	EnableAnimation();
 	
@@ -108,18 +108,18 @@ void cEnemyPersecutor::Move()
 			case ORIENTATION_N:
 			case ORIENTATION_NE:
 			case ORIENTATION_NO:
-				SetAnimationSteps(_up_animation);
+				SetAnimationRects(_up_animation);
 				break;
 			case ORIENTATION_S:
 			case ORIENTATION_SE:
 			case ORIENTATION_SO:
-				SetAnimationSteps(_down_animation);
+				SetAnimationRects(_down_animation);
 				break;
 			case ORIENTATION_E:
-				SetAnimationSteps(_right_animation);
+				SetAnimationRects(_right_animation);
 				break;
 			case ORIENTATION_O:
-				SetAnimationSteps(_left_animation);
+				SetAnimationRects(_left_animation);
 				break;
 			default:
 				break;
