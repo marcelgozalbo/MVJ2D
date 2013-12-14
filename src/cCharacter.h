@@ -27,11 +27,12 @@ public:
 
 	virtual void Update() override = 0;
 	virtual void Render() override = 0;
-
+	CharacterOrientation GetCurrentOrientation(){ return m_orientation; };
+	CharacterOrientation GetLastOrientation(){ return m_last_orientation; };
 protected:
 	virtual void Move(s32 xAmount, s32 yAmount) final;
 
-	CharacterOrientation m_orientation;
+	CharacterOrientation m_orientation, m_last_orientation;
 	s32 m_vStraight;
 	s32 m_vDiagonal;
 };
