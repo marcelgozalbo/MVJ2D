@@ -32,8 +32,9 @@ void cCharacter::Init(const std::string& textureId, const cRectangle& textureRec
 	m_vDiagonal = vDiagonal;
 }
 
-void cCharacter::Move(s32 xAmount, s32 yAmount)
+bool cCharacter::Move(s32 xAmount, s32 yAmount)
 {
+	bool moveOk = false;
 	m_last_orientation = m_orientation;
 
 	if (xAmount || yAmount)
@@ -101,12 +102,12 @@ void cCharacter::Move(s32 xAmount, s32 yAmount)
 
 		cGame* game = cGame::Instance();
 
-		if (game->globals.limits.inside(x, y))
+		if (game->Scene->m_map.isWalkable(destRect))
 		{
-			if (game->Scene->m_map.isWalkable(destRect))
-			{
-				SetPosition(x, y);
-			}
+			SetPosition(x, y);
+			moveOk = true;
 		}
 	}
+
+	return moveOk;
 }

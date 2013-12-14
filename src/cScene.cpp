@@ -12,7 +12,7 @@ cScene::cScene() :
 	cx=0;
 	cy=0;
 
-	m_enemy.SetPosition(50, 50);
+	m_enemy.SetPosition(200, 200);
 }
 
 cScene::~cScene()
