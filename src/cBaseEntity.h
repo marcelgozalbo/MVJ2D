@@ -65,11 +65,21 @@ public:
 	void DisableAnimation();
 
 	//HELPERS
-	void RenderCollisionRect();
-	void EnableDebugMode(){ m_debug_collision = true; };
-	void DisableDebugMode(){ m_debug_collision = false; };
-	
+	void EnableDebugMode(){ m_debug_mode = true; };
+	void DisableDebugMode(){ m_debug_mode = false; };
 
+
+	void RenderCollisionRect();
+	void EnableColDebugMode(){ m_debug_collision = true; };
+	void DisableColDebugMode(){ m_debug_collision = false; };
+
+	void RenderAnimInfoDebug();
+	void EnableDebugAnimMode(){ m_debug_anim = true; };
+	void DisableDebugAnimMode(){ m_debug_anim = false; };
+
+	void RenderPosInfoDebug();
+	void EnableDebugPosMode(){ m_debug_pos = true; };
+	void DisableDebugPosMode(){ m_debug_pos = false; };
 	virtual ~cBaseEntity();
 
 private:
@@ -99,6 +109,9 @@ private:
 	std::size_t m_anim_curr_time_frame; //quantitat de frames que han passat desde l'ultim canvi d'step
 	
 	static bool m_debug_collision;
+	static bool m_debug_anim;
+	bool m_debug_mode;
+	static bool m_debug_pos;
 
 };
 

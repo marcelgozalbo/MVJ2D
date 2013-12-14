@@ -27,7 +27,7 @@ public:
 
 	virtual void Update() override = 0;
 	virtual void Render() override = 0;
-
+	CharacterOrientation GetCurrentOrientation(){ return m_orientation; };
 protected:
 	virtual void Move(s32 xAmount, s32 yAmount) final;
 

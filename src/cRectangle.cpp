@@ -80,7 +80,7 @@ bool cRectangle::Intersects(const cRectangle &_rect_check) const
 
 std::string cRectangle::toString() const
 {
-	return std::string("x:" + util::toString(x) + " y:" + util::toString(y) + " w:" + util::toString(w) + " h:" + util::toString(h));
+	return std::string("x: " + util::toString(x) + " y: " + util::toString(y) + " w: " + util::toString(w) + " h: " + util::toString(h));
 }
 
 void cRectangle::reset()

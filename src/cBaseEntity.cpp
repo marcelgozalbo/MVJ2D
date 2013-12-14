@@ -1,8 +1,12 @@
 #include "cBaseEntity.h"
 #include "cGame.h"
 #include "cLog.h"
-
+#include "cFont.h"
+#include "Utils.h"
 bool cBaseEntity::m_debug_collision = false;
+bool cBaseEntity::m_debug_anim  = false;
+bool cBaseEntity::m_debug_pos = false;
+
 
 
 
@@ -35,6 +39,8 @@ cBaseEntity::cBaseEntity()
 	DisableAnimation();
 	StopAnimation();
 	SetAnimationFramesPerStep(1);
+
+	DisableDebugMode();
 	
 }
 
@@ -45,9 +51,32 @@ void cBaseEntity::Update()
 
 	cInputLayer  &input = cGame::Instance()->Input;
 	if (input.KeyDown(DIK_F5))
-		EnableDebugMode();
+		EnableColDebugMode();
 	else
-		DisableDebugMode();
+		DisableColDebugMode();
+
+	if (input.KeyDown(DIK_F6))
+		EnableDebugAnimMode();
+	else
+		DisableDebugAnimMode();
+
+	if (input.KeyDown(DIK_F7))
+	{
+		EnableDebugPosMode();		
+	}
+	else
+	{
+		DisableDebugPosMode();
+	}
+	
+	if (input.KeyDown(DIK_F8))
+	{
+		EnableDebugAnimMode();
+		EnableColDebugMode();
+		EnableDebugPosMode();
+	}
+	
+
 
 }
 
@@ -64,8 +93,17 @@ void cBaseEntity::Render()
 
 	}
 
-	if (m_debug_collision)
-		RenderCollisionRect();
+	if (m_debug_mode)
+	{
+		if (m_debug_collision)
+			RenderCollisionRect();
+
+		if (m_debug_anim)
+			RenderAnimInfoDebug();
+
+		if (m_debug_pos)
+			RenderPosInfoDebug();
+	}
 }
 
 bool cBaseEntity::IsVisible() const
@@ -300,3 +338,25 @@ std::size_t cBaseEntity::GetAnimationFramesPerStep() const
 	return m_anim_time_frame;
 }
 
+void cBaseEntity::RenderAnimInfoDebug()
+{
+	std::string text("AnimInfo[" + util::toString(m_curr_anim_step) +"]\n"+ m_anim_rect_bystep[m_curr_anim_step].toString());
+	auto rec = GetCollisionRectAbsolute();
+	rec.x += rec.w + 2;
+	rec.w = 0;
+	rec.h = 0;
+	cGame::Instance()->Graphics->DrawFont("arial", text, m_posz + 1, rec);
+
+}
+
+void cBaseEntity::RenderPosInfoDebug()
+{
+	
+	std::string text("Pos: x: " + util::toString(m_posx) + " y: " + util::toString(m_posy) +	" z: " 	+ util::toString(m_posz)+"\n"
+		+"ColAbs: " +GetCollisionRectAbsolute().toString()
+		+"\nColRel"+GetCollisionRectRelative().toString());
+	
+	cRectangle postext(m_posx, m_posy - 50, 0, 0);
+	cGame::Instance()->Graphics->DrawFont("arial", text, m_posz + 1, postext);
+
+}
