@@ -14,8 +14,8 @@ public:
 	~cMap();
 
 	void load(const std::string& _filePath);
-	void render();
 	void update();
+	void render();
 	bool isWalkable(const cRectangle& position) const;
 
 	//debug

@@ -3,10 +3,13 @@
 #include <sstream>
 #include "cLog.h"
 #include "Utils.h"
+#include "cGame.h"
 
 using namespace util;
 
-cMap::cMap()
+cMap::cMap() :
+	m_visibleRect(0, 0, SCREEN_RES_X, SCREEN_RES_Y),
+	m_movementRect(m_visibleRect.w / 4, m_visibleRect.h / 4, m_visibleRect.w / 2, m_visibleRect.h / 2)
 {
 
 }
@@ -32,6 +35,20 @@ void cMap::load(const std::string& _filePath)
 	file.close();
 }
 
+void cMap::update()
+{
+	// #todo: solo logica de los visibles?
+	for (auto& row : m_grid)
+	{
+		for (auto* cell : row)
+		{
+			cell->update();
+		}
+	}
+
+//	cRectangle playerRect = cGame::Instance()->Scene->m_player.GetCollisionRectAbsolute();
+}
+
 void cMap::render()
 {
 	for (auto& row : m_grid)
@@ -39,17 +56,6 @@ void cMap::render()
 		for (auto* cell : row)
 		{
 			cell->render();
-		}
-	}
-}
-
-void cMap::update()
-{
-	for (auto& row : m_grid)
-	{
-		for (auto* cell : row)
-		{
-			cell->update();
 		}
 	}
 }
