@@ -332,7 +332,7 @@ void cBaseEntity::ResetAnimation()
 
 const cRectangle & cBaseEntity::GetAnimationCurrentStepRectangle() const
 {
-	return m_anim_rect_bystep[m_curr_anim_step];
+	return m_anim_rect_bystep[m_anim_steps_order[m_curr_anim_step]];
 }
 
 void cBaseEntity::UpdateAnimation()
@@ -345,7 +345,7 @@ void cBaseEntity::UpdateAnimation()
 		}
 		else
 		{
-			m_curr_anim_step = (m_curr_anim_step+1) % m_anim_rect_bystep.size();
+			m_curr_anim_step = (m_curr_anim_step + 1) % m_anim_steps_order.size();
 			m_anim_curr_time_frame=0;
 		}
 	}
