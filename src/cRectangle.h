@@ -15,6 +15,7 @@ public:
 	bool		Intersects(const cRectangle &_rect_check) const;
 	bool		IsEmpty() const;
 	std::string toString() const;
+	void		reset();
 
 	~cRectangle();
 

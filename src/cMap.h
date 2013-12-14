@@ -37,6 +37,8 @@ private:
 
 	tGrid m_grid;
 	tAnimations m_animations;
+	cRectangle m_visibleRect;
+	cRectangle m_movementRect;
 };
 
 #endif
