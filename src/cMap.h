@@ -16,14 +16,14 @@ public:
 	void load(const std::string& _filePath);
 	void render();
 	void update();
-	bool isWalkableFor(const cBaseEntity& entity) const;
+	bool isWalkable(const cRectangle& position) const;
 
 private:
 	typedef std::vector<cCell*> tRow;
 	typedef std::vector<tRow> tGrid;
 	typedef std::unordered_map<u32, cCell::sCellInfo> tAnimations;
 
-	static u32 integer_div(u32 dividend, u32 divisor);
+	static u32 divAddRemainder(u32 dividend, u32 divisor);
 
 	void clear();
 	void loadAnimations(std::ifstream& file);

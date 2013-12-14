@@ -52,15 +52,14 @@ void cMap::update()
 	}
 }
 
-bool cMap::isWalkableFor(const cBaseEntity& entity) const
+bool cMap::isWalkable(const cRectangle& position) const
 {
-	bool walkable = false;
+	bool walkable = true;
 
-	const cRectangle& collisionRect = entity.GetCollisionRectAbsolute();
-	const u32 firstRow = collisionRect.y / cCell::tileHeight;
-	const u32 firstCol = collisionRect.x / cCell::tileWidth;
-	const u32 lastRow = (collisionRect.y + collisionRect.h) / cCell::tileHeight;
-	const u32 lastCol = (collisionRect.x + collisionRect.w) / cCell::tileWidth;
+	const u32 firstRow = position.y / cCell::tileHeight;
+	const u32 firstCol = position.x / cCell::tileWidth;
+	const u32 lastRow = (position.y + position.h) / cCell::tileHeight;
+	const u32 lastCol = (position.x + position.w) / cCell::tileWidth;
 
 	for (u32 row = firstRow; row <= lastRow; row++)
 	{
@@ -83,7 +82,7 @@ bool cMap::isWalkableFor(const cBaseEntity& entity) const
 	return walkable;
 }
 
-u32 cMap::integer_div(u32 dividend, u32 divisor)
+u32 cMap::divAddRemainder(u32 dividend, u32 divisor)
 {
 	u32 result = dividend / divisor;
 

@@ -1,8 +1,11 @@
 
 #ifndef __SCENE_H__
 #define __SCENE_H__
+
 #include "cPlayer.h"
 #include "cMap.h"
+#include "cEnemyPersecutor.h"
+
 //Resolution
 #define SCREEN_RES_X	800
 #define SCREEN_RES_Y	600
@@ -41,10 +44,10 @@ public:
 	void Move(int pointer);
 	void MoveByRadar(int x,int y);
 	bool Visible(int cellx,int celly);
-	bool isWalkableFor(const cBaseEntity& entity) const;
 
 	cMap m_map;
 	cPlayer m_player;
+	cEnemyPersecutor m_enemy; // just to test: we will have more than one enemy
 
 	int cx,cy;
 };

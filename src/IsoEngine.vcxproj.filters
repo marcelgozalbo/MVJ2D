@@ -75,7 +75,7 @@
     <ClCompile Include="cCharacter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cEnemy.cpp">
+    <ClCompile Include="cEnemyPersecutor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -140,10 +140,10 @@
     <ClInclude Include="types.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cEnemy.h">
+    <ClInclude Include="cCharacter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cCharacter.h">
+    <ClInclude Include="cEnemyPersecutor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
