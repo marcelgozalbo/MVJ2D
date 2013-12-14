@@ -131,7 +131,7 @@ void cGraphicsLayer::LoadData()
 
 	LPD3DXFONT buffer_font = nullptr;
 
-	D3DXCreateFont(g_pD3DDevice, 12, 0, FW_BOLD, 0, FALSE,
+	D3DXCreateFont(g_pD3DDevice, 16, 0, FW_BOLD, 0, FALSE,
 		DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY,
 		DEFAULT_PITCH | FF_DONTCARE, TEXT("Arial"),
 		&buffer_font);
