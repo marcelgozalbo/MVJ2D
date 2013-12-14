@@ -9,14 +9,20 @@ cScene::cScene()
 {
 	cx=0;
 	cy=0;
-}
-cScene::~cScene(){}
 
+	m_enemy.SetPosition(50, 50);
+}
+
+cScene::~cScene()
+{
+
+}
 
 void cScene::Update()
 {
 	m_map.update();
 	m_player.Update();
+	m_enemy.Update();
 }
 
 void cScene::Render()
@@ -29,6 +35,7 @@ void cScene::Render()
 	// TESTING SHIT
 	m_map.render();
 	m_player.Render();
+	m_enemy.Render();
 	/*
 	cBaseEntity a;
 	a.SetTextureID(std::string("characters"));
@@ -105,8 +112,4 @@ bool cScene::Visible(int cellx,int celly)
 	return ((cellx>=cx)&&(cellx<cx+SCENE_WIDTH)&&(celly>=cy)&&(celly<cy+SCENE_HEIGHT)) ? 1 : 0;
 }
 
-bool cScene::isWalkableFor(const cBaseEntity& entity) const
-{
-	return m_map.isWalkableFor(entity);
-}
 

@@ -2,15 +2,8 @@
 
 #include "cGame.h"
 cPlayer::cPlayer():
-cBaseEntity("player",0, 0, 0)
+	cCharacter("player", cRectangle(0, 0, 16, 24), 0, 0, 10, 3, 2, 3.0f)
 {
-	cRectangle rec(0, 0, 16,24);
-	SetTextureRect(rec);
-	SetZIndex(10);
-	EnableCollision();
-	SetCollisionRectRelative(rec);
-	SetTextureScale(3.0);
-
 	std::vector<cRectangle> Animations;
 	Animations.push_back(cRectangle(0, 0, 16, 24));
 	Animations.push_back(cRectangle(23,0, 16, 24));
@@ -32,21 +25,17 @@ cBaseEntity("player",0, 0, 0)
 	SetAnimationSteps(DownShield);
 	SetAnimationFramesPerStep(5);
 	EnableAnimation();
-	PlayAnimation();
-
-	
+	PlayAnimation();	
 }
 
 
 cPlayer::~cPlayer()
 {
+
 }
 
 void cPlayer::Update()
 {
-	int V_STRAIGHT = 3;
-	int V_DIAGONAL = 2;
-
 	cInputLayer  &input = cGame::Instance()->Input;
 
 	int vecx = 0;
@@ -58,70 +47,8 @@ void cPlayer::Update()
 	if (input.KeyDown(DIK_A))	vecx--;
 	if (input.KeyDown(DIK_D))	vecx++;
 
-	//Si no m'he mogut FORA!
-	if (!vecy && !vecx)
-	{
+	Move(vecx, vecy);
 
-	}
-	else
-	{
-		// Busco l'orientacio del moviment
-		if (vecy == 0)
-		{
-			if (vecx > 0)		m_orientation = ORIENTATION_E;
-			else if (vecx < 0)	m_orientation = ORIENTATION_O;
-		}
-		else if (vecy > 0)
-		{
-			if (vecx > 0)		m_orientation = ORIENTATION_SE;
-			else if (vecx < 0)	m_orientation = ORIENTATION_SO;
-			else				m_orientation = ORIENTATION_S;
-		}
-		else
-		{
-			if (vecx > 0)		m_orientation = ORIENTATION_NE;
-			else if (vecx < 0)	m_orientation = ORIENTATION_NO;
-			else				m_orientation = ORIENTATION_N;
-		}
-
-		int x, y;
-		GetPosition(x,y);
-
-		//Actualitzo el moviment segons orientacio
-		switch (m_orientation)
-		{
-		case ORIENTATION_N:
-			y -= V_STRAIGHT;
-			break;
-		case ORIENTATION_NE:
-			y -= V_DIAGONAL;
-			x += V_DIAGONAL;
-			break;
-		case ORIENTATION_NO:
-			y -= V_DIAGONAL;
-			x -= V_DIAGONAL;
-			break;
-		case ORIENTATION_S:
-			y += V_STRAIGHT;
-			break;
-		case ORIENTATION_SE:
-			y += V_DIAGONAL;
-			x += V_DIAGONAL;
-			break;
-		case ORIENTATION_SO:
-			y += V_DIAGONAL;
-			x -= V_DIAGONAL;
-			break;
-		case ORIENTATION_E:
-			x += V_STRAIGHT;
-			break;
-		case ORIENTATION_O:
-			x -= V_STRAIGHT;
-			break;
-		}
-	
-		SetPosition(x, y);
-	}
 	cBaseEntity::Update();
 }
 

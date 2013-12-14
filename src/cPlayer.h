@@ -1,34 +1,16 @@
 #pragma once
 
-#include "cBaseEntity.h"
+#include "cCharacter.h"
 
-typedef enum
-{
-	ORIENTATION_N = 0,
-	ORIENTATION_NE,
-	ORIENTATION_NO,
-	ORIENTATION_S,
-	ORIENTATION_SE,
-	ORIENTATION_SO,
-	ORIENTATION_E,
-	ORIENTATION_O,
-
-}PlayerOrientation;
-
-class cPlayer: public cBaseEntity
+class cPlayer: public cCharacter
 {
 public:
 	cPlayer();
+	~cPlayer();
 
-
-	virtual void Update();
-	virtual void Render();
-
-	virtual ~cPlayer();
+	void Update() override;
+	void Render() override;
 
 private:
-
-	PlayerOrientation m_orientation;
 	
 };
-

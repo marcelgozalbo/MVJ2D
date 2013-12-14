@@ -1,4 +1,5 @@
 #include "cCharacter.h"
+#include "cGame.h"
 
 cCharacter::cCharacter() :
 	cBaseEntity()
@@ -90,6 +91,13 @@ void cCharacter::Move(s32 xAmount, s32 yAmount)
 			break;
 		}
 
-		SetPosition(x, y);
+		cRectangle destRect = GetCollisionRectAbsolute();
+		destRect.x = x;
+		destRect.y = y;
+
+		if (cGame::Instance()->Scene->m_map.isWalkable(destRect))
+		{
+			SetPosition(x, y);
+		}
 	}
 }
