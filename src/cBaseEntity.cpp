@@ -2,7 +2,6 @@
 #include "cGame.h"
 #include "cLog.h"
 
-
 bool cBaseEntity::m_debug_collision = false;
 
 
@@ -84,8 +83,8 @@ void cBaseEntity::RenderCollisionRect()
 	if (IsCollidable())
 	{
 		
-		//Renderitzo el rectangle a Z-1 perque surti per sobre la textura sempre
-		cGame::Instance()->Graphics->DrawRect(GetCollisionRectAbsolute(), 0x00FF00FF, m_posz - 1);
+		//Renderitzo el rectangle a Z+1 perque surti per sobre la textura sempre
+		cGame::Instance()->Graphics->DrawRect(GetCollisionRectAbsolute(), 0x00FF00FF, m_posz + 1);
 	}
 }
 
