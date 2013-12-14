@@ -22,9 +22,9 @@ cScene::~cScene()
 
 void cScene::Update()
 {
-	m_map.update();
 	m_player.Update();
 	m_enemy.Update();
+	m_map.update();
 
 	// update debug font
 	cRectangle playerRect = m_player.GetCollisionRectAbsolute();
