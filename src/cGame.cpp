@@ -130,14 +130,14 @@ bool cGame::LoopProcess()
 						if (Input.KeyUpDown(DIK_P))
 						{
 							_state = STATE_PAUSED;
-							Sound.SetVolumeSound(_loop_sound_id, 0.1);
+							Sound.SetVolumeSound(_loop_sound_id, 0.1f);
 						}
 						break;
 		case STATE_PAUSED:
 						if (Input.KeyUpDown(DIK_P))
 						{
 							_state = STATE_GAME;
-							Sound.SetVolumeSound(_loop_sound_id, 1.0);
+							Sound.SetVolumeSound(_loop_sound_id, 1.0f);
 						}
 						break;
 	}
