@@ -58,9 +58,9 @@ void cSound::Release()
 	}
 }
 
-unsigned int cSound::LoadSound(const std::string& aSoundName)
+cSound::tSoundId cSound::LoadSound(const std::string& aSoundName)
 {
-	unsigned int identifier = -1;
+	tSoundId identifier = -1;
 	FMOD::Sound* sound = nullptr;
 	FMOD_CREATESOUNDEXINFO settings;
 	settings.cbsize = sizeof(FMOD_CREATESOUNDEXINFO);
@@ -74,7 +74,7 @@ unsigned int cSound::LoadSound(const std::string& aSoundName)
 	return identifier;
 }
 
-void cSound::PlayGameSound(unsigned int aIdSound, bool aLoop)
+void cSound::PlayGameSound(tSoundId aIdSound, bool aLoop)
 {
 	sSound sound = GetSound(aIdSound);
 	if (sound.Sound)
@@ -86,7 +86,7 @@ void cSound::PlayGameSound(unsigned int aIdSound, bool aLoop)
 	}
 }
 
-void cSound::PauseSound(unsigned int aIdSound)
+void cSound::PauseSound(tSoundId aIdSound)
 {
 	sSound sound = GetSound(aIdSound);
 	if (sound.Sound && sound.Channel)
@@ -95,7 +95,7 @@ void cSound::PauseSound(unsigned int aIdSound)
 	}
 }
 
-void cSound::ToggleSound(unsigned int aIdSound)
+void cSound::ToggleSound(tSoundId aIdSound)
 {
 	sSound sound = GetSound(aIdSound);
 	if (sound.Sound && sound.Channel)
@@ -106,7 +106,7 @@ void cSound::ToggleSound(unsigned int aIdSound)
 	}
 }
 
-void cSound::SetVolumeSound(unsigned int aIdSound, float aVolume)
+void cSound::SetVolumeSound(tSoundId aIdSound, float aVolume)
 {
 	sSound sound = GetSound(aIdSound);
 	if (sound.Sound && sound.Channel)
@@ -128,7 +128,7 @@ bool cSound::CheckError(std::string aFunctionName, FMOD_RESULT aResult)
 	return returnValue;
 }
 
-cSound::sSound cSound::GetSound(unsigned int aIdSound) const
+cSound::sSound cSound::GetSound(tSoundId aIdSound) const
 {
 	sSound returnValue;
 	tSoundMap::const_iterator it = mSounds.find(aIdSound);
@@ -139,7 +139,7 @@ cSound::sSound cSound::GetSound(unsigned int aIdSound) const
 	return returnValue;
 }
 
-void cSound::AssingChanelToSound(unsigned int aIdSound, FMOD::Channel* aChannel)
+void cSound::AssingChanelToSound(tSoundId aIdSound, FMOD::Channel* aChannel)
 {
 	tSoundMap::iterator it = mSounds.find(aIdSound);
 	if (it != mSounds.end())
