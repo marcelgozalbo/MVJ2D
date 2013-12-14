@@ -271,7 +271,6 @@ void cBaseEntity::SetAnimationCurrentStep(const std::size_t &_anim_step)
 
 void cBaseEntity::PlayAnimation()
 {
-	SetAnimationCurrentStep(m_curr_anim_step);
 	m_anim_run = true;
 }
 

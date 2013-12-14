@@ -61,7 +61,7 @@ cPlayer::cPlayer():
 	m_Left.push_back(cRectangle(144, 179, 16, 24));
 
 	m_LeftShield.push_back(cRectangle(0, 209, 18, 24));
-	m_LeftShield.push_back(cRectangle(25, 209, 17, 24));
+	m_LeftShield.push_back(cRectangle(23, 209, 17, 24));
 	m_LeftShield.push_back(cRectangle(46, 209, 18, 24));
 	m_LeftShield.push_back(cRectangle(70, 209, 18, 24));
 	m_LeftShield.push_back(cRectangle(90, 209, 18, 24));
@@ -95,8 +95,60 @@ void cPlayer::Update()
 	if (input.KeyDown(DIK_A))	vecx--;
 	if (input.KeyDown(DIK_D))	vecx++;
 
-	Move(vecx, vecy);
+	// Si m'haig de moure
+	if (vecx || vecy)
+	{
+		Move(vecx, vecy);
 
+		//CAnvio l'animacio segons l'orientacio
+		if (GetLastOrientation() != GetCurrentOrientation())
+		{
+			/*{
+			int x, y, z;
+			GetPosition(x, y);
+			GetZIndex(z);
+			cGame::Instance()->Graphics->DrawFont("arial", "SET O", z + 1, cRectangle(x - 40, y, 0, 0));
+			}
+			*/
+			auto orient = GetCurrentOrientation();
+			switch (orient)
+			{
+				case ORIENTATION_N:
+				case ORIENTATION_NE:
+				case ORIENTATION_NO:
+					SetAnimationSteps(m_Up);
+					break;
+				case ORIENTATION_S:
+				case ORIENTATION_SE:
+				case ORIENTATION_SO:
+					SetAnimationSteps(m_Down);
+					break;
+				case ORIENTATION_E:
+					SetAnimationSteps(m_Right);
+					break;
+				case ORIENTATION_O:
+					SetAnimationSteps(m_Left);
+					break;
+				default:
+					break;
+			}
+			ResetAnimation();
+
+		}
+		
+		PlayAnimation();
+	}
+	else
+	{
+		ResetAnimation();
+		StopAnimation();
+	}
+	
+
+
+	
+
+	
 	cBaseEntity::Update();
 }
 
