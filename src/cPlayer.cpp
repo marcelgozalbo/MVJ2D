@@ -2,7 +2,7 @@
 
 #include "cGame.h"
 cPlayer::cPlayer():
-	cCharacter("player", cRectangle(0, 0, 16, 24), 0, 0, 10, 9, 6, 3.0f)
+	cCharacter("player", cRectangle(0, 0, 16, 24), 0, 0, 10, 3, 2, 3.0f)
 {
 	std::vector<cRectangle> Animations;
 	Animations.push_back(cRectangle(0, 0, 16, 24));
