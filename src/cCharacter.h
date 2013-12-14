@@ -30,7 +30,7 @@ public:
 	CharacterOrientation GetCurrentOrientation(){ return m_orientation; };
 	CharacterOrientation GetLastOrientation(){ return m_last_orientation; };
 protected:
-	virtual void Move(s32 xAmount, s32 yAmount) final;
+	virtual bool Move(s32 xAmount, s32 yAmount) final;
 
 	CharacterOrientation m_orientation, m_last_orientation;
 	s32 m_vStraight;

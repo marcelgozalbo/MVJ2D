@@ -8,10 +8,9 @@
 using namespace util;
 
 cMap::cMap() :
-	m_visibleRect(0, 0, SCREEN_RES_X, SCREEN_RES_Y),
-	m_movementRect(m_visibleRect.w / 4, m_visibleRect.h / 4, m_visibleRect.w / 2, m_visibleRect.h / 2)
+	m_visibleRect(0, 0, SCREEN_RES_X, SCREEN_RES_Y)
 {
-
+	updateMovementRect();
 }
 
 cMap::~cMap()
@@ -46,16 +45,25 @@ void cMap::update()
 		}
 	}
 
-//	cRectangle playerRect = cGame::Instance()->Scene->m_player.GetCollisionRectAbsolute();
+	updateVisibleRect();
+	updateMovementRect();
 }
 
 void cMap::render()
 {
-	for (auto& row : m_grid)
+	s32 firstRow, firstCol, lastRow, lastCol;
+
+	toCellCoord(m_visibleRect.x, m_visibleRect.y, &firstRow, &firstCol);
+	toCellCoord(m_visibleRect.x + m_visibleRect.w, m_visibleRect.y + m_visibleRect.h, &lastRow, &lastCol);
+
+	for (s32 row = firstRow; row <= lastRow; row++)
 	{
-		for (auto* cell : row)
+		for (s32 col = firstCol; col <= lastCol; col++)
 		{
-			cell->render();
+			if (cCell* const cell = getCell(row, col))
+			{
+				cell->render();
+			}
 		}
 	}
 }
@@ -66,13 +74,13 @@ std::string cMap::getCellDebugString(u32 row, u32 col)
 
 	if (!cell)
 	{
-		fatalError("getCellDebugString: row " + util::toString(row) + " col " + util::toString(col) + " out of bounds");
+		fatalError("getCellDebugString: row " + toString(row) + " col " + toString(col) + " out of bounds");
 	}
 
 	return cell->toString();
 }
 
-void cMap::toCellCoord(s32 x, s32 y, s32* row, s32* col)
+void cMap::toCellCoord(s32 x, s32 y, s32* row, s32* col) const
 {
 	*row = y / cCell::tileHeight;
 	*col = x / cCell::tileWidth;
@@ -82,14 +90,14 @@ bool cMap::isWalkable(const cRectangle& position) const
 {
 	bool walkable = true;
 
-	const u32 firstRow = position.y / cCell::tileHeight;
-	const u32 firstCol = position.x / cCell::tileWidth;
-	const u32 lastRow = (position.y + position.h) / cCell::tileHeight;
-	const u32 lastCol = (position.x + position.w) / cCell::tileWidth;
+	s32 firstRow, firstCol, lastRow, lastCol;
 
-	for (u32 row = firstRow; walkable && row <= lastRow; row++)
+	toCellCoord(position.x, position.y, &firstRow, &firstCol);
+	toCellCoord(position.x + position.w, position.y + position.h, &lastRow, &lastCol);
+
+	for (s32 row = firstRow; walkable && row <= lastRow; row++)
 	{
-		for (u32 col = firstCol; walkable && col <= lastCol; col++)
+		for (s32 col = firstCol; walkable && col <= lastCol; col++)
 		{
 			if (cCell* const cell = getCell(row, col))
 			{
@@ -248,4 +256,44 @@ cCell* cMap::getCell(u32 row, u32 col) const
 	}
 
 	return cell;
+}
+
+void cMap::updateMovementRect()
+{
+	m_movementRect.SetRect(m_visibleRect.w / 4, m_visibleRect.h / 4, m_visibleRect.w / 2, m_visibleRect.h / 2);
+}
+
+void cMap::updateVisibleRect()
+{
+	cGame* game = cGame::Instance();
+	cRectangle playerRect = game->Scene->m_player.GetCollisionRectAbsolute();
+
+	if (playerRect.Intersects(m_movementRect))
+	{
+		if (!m_lastPlayerPos.isEmpty())
+		{
+			m_visibleRect.x += playerRect.x - m_lastPlayerPos.x;
+			m_visibleRect.y += playerRect.y - m_lastPlayerPos.y;
+
+			if (m_visibleRect.x < game->globals.limits.minX)
+			{
+				m_visibleRect.x = game->globals.limits.minX;
+			}
+			else if (m_visibleRect.x > game->globals.limits.maxX)
+			{
+				m_visibleRect.x = game->globals.limits.maxX;
+			}
+
+			if (m_visibleRect.y < game->globals.limits.minY)
+			{
+				m_visibleRect.y = game->globals.limits.minY;
+			}
+			else if (m_visibleRect.y > game->globals.limits.maxY)
+			{
+				m_visibleRect.y = game->globals.limits.maxY;
+			}
+		}
+	}
+
+	m_lastPlayerPos = playerRect;
 }

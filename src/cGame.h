@@ -23,12 +23,12 @@ struct Globals
 {
 	struct Limits
 	{
-		u32 minX = 0;
-		u32 minY = 0;
-		u32 maxX = 1024;
-		u32 maxY = 1024;
+		s32 minX = 0;
+		s32 minY = 0;
+		s32 maxX = 1024;
+		s32 maxY = 1024;
 
-		bool inside(u32 x, u32 y) const { return x >= minX && x <= maxX && y >= minY && y <= maxY; }
+		bool inside(s32 x, s32 y) const { return x >= minX && x <= maxX && y >= minY && y <= maxY; }
 	};
 
 	Limits limits;

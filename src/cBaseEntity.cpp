@@ -232,12 +232,27 @@ void cBaseEntity::SetTextureSizeToCollisionRectRelative()
 
 void cBaseEntity::SetAnimationSteps(const std::vector<cRectangle> &_rect_steps)
 {
+	
 	if (!_rect_steps.empty())
-	{
 		m_anim_rect_bystep = _rect_steps;
-		SetAnimationCurrentStep(0);
-		
+	
+	std::vector<u32> default_step_order;
+	for (u32 step = 0; step < _rect_steps.size(); step++)
+		default_step_order.push_back(step);
+
+	
+	SetAnimationStepOrder(default_step_order);
+
+}
+
+void cBaseEntity::SetAnimationStepOrder(const std::vector<u32> &_steps_order)
+{
+	if (!_steps_order.empty())
+	{
+		m_anim_steps_order = _steps_order;
+		ResetAnimation();
 	}
+
 }
 
 
@@ -254,18 +269,29 @@ std::size_t cBaseEntity::GetAnimationCurrentStep()
 
 void cBaseEntity::SetAnimationCurrentStep(const std::size_t &_anim_step)
 {
-	if (_anim_step < m_anim_rect_bystep.size() )
+	if (_anim_step < m_anim_steps_order.size())
 	{
-		m_curr_anim_step = _anim_step;
-		m_anim_curr_time_frame = 0;
-		
+		if (m_anim_steps_order[_anim_step] < m_anim_rect_bystep.size())
+		{
+			m_curr_anim_step = m_anim_steps_order[_anim_step];
+			m_anim_curr_time_frame = 0;
+
+		}
+		else
+		{
+			cLog *Log = cLog::Instance();
+			Log->Msg(std::string("SetAnimationCurrentStep out of range 2"));
+			
+		}
+
 	}
 	else
 	{
 		cLog *Log = cLog::Instance();
-		Log->Msg(std::string("SetAnimationCurrentStep out of range"));
-		return;
+		Log->Msg(std::string("SetAnimationCurrentStep out of range 1"));
+
 	}
+	
 
 }
 
@@ -306,7 +332,7 @@ void cBaseEntity::ResetAnimation()
 
 const cRectangle & cBaseEntity::GetAnimationCurrentStepRectangle() const
 {
-	return m_anim_rect_bystep[m_curr_anim_step];
+	return m_anim_rect_bystep[m_anim_steps_order[m_curr_anim_step]];
 }
 
 void cBaseEntity::UpdateAnimation()
@@ -319,7 +345,7 @@ void cBaseEntity::UpdateAnimation()
 		}
 		else
 		{
-			m_curr_anim_step = (m_curr_anim_step+1) % m_anim_rect_bystep.size();
+			m_curr_anim_step = (m_curr_anim_step + 1) % m_anim_steps_order.size();
 			m_anim_curr_time_frame=0;
 		}
 	}

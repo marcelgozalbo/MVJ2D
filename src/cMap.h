@@ -20,7 +20,7 @@ public:
 
 	//debug
 	std::string getCellDebugString(u32 row, u32 col);
-	void toCellCoord(s32 x, s32 y, s32* row, s32* col);
+	void toCellCoord(s32 x, s32 y, s32* row, s32* col) const;
 
 private:
 	typedef std::vector<cCell*> tRow;
@@ -34,6 +34,8 @@ private:
 	void loadMap(std::ifstream& file);
 	void fatalError(const std::string& errorText);
 	cCell* getCell(u32 row, u32 col) const;
+	void updateMovementRect();
+	void updateVisibleRect();
 
 	tGrid m_grid;
 	tAnimations m_animations;

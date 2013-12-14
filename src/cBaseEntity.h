@@ -3,6 +3,7 @@
 
 #include "cRectangle.h"
 #include <vector>
+#include "types.h"
 
 class cBaseEntity
 {
@@ -47,6 +48,7 @@ public:
 
 	//ANIMATION
 	void SetAnimationSteps(const std::vector<cRectangle> &_rect_steps);
+	void SetAnimationStepOrder(const std::vector<u32> &_steps_order);
 	void GetAnimationSteps(std::vector<cRectangle> &_rect_steps);
 	void SetAnimationFramesPerStep(const std::size_t _timeperstep);
 	std::size_t GetAnimationFramesPerStep() const;
@@ -106,6 +108,7 @@ private:
 	cRectangle m_rect_colision_rel; //Actuara com a offset desde m_posx/y
 
 	//Animation
+	std::vector<u32> m_anim_steps_order;
 	std::vector<cRectangle>	m_anim_rect_bystep;
 	bool m_animation_enabled;
 	bool m_anim_run;
