@@ -39,6 +39,7 @@ private:
 	tAnimations m_animations;
 	cRectangle m_visibleRect;
 	cRectangle m_movementRect;
+	cRectangle m_lastPlayerPos;
 };
 
 #endif

@@ -16,6 +16,7 @@ public:
 	bool		IsEmpty() const;
 	std::string toString() const;
 	void		reset();
+	bool		isEmpty() const;
 
 	~cRectangle();
 

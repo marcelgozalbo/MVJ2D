@@ -87,3 +87,8 @@ void cRectangle::reset()
 {
 	x = y = w = h = 0;
 }
+
+bool cRectangle::isEmpty() const
+{
+	return x == y == w == h == 0;
+}
