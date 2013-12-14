@@ -61,7 +61,7 @@ cPlayer::cPlayer():
 	m_Left.push_back(cRectangle(144, 179, 16, 24));
 
 	m_LeftShield.push_back(cRectangle(0, 209, 18, 24));
-	m_LeftShield.push_back(cRectangle(25, 209, 17, 24));
+	m_LeftShield.push_back(cRectangle(23, 209, 17, 24));
 	m_LeftShield.push_back(cRectangle(46, 209, 18, 24));
 	m_LeftShield.push_back(cRectangle(70, 209, 18, 24));
 	m_LeftShield.push_back(cRectangle(90, 209, 18, 24));
@@ -69,7 +69,7 @@ cPlayer::cPlayer():
 	m_LeftShield.push_back(cRectangle(141, 209, 17, 24));
 
 	SetAnimationSteps(m_LeftShield);
-	SetAnimationFramesPerStep(5);
+	SetAnimationFramesPerStep(30);
 	EnableAnimation();
 	PlayAnimation();	
 
@@ -96,7 +96,9 @@ void cPlayer::Update()
 	if (input.KeyDown(DIK_D))	vecx++;
 
 	Move(vecx, vecy);
+	auto orientation = GetCurrentOrientation();
 
+	
 	cBaseEntity::Update();
 }
 

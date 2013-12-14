@@ -34,6 +34,8 @@ void cCharacter::Init(const std::string& textureId, const cRectangle& textureRec
 
 void cCharacter::Move(s32 xAmount, s32 yAmount)
 {
+	m_last_orientation = m_orientation;
+
 	if (xAmount || yAmount)
 	{
 		// Busco l'orientacio del moviment
@@ -54,6 +56,8 @@ void cCharacter::Move(s32 xAmount, s32 yAmount)
 			else if (xAmount < 0)	m_orientation = ORIENTATION_NO;
 			else				m_orientation = ORIENTATION_N;
 		}
+
+		
 
 		int x, y;
 		GetPosition(x, y);
