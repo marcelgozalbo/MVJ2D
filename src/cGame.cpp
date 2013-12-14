@@ -62,6 +62,7 @@ bool cGame::Init(HWND hWnd,HINSTANCE hInst,bool exclusive)
 	_loop_sound_id = Sound.LoadSound("../media/back_music.mp3");
 	Sound.PlayGameSound(_loop_sound_id, true);
 	Sound.SetVolumeSound(_loop_sound_id, 1.0);
+	Sound.PauseSound(_loop_sound_id);
 
 	return true;
 }
@@ -144,6 +145,10 @@ bool cGame::LoopProcess()
 	if (Input.KeyDown(DIK_ESCAPE))
 	{
 		_state = STATE_FINISHED;
+	}
+	else if (Input.KeyUpDown(DIK_M))
+	{
+		Sound.ToggleSound(_loop_sound_id);
 	}
 
 	return true;
