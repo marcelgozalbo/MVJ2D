@@ -67,19 +67,24 @@ public:
 	//HELPERS
 	void EnableDebugMode(){ m_debug_mode = true; };
 	void DisableDebugMode(){ m_debug_mode = false; };
+	bool IsDebugMode(){ return m_debug_mode; };
 
 
 	void RenderCollisionRect();
 	void EnableColDebugMode(){ m_debug_collision = true; };
 	void DisableColDebugMode(){ m_debug_collision = false; };
+	bool IsColDebugMode(){ return m_debug_collision; };
 
 	void RenderAnimInfoDebug();
 	void EnableDebugAnimMode(){ m_debug_anim = true; };
 	void DisableDebugAnimMode(){ m_debug_anim = false; };
+	bool IsDebugAnimMode(){ return m_debug_anim; };
 
 	void RenderPosInfoDebug();
 	void EnableDebugPosMode(){ m_debug_pos = true; };
 	void DisableDebugPosMode(){ m_debug_pos = false; };
+	bool IsDebugPosMode(){ return m_debug_pos; };
+
 	virtual ~cBaseEntity();
 
 private:
