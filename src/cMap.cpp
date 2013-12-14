@@ -4,6 +4,8 @@
 #include "cLog.h"
 #include "Utils.h"
 
+using namespace util;
+
 cMap::cMap()
 {
 

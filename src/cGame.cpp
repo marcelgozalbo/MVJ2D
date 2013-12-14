@@ -4,6 +4,7 @@
 #include "cMouse.h"
 
 cGame* cGame::_instance = 0;
+const Globals cGame::globals;
 
 cGame* cGame::Instance()
 {
@@ -15,9 +16,11 @@ cGame* cGame::Instance()
 }
 
 cGame::cGame() :
-_state(STATE_MAIN)
+	_state(STATE_MAIN)
 {
+
 }
+
 cGame::~cGame()
 {
 	delete Scene;

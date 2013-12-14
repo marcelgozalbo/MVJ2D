@@ -95,9 +95,14 @@ void cCharacter::Move(s32 xAmount, s32 yAmount)
 		destRect.x = x;
 		destRect.y = y;
 
-		if (cGame::Instance()->Scene->m_map.isWalkable(destRect))
+		cGame* game = cGame::Instance();
+
+		if (game->globals.limits.inside(x, y))
 		{
-			SetPosition(x, y);
+			if (game->Scene->m_map.isWalkable(destRect))
+			{
+				SetPosition(x, y);
+			}
 		}
 	}
 }

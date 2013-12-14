@@ -5,7 +5,8 @@
 #include <iostream>
 #include "cGame.h"
 
-cScene::cScene()
+cScene::cScene() :
+	m_debugFont("arial", "", 100, cRectangle(0, 0, 300, 100), 0xFFFFFFFF, cFont::ALIGN_LEFT)
 {
 	cx=0;
 	cy=0;
@@ -23,6 +24,7 @@ void cScene::Update()
 	m_map.update();
 	m_player.Update();
 	m_enemy.Update();
+	m_debugFont.setText("playerRect -> " + m_player.GetCollisionRectAbsolute().toString());
 }
 
 void cScene::Render()
@@ -36,6 +38,8 @@ void cScene::Render()
 	m_map.render();
 	m_player.Render();
 	m_enemy.Render();
+	m_debugFont.render();
+	
 	/*
 	cBaseEntity a;
 	a.SetTextureID(std::string("characters"));
@@ -111,5 +115,4 @@ bool cScene::Visible(int cellx,int celly)
 {
 	return ((cellx>=cx)&&(cellx<cx+SCENE_WIDTH)&&(celly>=cy)&&(celly<cy+SCENE_HEIGHT)) ? 1 : 0;
 }
-
 

@@ -148,10 +148,11 @@ const cRectangle&  cBaseEntity::GetCollisionRectRelative() const
 cRectangle  cBaseEntity::GetCollisionRectAbsolute() const
 {
 	cRectangle rect_absolute;
-	rect_absolute.SetRect((m_posx + m_rect_colision_rel.x) * scalex,
-		(m_posy + m_rect_colision_rel.y) * scaley,
-		(m_rect_colision_rel.w) * scalex,
-		(m_rect_colision_rel.h) * scaley
+	rect_absolute.SetRect(
+		static_cast<s32>((m_posx + m_rect_colision_rel.x) * scalex),
+		static_cast<s32>((m_posy + m_rect_colision_rel.y) * scaley),
+		static_cast<s32>((m_rect_colision_rel.w) * scalex),
+		static_cast<s32>((m_rect_colision_rel.h) * scaley)
 		);
 	return rect_absolute;
 }

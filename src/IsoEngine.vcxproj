@@ -136,6 +136,7 @@
     <ClCompile Include="cCell.cpp" />
     <ClCompile Include="cCharacter.cpp" />
     <ClCompile Include="cEnemyPersecutor.cpp" />
+    <ClCompile Include="cFont.cpp" />
     <ClCompile Include="cGame.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -183,6 +184,7 @@
     <ClInclude Include="cCell.h" />
     <ClInclude Include="cCharacter.h" />
     <ClInclude Include="cEnemyPersecutor.h" />
+    <ClInclude Include="cFont.h" />
     <ClInclude Include="cGame.h" />
     <ClInclude Include="cGraphicsLayer.h" />
     <ClInclude Include="cInputLayer.h" />
