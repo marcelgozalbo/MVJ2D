@@ -72,7 +72,7 @@ bool cRectangle::Intersects(const cRectangle &_rect_check) const
 		Amin = Bmin;
 	if (Bmax < Amax)
 		Amax = Bmax;
-	if (Amax <= Amin)
+	if (Amax >= Amin)
 		return false;
 
 	return true;
