@@ -230,7 +230,7 @@ void cBaseEntity::SetTextureSizeToCollisionRectRelative()
 	SetCollisionRectRelative(rec);
 }
 
-void cBaseEntity::SetAnimationSteps(const std::vector<cRectangle> &_rect_steps)
+void cBaseEntity::SetAnimationRects(const std::vector<cRectangle> &_rect_steps)
 {
 	
 	if (!_rect_steps.empty())
@@ -241,11 +241,11 @@ void cBaseEntity::SetAnimationSteps(const std::vector<cRectangle> &_rect_steps)
 		default_step_order.push_back(step);
 
 	
-	SetAnimationStepOrder(default_step_order);
+	SetAnimationOrderSteps(default_step_order);
 
 }
 
-void cBaseEntity::SetAnimationStepOrder(const std::vector<u32> &_steps_order)
+void cBaseEntity::SetAnimationOrderSteps(const std::vector<u32> &_steps_order)
 {
 	if (!_steps_order.empty())
 	{
@@ -256,7 +256,7 @@ void cBaseEntity::SetAnimationStepOrder(const std::vector<u32> &_steps_order)
 }
 
 
-void cBaseEntity::GetAnimationSteps(std::vector<cRectangle> &_rect_steps)
+void cBaseEntity::GetAnimationRects(std::vector<cRectangle> &_rect_steps)
 {
 	_rect_steps = m_anim_rect_bystep;
 }
@@ -271,27 +271,16 @@ void cBaseEntity::SetAnimationCurrentStep(const std::size_t &_anim_step)
 {
 	if (_anim_step < m_anim_steps_order.size())
 	{
-		if (m_anim_steps_order[_anim_step] < m_anim_rect_bystep.size())
-		{
-			m_curr_anim_step = m_anim_steps_order[_anim_step];
-			m_anim_curr_time_frame = 0;
-
-		}
-		else
-		{
-			cLog *Log = cLog::Instance();
-			Log->Msg(std::string("SetAnimationCurrentStep out of range 2"));
-			
-		}
+		m_curr_anim_step = _anim_step;
+		m_anim_curr_time_frame = 0;
 
 	}
 	else
 	{
 		cLog *Log = cLog::Instance();
-		Log->Msg(std::string("SetAnimationCurrentStep out of range 1"));
-
+		Log->Msg(std::string("SetAnimationCurrentStep out of range 2"));
+			
 	}
-	
 
 }
 
@@ -365,7 +354,8 @@ std::size_t cBaseEntity::GetAnimationFramesPerStep() const
 
 void cBaseEntity::RenderAnimInfoDebug()
 {
-	std::string text("AnimInfo[" + util::toString(m_curr_anim_step) + "]\n" + m_anim_rect_bystep[m_anim_steps_order[m_curr_anim_step]].toString());
+	std::string text("AnimInfo Steps: " + util::toString(m_anim_steps_order.size()) + " | CurStep: " + util::toString(m_curr_anim_step) + " RectIndex: "+ util::toString(m_anim_steps_order[m_curr_anim_step])+"\n" 
+		+ GetAnimationCurrentStepRectangle().toString());
 	auto rec = GetCollisionRectAbsolute();
 	rec.x += rec.w + 2;
 	rec.w = 0;

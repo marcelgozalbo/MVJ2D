@@ -25,7 +25,7 @@ cCell::cCell(unsigned int _row, unsigned int _col, const sCellInfo& _cellInfo) :
 			rectVec.push_back(cRectangle(frameInfo.framePosX * tileWidth, frameInfo.framePosY * tileHeight, tileWidth, tileHeight));
 		}
 
-		SetAnimationSteps(rectVec);
+		SetAnimationRects(rectVec);
 		SetAnimationFramesPerStep(_cellInfo.duration * 10);
 		EnableAnimation();
 		PlayAnimation();

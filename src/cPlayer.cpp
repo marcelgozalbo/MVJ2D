@@ -2,10 +2,10 @@
 
 #include "cGame.h"
 cPlayer::cPlayer():
-	cCharacter("player", cRectangle(0, 0, 16, 24), 0, 0, 10, 3, 2, 3.0f)
+	cCharacter("player", cRectangle(0, 0, 16, 24), 0, 0, 10,1, 1, 3.0f)
 {
 	m_StepsOrder = {5,6,5,4,1,0,1,2};
-	m_IdleStep = 3;
+	m_IdleStep = { 3 };
 
 	m_Down.push_back(cRectangle(0, 0, 16, 24));
 	m_Down.push_back(cRectangle(23, 0, 16, 24));
@@ -71,9 +71,9 @@ cPlayer::cPlayer():
 	m_LeftShield.push_back(cRectangle(118, 209, 17, 24));
 	m_LeftShield.push_back(cRectangle(141, 209, 17, 24));
 
-	SetAnimationSteps(m_LeftShield);
-	SetAnimationStepOrder(m_StepsOrder);
-	SetAnimationFramesPerStep(5);
+	SetAnimationRects(m_LeftShield);
+	SetAnimationOrderSteps(m_StepsOrder);
+	SetAnimationFramesPerStep(45);
 	EnableAnimation();
 	PlayAnimation();	
 
@@ -105,48 +105,49 @@ void cPlayer::Update()
 		Move(vecx, vecy);
 
 		//CAnvio l'animacio segons l'orientacio
-		if (GetLastOrientation() != GetCurrentOrientation())
+		if ((GetLastOrientation() != GetCurrentOrientation()) || !IsPlayingAnimation())
 		{
 			/*{
 			int x, y, z;
 			GetPosition(x, y);
 			GetZIndex(z);
-			cGame::Instance()->Graphics->DrawFont("arial", "SET O", z + 1, cRectangle(x - 40, y, 0, 0));
-			}
-			*/
+			cGame::Instance()->Graphics->DrawFont("arial", "DINS O", z + 1, cRectangle(x - 40, y, 0, 0));
+			}*/
+			
 			auto orient = GetCurrentOrientation();
 			switch (orient)
 			{
 				case ORIENTATION_N:
 				case ORIENTATION_NE:
 				case ORIENTATION_NO:
-					SetAnimationSteps(m_Up);
+					SetAnimationRects(m_Up);
 					break;
 				case ORIENTATION_S:
 				case ORIENTATION_SE:
 				case ORIENTATION_SO:
-					SetAnimationSteps(m_Down);
+					SetAnimationRects(m_Down);
 					break;
 				case ORIENTATION_E:
-					SetAnimationSteps(m_Right);
+					SetAnimationRects(m_Right);
 					break;
 				case ORIENTATION_O:
-					SetAnimationSteps(m_Left);
+					SetAnimationRects(m_Left);
 					break;
 				default:
 					break;
 			}
 			//Setejo l'ordre.
-			SetAnimationStepOrder(m_StepsOrder);
-
+			SetAnimationOrderSteps(m_StepsOrder);
+			PlayAnimation();
 		}
-		PlayAnimation();
+		
 	}
 	else
 	{
 		//Setejo el Frame que esta quiet i paro
-		SetAnimationCurrentStep(m_IdleStep);
+		SetAnimationOrderSteps(m_IdleStep);
 		StopAnimation();
+
 	}
 	
 	cBaseEntity::Update();
