@@ -60,9 +60,9 @@ private:
 	bool LoopOutput();
 
 	cSound Sound;
-	
 	eGameStates _state;
-
+	cSound::tSoundId _loop_sound_id;
+ 
 	bool Render();
 };
 

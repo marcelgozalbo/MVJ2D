@@ -16,7 +16,8 @@ cGame* cGame::Instance()
 }
 
 cGame::cGame() :
-	_state(STATE_MAIN)
+	_state(STATE_MAIN),
+	_loop_sound_id(0)
 {
 
 }
@@ -58,8 +59,9 @@ bool cGame::Init(HWND hWnd,HINSTANCE hInst,bool exclusive)
 
 	Menu.LoadData();
 
-	int id = Sound.LoadSound("../media/back_music.mp3");
-	//Sound.PlayGameSound(id, true);
+	_loop_sound_id = Sound.LoadSound("../media/back_music.mp3");
+	Sound.PlayGameSound(_loop_sound_id, true);
+	Sound.SetVolumeSound(_loop_sound_id, 1.0);
 
 	return true;
 }
@@ -127,12 +129,14 @@ bool cGame::LoopProcess()
 						if (Input.KeyUpDown(DIK_P))
 						{
 							_state = STATE_PAUSED;
+							Sound.SetVolumeSound(_loop_sound_id, 0.1);
 						}
 						break;
 		case STATE_PAUSED:
 						if (Input.KeyUpDown(DIK_P))
 						{
 							_state = STATE_GAME;
+							Sound.SetVolumeSound(_loop_sound_id, 1.0);
 						}
 						break;
 	}
