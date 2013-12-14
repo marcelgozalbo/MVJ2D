@@ -121,16 +121,21 @@ private:
 			spr->Begin(D3DXSPRITE_ALPHABLEND);
 
 
-			D3DXMATRIX matrixscale;
+
+			
+			D3DXMATRIX matrixscale, matrixtranslation,matrixtransform;
+			
+			D3DXMatrixTranslation(&matrixtranslation, posx, posy, 0.0);
 			D3DXMatrixScaling(&matrixscale, scalex, scaley, scalez);
-
-			spr->SetTransform(&matrixscale);
-
+			D3DXMatrixMultiply(&matrixtransform, &matrixscale, &matrixtranslation);
+			
+			spr->SetTransform(&matrixtransform);
+			
 
 			RECT rc;
 			SetRect(&rc, rect.x, rect.y, rect.x + rect.w, rect.y + rect.h);
-			hr = spr->Draw(textureid, &rc, NULL, &D3DXVECTOR3(float(posx), float(posy), 0.0), 0xFFFFFFFF);
-
+			//hr = spr->Draw(textureid, &rc, NULL, &D3DXVECTOR3(float(posx), float(posy), 0.0), 0xFFFFFFFF);
+			hr = spr->Draw(textureid, &rc, NULL,NULL, 0xFFFFFFFF);
 			spr->End();
 		}
 	private:
