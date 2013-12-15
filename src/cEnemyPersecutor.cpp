@@ -2,11 +2,12 @@
 #include "cGame.h"
 
 cEnemyPersecutor::cEnemyPersecutor() :
-cCharacter("enemies", cRectangle(0, 0, 60, 59), 0, 0, 10, 2, 2, 2.0f),
+cCharacter("enemies", cRectangle(0, 0, 60, 59), 0, 0, 10, 2, 0, 2.0f),
 _state(IDLE),
-_anim_frame_to_change(24),
+_anim_frame_to_change(12),
 _anim_curr_frame(0),
-_movement(M_DOWN)
+_movement(M_DOWN),
+_attack_area(100)
 {
 	const u32 w = 60, h = 59;
 	const u32 x0 = 12, x1 = x0 + w, x2 = x1 + w, x3 = x2 + w, x4 = x3 + w, x5 = x4 + w, x6 = x5 + w, x7 = x6 + w, x8 = x7 + w, x9 = x8 + w;
@@ -148,18 +149,18 @@ void cEnemyPersecutor::ChangeToIdle()
 {
 	ResetAnimation();
 	StopAnimation();
+
+	SetPatrol(_patrol_rectangle.w, _patrol_rectangle.h);
 	_state = IDLE;
 }
 
 void cEnemyPersecutor::UpdatePatrol()
 {
 	// Comprovem si estem a l'abast de l'enemic
-	s32 posx = 0, posy = 0, posplayerx = 0, posplayery = 0;
-	GetPosition(posx, posy);
-	cGame::Instance()->Scene->m_player.GetPosition(posplayerx, posplayery);
+	s32 posx = GetCollisionRectAbsolute().x, posy = GetCollisionRectAbsolute().y, posplayerx = cGame::Instance()->Scene->m_player.GetCollisionRectAbsolute().x, posplayery = cGame::Instance()->Scene->m_player.GetCollisionRectAbsolute().y;
 
 	double radi = sqrt((posplayerx - posx)*(posplayerx - posx) + (posplayery - posy)*(posplayery - posy));
-	if (radi < 100)
+	if (radi < _attack_area)
 	{
 		int* map = cGame::Instance()->Scene->m_map.getVisibleCells();
 		Path.Make(map, posx / cCell::tileWidth, posy / cCell::tileHeight, posplayerx / cCell::tileWidth, posplayery / cCell::tileHeight);
@@ -263,11 +264,19 @@ void cEnemyPersecutor::DoMovement()
 }
 
 void cEnemyPersecutor::UpdateRun()
-{
+{	
 	if (!Path.IsDone())
 	{
-		s32 posx = 0, posy = 0;
-		GetPosition(posx, posy);
+		// Comprovem si estem a l'abast de l'enemic
+		s32 posx = GetCollisionRectAbsolute().x, posy = GetCollisionRectAbsolute().y, posplayerx = cGame::Instance()->Scene->m_player.GetCollisionRectAbsolute().x, posplayery = cGame::Instance()->Scene->m_player.GetCollisionRectAbsolute().y;
+
+		double radi = sqrt((posplayerx - posx)*(posplayerx - posx) + (posplayery - posy)*(posplayery - posy));
+		if (radi > _attack_area)
+		{
+			Path.Done();
+			ChangeToIdle();
+			return;
+		}
 
 		s32 nposx = posx, nposy = posy, cx = posx / cCell::tileWidth, cy = posy / cCell::tileHeight;
 		int mov = Path.NextStep(&nposx, &nposy, &cx, &cy);
@@ -275,20 +284,30 @@ void cEnemyPersecutor::UpdateRun()
 		if (mov == ARRIVE)
 		{
 			Path.Done();
-			int* map = (int *)malloc(sizeof(int)*(25 * 18));
-			ZeroMemory(map, (25 * 18)*sizeof(int));
-			Path.Make(map, posx / cCell::tileWidth, posy / cCell::tileHeight, 10, 10);
-			delete map;
+			ChangeToIdle();
 		}
 		else if (mov == CONTINUE)
 		{
+			// Comprovem la colisio amb el jugador
+			if (HasCollision(cGame::Instance()->Scene->m_player))
+			{
+				ChangeToAction();
+				return;
+			}
 
 			int xdiff = nposx - posx;
 			int ydiff = nposy - posy;
 			eMovement NewMovement = M_NOT_MOVE;
 			if (xdiff > 0) NewMovement = M_RIGHT;
 			else if (xdiff < 0) NewMovement = M_LEFT;
-			else if (ydiff > 0) NewMovement = M_DOWN;
+			if (NewMovement != M_NOT_MOVE)
+			{
+				_movement = NewMovement;
+				DoMovement();
+			}
+
+			NewMovement = M_NOT_MOVE;
+			if (ydiff > 0) NewMovement = M_DOWN;
 			else if (ydiff < 0) NewMovement = M_UP;
 			if (NewMovement != M_NOT_MOVE)
 			{
@@ -357,8 +376,7 @@ void cEnemyPersecutor::ComputeNextMovement()
 
 void cEnemyPersecutor::SetPatrol(u32 a_weight, u32 a_height)
 {
-	s32 posx = 0, posy = 0;
-	GetPosition(posx, posy);
+	s32 posx = GetCollisionRectAbsolute().x, posy = GetCollisionRectAbsolute().y;
 
 	_patrol_rectangle.x = posx - a_weight / 2;
 	_patrol_rectangle.y = posy - a_height / 2;
@@ -375,4 +393,9 @@ void cEnemyPersecutor::RenderPatrolRectangle()
 		//Renderitzo el rectangle a Z+1 perque surti per sobre la textura sempre
 		cGame::Instance()->Graphics->DrawRect(_patrol_rectangle, 0x00FF00FF, zIndex + 1);
 	}
+}
+
+void cEnemyPersecutor::UpdatePatrolRectangle()
+{
+	SetPatrol(_patrol_rectangle.w, _patrol_rectangle.h);
 }

@@ -14,6 +14,7 @@ public:
 	void Render() override;
 	void SetPatrol(u32 a_weight, u32 a_height);
 	void Die();
+	void UpdatePatrolRectangle();
 
 private:
 	
@@ -71,6 +72,7 @@ private:
 	eMovement _movement;
 	cRectangle _patrol_rectangle;
 	cPath Path;
+	u32 _attack_area;
 };
 
 #endif
