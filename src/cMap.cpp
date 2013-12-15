@@ -435,32 +435,37 @@ bool cMap::isWalkableFor(const cRectangle& position, s32 originRow, s32 originCo
 
 void cMap::repositionEnemies(eMovementDirection direction)
 {
-	cEnemyPersecutor& enemy = cGame::Instance()->Scene->m_enemy;
+	std::vector<cEnemyPersecutor>& enemies = cGame::Instance()->Scene->m_enemies;
 
-	s32 enemyX, enemyY;
-	enemy.GetPosition(enemyX, enemyY);
-
-	switch (direction)
+	for (u32 idx = 0; idx < enemies.size(); idx++)
 	{
-	case DIRECTION_EAST:
-		enemyX -= m_visibleCols * cCell::tileWidth;
-		break;
+		cEnemyPersecutor& enemy = enemies[idx];
 
-	case DIRECTION_WEST:
-		enemyX += m_visibleCols * cCell::tileWidth;
-		break;
+		s32 enemyX, enemyY;
+		enemy.GetPosition(enemyX, enemyY);
 
-	case DIRECTION_SOUTH:
-		enemyY -= m_visibleRows * cCell::tileHeight;
-		break;
+		switch (direction)
+		{
+		case DIRECTION_EAST:
+			enemyX -= m_visibleCols * cCell::tileWidth;
+			break;
 
-	case DIRECTION_NORTH:
-		enemyY += m_visibleRows * cCell::tileHeight;
-		break;
+		case DIRECTION_WEST:
+			enemyX += m_visibleCols * cCell::tileWidth;
+			break;
+
+		case DIRECTION_SOUTH:
+			enemyY -= m_visibleRows * cCell::tileHeight;
+			break;
+
+		case DIRECTION_NORTH:
+			enemyY += m_visibleRows * cCell::tileHeight;
+			break;
+		}
+
+		enemy.SetPosition(enemyX, enemyY);
+		enemy.UpdatePatrolRectangle();
 	}
-
-	enemy.SetPosition(enemyX, enemyY);
-	enemy.UpdatePatrolRectangle();
 }
 
 int* cMap::getVisibleCells()

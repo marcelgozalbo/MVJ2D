@@ -51,9 +51,10 @@ public:
 
 	cMap m_map;
 	cPlayer m_player;
-	cEnemyPersecutor m_enemy; // just to test: we will have more than one enemy
 	cFont m_debugFont;
 	cFont m_debugCellFont;
+
+	std::vector<cEnemyPersecutor> m_enemies;
 
 
 	void UpdateEnemyHit(const cRectangle &hitrect);
