@@ -418,3 +418,8 @@ void cPlayer::MovePlayer(s32 xAmount, s32 yAmount)
 		}
 	}
 }
+
+void cPlayer::respawn()
+{
+	m_life_count = 5;
+}
