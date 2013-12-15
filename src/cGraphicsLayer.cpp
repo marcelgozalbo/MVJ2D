@@ -185,8 +185,8 @@ void cGraphicsLayer::GetTextureSizes(const std::string &text_id, int &h, int &w)
 
 void cGraphicsLayer::UnLoadData()
 {
-	for(auto &p: m_texturesmap)
-		p.second->Release();
+	//for(auto &p: m_texturesmap)
+	//	p.second->Release();
 
 
 	if(g_pSprite)
