@@ -493,10 +493,16 @@ int* cMap::getVisibleCells()
 			}
 			else
 			{
-				fatalError("bad cell pos");
+				map[idx] = 0;
 			}
 		}
 	}
 
 	return map;
+}
+
+void cMap::getLimits(s32* limitX, s32* limitY)
+{
+	*limitX = m_totalCols * cCell::tileWidth;
+	*limitY = m_totalRows * cCell::tileHeight;
 }

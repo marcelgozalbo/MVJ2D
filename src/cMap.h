@@ -22,6 +22,7 @@ public:
 	bool insideLimits(const cRectangle& position);
 	bool insideScreen(const cRectangle& position);
 	int* getVisibleCells();
+	void getLimits(s32* limitX, s32* limitY);
 
 	//debug
 	std::string getCellDebugString(u32 row, u32 col);

@@ -1,13 +1,12 @@
 #include "cScene.h"
 #include "cMouse.h"
 #include <stdio.h>
+#include <cstdlib>
 #include <iostream>
 #include "cGame.h"
 #include "Utils.h"
 
 #define ENEMY_COUNT 5
-
-u32 enemiesPos[5][2] = { {120,120}, {240,135}, {642,328}, {712,435}, {812,522} };
 
 cScene::cScene() :
 	m_debugFont("arial", "", 100, cRectangle(0, 0, 300, 100), 0xFFFFFFFF, cFont::ALIGN_LEFT),
@@ -15,18 +14,33 @@ cScene::cScene() :
 {
 	cx=0;
 	cy=0;
-
-	for (u32 idx = 0; idx < ENEMY_COUNT; idx++)
-	{
-		m_enemies.push_back(cEnemyPersecutor());
-		m_enemies.back().SetPosition(enemiesPos[idx][0], enemiesPos[idx][1]);
-		m_enemies.back().SetPatrol(150, 150);
-	}
 }
 
 cScene::~cScene()
 {
 
+}
+
+void cScene::LoadEnemies()
+{
+	s32 limitX, limitY;
+	m_map.getLimits(&limitX, &limitY);
+
+	for (u32 idx = 0; idx < ENEMY_COUNT; idx++)
+	{
+		cRectangle rect;
+		rect.w = 150;
+		rect.h = 150;
+		do
+		{
+			rect.x = rand() % limitX;
+			rect.y = rand() % limitY;
+		} while (!m_map.isWalkable(rect));
+
+		m_enemies.push_back(cEnemyPersecutor());
+		m_enemies.back().SetPosition(rect.x, rect.y);
+		m_enemies.back().SetPatrol(150, 150);
+	}
 }
 
 //Chequejo i mato si dono a un enemic
