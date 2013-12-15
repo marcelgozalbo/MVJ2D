@@ -106,7 +106,7 @@ void cGraphicsLayer::LoadData()
 	m_texturesmap["characters"] = buffer;
 
 	//Player
-	D3DXCreateTextureFromFileEx(g_pD3DDevice, "../media/Player.png", 0, 0, 1, 0, D3DFMT_UNKNOWN,
+	D3DXCreateTextureFromFileEx(g_pD3DDevice, "../media/Player.png", D3DX_DEFAULT_NONPOW2, D3DX_DEFAULT_NONPOW2, 1, 0, D3DFMT_UNKNOWN,
 								D3DPOOL_DEFAULT, D3DX_FILTER_NONE, D3DX_FILTER_NONE,
 								0x00ff00ff, NULL, NULL, &buffer);
 	m_texturesmap["player"] = buffer;

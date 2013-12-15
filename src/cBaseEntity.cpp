@@ -41,8 +41,14 @@ cBaseEntity::cBaseEntity()
 	SetAnimationFramesPerStep(1);
 
 	DisableDebugMode();
-	
+	SetTextureRotation(0.0, 0.0);
 }
+void cBaseEntity::SetTextureRotation(const float rotx, const float roty)
+{
+	m_rotx = rotx;
+	m_roty = roty;
+}
+
 
 void cBaseEntity::Update()
 {
@@ -86,10 +92,10 @@ void cBaseEntity::Render()
 	{
 		if (IsAnimationEnabled())
 		{
-			cGame::Instance()->Graphics->DrawSprite(m_text_id, m_posx, m_posy, m_posz, GetAnimationCurrentStepRectangle(),scalex, scaley, scalez);
+			cGame::Instance()->Graphics->DrawSprite(m_text_id, m_posx, m_posy, m_posz, GetAnimationCurrentStepRectangle(),scalex, scaley, scalez,m_rotx,m_roty);
 		}
 		else
-			cGame::Instance()->Graphics->DrawSprite(m_text_id, m_posx, m_posy, m_posz, m_rect_texture,scalex,scaley,scalez);
+			cGame::Instance()->Graphics->DrawSprite(m_text_id, m_posx, m_posy, m_posz, m_rect_texture, scalex, scaley, scalez, m_rotx, m_roty);
 
 	}
 
@@ -186,8 +192,8 @@ cRectangle  cBaseEntity::GetCollisionRectAbsolute() const
 {
 	cRectangle rect_absolute;
 	rect_absolute.SetRect(
-		static_cast<s32>(m_posx + m_rect_colision_rel.x),
-		static_cast<s32>(m_posy + m_rect_colision_rel.y),
+		static_cast<s32>(m_posx + (m_rect_colision_rel.x * scalex)),
+		static_cast<s32>(m_posy + (m_rect_colision_rel.y * scaley)),
 		static_cast<s32>((m_rect_colision_rel.w) * scalex),
 		static_cast<s32>((m_rect_colision_rel.h) * scaley)
 		);
@@ -387,6 +393,8 @@ std::size_t cBaseEntity::GetAnimationFramesPerStep() const
 
 void cBaseEntity::RenderAnimInfoDebug()
 {
+	if (IsAnimationEnabled())
+	{
 	std::string text("AnimInfo Steps: " + util::toString(m_anim_steps_order.size()) + " | CurStep: " + util::toString(m_curr_anim_step) + " RectIndex: "+ util::toString(m_anim_steps_order[m_curr_anim_step])+"\n" 
 		+ GetAnimationCurrentStepRectangle().toString());
 	auto rec = GetCollisionRectAbsolute();
@@ -394,6 +402,7 @@ void cBaseEntity::RenderAnimInfoDebug()
 	rec.w = 0;
 	rec.h = 0;
 	cGame::Instance()->Graphics->DrawFont("arial", text, m_posz + 1, rec);
+	}
 
 }
 
