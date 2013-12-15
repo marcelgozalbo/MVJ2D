@@ -2,7 +2,7 @@
 
 #include "cGame.h"
 cPlayer::cPlayer():
-	cCharacter("player", cRectangle(0, 0, 16, 24), 0, 0, 10,3, 2, 1.0f)
+	cCharacter("player", cRectangle(0, 0, 16, 24), 0, 0, 10,3, 2, 2.0f)
 {
 	m_StepsOrder = {5,6,5,4,1,0,1,2};
 	m_IdleStep = { 3 };
