@@ -20,6 +20,7 @@ public:
 	bool movePlayer(const cRectangle& position);
 	bool moveEnemy(const cRectangle& position);
 	bool insideLimits(const cRectangle& position);
+	bool insideScreen(const cRectangle& position);
 
 	//debug
 	std::string getCellDebugString(u32 row, u32 col);
