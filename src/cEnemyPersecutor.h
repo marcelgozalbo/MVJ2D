@@ -17,6 +17,7 @@ public:
 	void UpdatePatrolRectangle();
 
 	bool IsAlive(){ if (_state == DEATH) return false; else return true; };
+	void respawn();
 private:
 	
 	std::vector<cRectangle> _down_animation;

@@ -5,6 +5,10 @@
 #include "cGame.h"
 #include "Utils.h"
 
+#define ENEMY_COUNT 5
+
+u32 enemiesPos[5][2] = { {120,120}, {240,135}, {642,328}, {712,435}, {812,522} };
+
 cScene::cScene() :
 	m_debugFont("arial", "", 100, cRectangle(0, 0, 300, 100), 0xFFFFFFFF, cFont::ALIGN_LEFT),
 	m_debugCellFont("arial", "", 100, cRectangle(0, 30, 300, 100), 0xFFFFFFFF, cFont::ALIGN_LEFT)
@@ -12,8 +16,12 @@ cScene::cScene() :
 	cx=0;
 	cy=0;
 
-	m_enemy.SetPosition(192, 192);
-	m_enemy.SetPatrol(150, 150);
+	for (u32 idx = 0; idx < ENEMY_COUNT; idx++)
+	{
+		m_enemies.push_back(cEnemyPersecutor());
+		m_enemies.back().SetPosition(enemiesPos[idx][0], enemiesPos[idx][1]);
+		m_enemies.back().SetPatrol(150, 150);
+	}
 }
 
 cScene::~cScene()
@@ -24,15 +32,26 @@ cScene::~cScene()
 //Chequejo i mato si dono a un enemic
 void cScene::UpdateEnemyHit(const cRectangle &hitrect)
 {
-	//todo array d'enemics
-	if (m_enemy.GetCollisionRectAbsolute().Intersects(hitrect))
-		m_enemy.Die();
+	for (u32 idx = 0; idx < m_enemies.size(); idx++)
+	{
+		cEnemyPersecutor& enemy = m_enemies[idx];
 
+		if (enemy.GetCollisionRectAbsolute().Intersects(hitrect))
+			enemy.Die();
+	}
 }
 
 bool cScene::IsPlayerWon()
 {
-	if (m_player.IsAlive() && !m_enemy.IsAlive())
+	bool allDead = true;
+
+	for (u32 idx = 0; allDead && idx < m_enemies.size(); idx++)
+	{
+		cEnemyPersecutor& enemy = m_enemies[idx];
+		allDead = allDead && !enemy.IsAlive();
+	}
+
+	if (m_player.IsAlive() && allDead)
 		return true;
 	
 	return false;
@@ -40,7 +59,15 @@ bool cScene::IsPlayerWon()
 
 bool cScene::IsPlayerLost()
 {
-	if (!m_player.IsAlive() && m_enemy.IsAlive())
+	bool allDead = true;
+
+	for (u32 idx = 0; allDead && idx < m_enemies.size(); idx++)
+	{
+		cEnemyPersecutor& enemy = m_enemies[idx];
+		allDead = allDead && !enemy.IsAlive();
+	}
+
+	if (!m_player.IsAlive() && !allDead)
 		return true;
 
 	return false;
@@ -49,7 +76,13 @@ bool cScene::IsPlayerLost()
 void cScene::Update()
 {
 	m_player.Update();
-	m_enemy.Update();
+
+	for (u32 idx = 0; idx < m_enemies.size(); idx++)
+	{
+		cEnemyPersecutor& enemy = m_enemies[idx];
+		enemy.Update();
+	}
+
 	m_map.update();
 
 	// update debug font
@@ -76,9 +109,16 @@ void cScene::Render()
 	// TESTING SHIT
 	// TESTING SHIT
 	// TESTING SHIT
-	m_map.render();
+	
 	m_player.Render();
-	m_enemy.Render();
+
+	for (u32 idx = 0; idx < m_enemies.size(); idx++)
+	{
+		cEnemyPersecutor& enemy = m_enemies[idx];
+		enemy.Render();
+	}
+
+	m_map.render();
 
 	//m_debugFont.render();
 	//m_debugCellFont.render();

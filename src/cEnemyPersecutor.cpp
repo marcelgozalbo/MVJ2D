@@ -399,3 +399,11 @@ void cEnemyPersecutor::UpdatePatrolRectangle()
 {
 	SetPatrol(_patrol_rectangle.w, _patrol_rectangle.h);
 }
+
+void cEnemyPersecutor::respawn()
+{
+	if (!IsAlive())
+	{
+		ChangeToIdle();
+	}
+}
