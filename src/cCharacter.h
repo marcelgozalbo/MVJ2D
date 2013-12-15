@@ -29,6 +29,7 @@ public:
 	virtual void Render() override = 0;
 	CharacterOrientation GetCurrentOrientation() const { return m_orientation; };
 	CharacterOrientation GetLastOrientation() const { return m_last_orientation; };
+	void reset();
 protected:
 	virtual bool Move(s32 xAmount, s32 yAmount) final;
 	bool PossibleMovement(s32 a_x, s32 a_y, s32& a_final_x, s32& a_final_y);

@@ -136,7 +136,8 @@ void cEnemyPersecutor::Render()
 
 void cEnemyPersecutor::Die()
 {
-	ChangeToDie();
+	if (IsAlive())
+		ChangeToDie();
 }
 
 void cEnemyPersecutor::UpdateIdle()
@@ -365,6 +366,26 @@ void cEnemyPersecutor::UpdateAction()
 
 void cEnemyPersecutor::ChangeToAction()
 {
+	// Calculem la orientacio de l'atac segons el jugador
+	s32 posx = GetCollisionRectAbsolute().x, posy = GetCollisionRectAbsolute().y, posplayerx = cGame::Instance()->Scene->m_player.GetCollisionRectAbsolute().x, posplayery = cGame::Instance()->Scene->m_player.GetCollisionRectAbsolute().y;
+	s32 maxposx = posx + GetCollisionRectAbsolute().w, maxposy = posy + GetCollisionRectAbsolute().h, maxposplayerx = posplayerx + cGame::Instance()->Scene->m_player.GetCollisionRectAbsolute().w, maxposplayery = posplayery + cGame::Instance()->Scene->m_player.GetCollisionRectAbsolute().h;
+	if (posx >= maxposplayerx)
+	{
+		m_orientation = ORIENTATION_O;
+	}
+	else if (maxposx <= posplayerx)
+	{
+		m_orientation = ORIENTATION_E;
+	}
+	else if (posy > posplayery)
+	{
+		m_orientation = ORIENTATION_N;
+	}
+	else
+	{
+		m_orientation = ORIENTATION_S;
+	}
+
 	auto orient = GetCurrentOrientation();
 	auto recEnemy = GetCollisionRectAbsolute();
 	switch (orient)
