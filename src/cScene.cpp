@@ -21,6 +21,15 @@ cScene::~cScene()
 
 }
 
+//Chequejo i mato si dono a un enemic
+void cScene::UpdateEnemyHit(const cRectangle &hitrect)
+{
+	//todo array d'enemics
+	if (m_enemy.GetCollisionRectAbsolute().Intersects(hitrect))
+		m_enemy.Die();
+
+}
+
 void cScene::Update()
 {
 	m_player.Update();

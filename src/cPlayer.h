@@ -38,6 +38,10 @@ private:
 	std::vector<cRectangle> m_DownSword, m_UpSword, m_LeftSword, m_RightSword;
 	std::vector<u32> m_SwordSteps;
 	E_PLAYER_STATE m_state;
+	
+	//Attacking
+	cRectangle m_attack_col_rect;
+
 
 	// VIDA
 	int m_life_count;
