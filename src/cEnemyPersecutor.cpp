@@ -2,8 +2,8 @@
 #include "cGame.h"
 
 cEnemyPersecutor::cEnemyPersecutor() :
-cCharacter("enemies", cRectangle(0, 0, 60, 59), 0, 0, 10, 3, 2, 1.0f),
-_state(RUN),
+cCharacter("enemies", cRectangle(0, 0, 16, 24), 0, 0, 10, 2, 2, 1.0f),
+_state(IDLE),
 _anim_frame_to_change(24),
 _anim_curr_frame(0),
 _movement(M_DOWN)
@@ -73,8 +73,6 @@ _movement(M_DOWN)
 	EnableAnimation();
 
 	EnableDebugMode();
-
-	SetCollisionRectRelative(cRectangle(20,20,30,30));
 }
 
 cEnemyPersecutor::~cEnemyPersecutor()
@@ -151,6 +149,21 @@ void cEnemyPersecutor::ChangeToIdle()
 
 void cEnemyPersecutor::UpdatePatrol()
 {
+	// Comprovem si estem a l'abast de l'enemic
+	s32 posx = 0, posy = 0, posplayerx = 0, posplayery = 0;
+	GetPosition(posx, posy);
+	cGame::Instance()->Scene->m_player.GetPosition(posplayerx, posplayery);
+
+	double radi = sqrt((posplayerx - posx)*(posplayerx - posx) + (posplayery - posy)*(posplayery - posy));
+	if (radi < 100)
+	{
+		int* map = cGame::Instance()->Scene->m_map.getVisibleCells();
+		Path.Make(map, posx / cCell::tileWidth, posy / cCell::tileHeight, posplayerx / cCell::tileWidth, posplayery / cCell::tileHeight);
+		delete map;
+		ChangeToRun();
+		return;
+	}
+	
 	// Comprovem si el seguent moviment surt dels limits de la patrulla
 	s32 x = 0, y = 0;
 	switch (_movement)
@@ -247,21 +260,11 @@ void cEnemyPersecutor::DoMovement()
 
 void cEnemyPersecutor::UpdateRun()
 {
-	s32 posx = 0, posy = 0;
-	GetPosition(posx, posy);
-
-	static bool b = true;
-	if (b)
-	{
-		int* map = (int *)malloc(sizeof(int)*(25*18));
-		ZeroMemory(map, (25 * 18)*sizeof(int));
-		Path.Make(map, posx / cCell::tileWidth, posy / cCell::tileHeight, 0, 0);
-		b = false;
-		delete map;
-	}
-
 	if (!Path.IsDone())
 	{
+		s32 posx = 0, posy = 0;
+		GetPosition(posx, posy);
+
 		s32 nposx = posx, nposy = posy, cx = posx / cCell::tileWidth, cy = posy / cCell::tileHeight;
 		int mov = Path.NextStep(&nposx, &nposy, &cx, &cy);
 
@@ -275,15 +278,20 @@ void cEnemyPersecutor::UpdateRun()
 		}
 		else if (mov == CONTINUE)
 		{
-		}
 
-		int xdiff = nposx - posx;
-		int ydiff = nposy - posy;
-		if(xdiff > 0) _movement = M_RIGHT;
-		else if (xdiff < 0) _movement = M_LEFT;
-		else if (ydiff > 0) _movement = M_DOWN;
-		else if (ydiff < 0) _movement = M_UP;
-		DoMovement();
+			int xdiff = nposx - posx;
+			int ydiff = nposy - posy;
+			eMovement NewMovement = M_NOT_MOVE;
+			if (xdiff > 0) NewMovement = M_RIGHT;
+			else if (xdiff < 0) NewMovement = M_LEFT;
+			else if (ydiff > 0) NewMovement = M_DOWN;
+			else if (ydiff < 0) NewMovement = M_UP;
+			if (NewMovement != M_NOT_MOVE)
+			{
+				_movement = NewMovement;
+				DoMovement();
+			}
+		}
 	}
 }
 

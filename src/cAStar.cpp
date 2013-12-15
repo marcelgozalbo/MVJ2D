@@ -70,7 +70,7 @@ void cAStar::LoadMap(int *map)
 	{
 		for(i=0;i<mapWidth;i++)
 		{
-			walkability[i][j]=(map[k]==0);
+			walkability[i][j]=(map[k]!=0);
 			k++;
 		}
 	}

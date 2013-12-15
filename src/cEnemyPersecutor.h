@@ -49,7 +49,8 @@ private:
 		M_UP,
 		M_LEFT,
 		M_RIGHT,
-		M_NUM_MOV
+		M_NUM_MOV,
+		M_NOT_MOVE
 	};
 
 	void DoMovement();
