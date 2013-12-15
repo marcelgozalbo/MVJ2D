@@ -14,6 +14,8 @@ public:
 	void Render() override;
 	void SetPatrol(u32 a_weight, u32 a_height);
 	void Die();
+	void UpdatePatrolRectangle();
+
 	bool IsAlive(){ if (_state == DEATH) return false; else return true; };
 private:
 	
@@ -71,6 +73,7 @@ private:
 	eMovement _movement;
 	cRectangle _patrol_rectangle;
 	cPath Path;
+	u32 _attack_area;
 
 	
 };
