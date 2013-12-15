@@ -41,8 +41,14 @@ cBaseEntity::cBaseEntity()
 	SetAnimationFramesPerStep(1);
 
 	DisableDebugMode();
-	
+	SetTextureRotation(0.0, 0.0);
 }
+void cBaseEntity::SetTextureRotation(const float rotx, const float roty)
+{
+	m_rotx = rotx;
+	m_roty = roty;
+}
+
 
 void cBaseEntity::Update()
 {
@@ -86,10 +92,10 @@ void cBaseEntity::Render()
 	{
 		if (IsAnimationEnabled())
 		{
-			cGame::Instance()->Graphics->DrawSprite(m_text_id, m_posx, m_posy, m_posz, GetAnimationCurrentStepRectangle(),scalex, scaley, scalez);
+			cGame::Instance()->Graphics->DrawSprite(m_text_id, m_posx, m_posy, m_posz, GetAnimationCurrentStepRectangle(),scalex, scaley, scalez,m_rotx,m_roty);
 		}
 		else
-			cGame::Instance()->Graphics->DrawSprite(m_text_id, m_posx, m_posy, m_posz, m_rect_texture,scalex,scaley,scalez);
+			cGame::Instance()->Graphics->DrawSprite(m_text_id, m_posx, m_posy, m_posz, m_rect_texture, scalex, scaley, scalez, m_rotx, m_roty);
 
 	}
 

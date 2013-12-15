@@ -9,6 +9,9 @@ cCharacter::cCharacter() :
 
 cCharacter::cCharacter(const std::string& textureId, const cRectangle& textureRect, s32 x, s32 y, s32 z, s32 vStraight, s32 vDiagonal, f32 textureScale)
 {
+	m_orientation = ORIENTATION_S;
+	m_last_orientation = ORIENTATION_S;
+
 	Init(textureId, textureRect, x, y, z, vStraight, vDiagonal, textureScale);
 }
 
