@@ -566,28 +566,30 @@ bool cMap::isWalkableFor(const cRectangle& position, s32 originRow, s32 originCo
 void cMap::repositionEnemies(eMovementDirection direction)
 {
 	cEnemyPersecutor& enemy = cGame::Instance()->Scene->m_enemy;
-	cRectangle rect = enemy.GetCollisionRectAbsolute();
+
+	s32 enemyX, enemyY;
+	enemy.GetPosition(enemyX, enemyY);
 
 	switch (direction)
 	{
 	case DIRECTION_EAST:
-		rect.x -= m_visibleCols * cCell::tileWidth;
+		enemyX -= m_visibleCols * cCell::tileWidth;
 		break;
 
 	case DIRECTION_WEST:
-		rect.x += m_visibleCols * cCell::tileWidth;
+		enemyX += m_visibleCols * cCell::tileWidth;
 		break;
 
 	case DIRECTION_SOUTH:
-		rect.y -= m_visibleRows * cCell::tileHeight;
+		enemyY -= m_visibleRows * cCell::tileHeight;
 		break;
 
 	case DIRECTION_NORTH:
-		rect.y += m_visibleRows * cCell::tileHeight;
+		enemyY += m_visibleRows * cCell::tileHeight;
 		break;
 	}
 
-	enemy.SetPosition(rect.x, rect.y);
+	enemy.SetPosition(enemyX, enemyY);
 }
 
 int* cMap::getVisibleCells()
