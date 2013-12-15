@@ -518,7 +518,7 @@ void cAStar::ReadPath(int pathfinderID,int currentX,int currentY,
 //-----------------------------------------------------------------------------
 int cAStar::ReadPathX(int pathfinderID,int pathLocation)
 {
-	int x;
+	int x = 0;
 	if (pathLocation <= pathLength[pathfinderID])
 	{
 
@@ -542,7 +542,7 @@ int cAStar::ReadPathX(int pathfinderID,int pathLocation)
 //-----------------------------------------------------------------------------
 int cAStar::ReadPathY(int pathfinderID,int pathLocation)
 {
-	int y;
+	int y = 0;
 	if (pathLocation <= pathLength[pathfinderID])
 	{
 

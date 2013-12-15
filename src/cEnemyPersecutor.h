@@ -2,6 +2,7 @@
 #define MPV2D_CENEMY_PERSECUTOR_H_
 
 #include "cCharacter.h"
+#include "cPath.h"
 
 class cEnemyPersecutor : public cCharacter
 {
@@ -51,16 +52,24 @@ private:
 		M_NUM_MOV
 	};
 
+	void DoMovement();
 	void ComputeNextMovement();
 	void Move();
 	void RenderPatrolRectangle();
 	void UpdateIdle();
+	void ChangeToIdle();
 	void UpdatePatrol();
+	void ChangeToPatrol();
 	void UpdateRun();
+	void ChangeToRun();
 	void UpdateAction();
+	void ChangeToAction();
+	void UpdateDie();
+	void ChangeToDie();
 
 	eMovement _movement;
 	cRectangle _patrol_rectangle;
+	cPath Path;
 };
 
 #endif

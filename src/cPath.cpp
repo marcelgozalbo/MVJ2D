@@ -78,14 +78,14 @@ int cPath::NextStep(int *px,int *py,int *cx,int *cy)
 
 	switch(dir)
 	{
-		case N:	(*py)-=STEP_LENGTH;						break;
-		case S:	(*py)+=STEP_LENGTH;						break;
-		case E:	(*px)+=STEP_LENGTH;						break;
-		case O:	(*px)-=STEP_LENGTH;						break;
-		case NE:(*py)-=STEP_LENGTH; (*px)+=STEP_LENGTH; break;
-		case NO:(*py)-=STEP_LENGTH; (*px)-=STEP_LENGTH; break;
-		case SE:(*py)+=STEP_LENGTH; (*px)+=STEP_LENGTH; break;
-		case SO:(*py)+=STEP_LENGTH; (*px)-=STEP_LENGTH; break;
+		case D_N:	(*py)-=STEP_LENGTH;						break;
+		case D_S:	(*py)+=STEP_LENGTH;						break;
+		case D_E:	(*px)+=STEP_LENGTH;						break;
+		case D_O:	(*px)-=STEP_LENGTH;						break;
+		case D_NE:(*py)-=STEP_LENGTH; (*px)+=STEP_LENGTH; break;
+		case D_NO:(*py)-=STEP_LENGTH; (*px)-=STEP_LENGTH; break;
+		case D_SE:(*py)+=STEP_LENGTH; (*px)+=STEP_LENGTH; break;
+		case D_SO:(*py)+=STEP_LENGTH; (*px)-=STEP_LENGTH; break;
 	}
 
 	//Calculate next cell
@@ -152,27 +152,27 @@ void cPath::CalcDir(int x1,int y1,int x2,int y2)
 	// - Horitzontal
 	if(sdy==0)
 	{
-		if(sdx>0) dir=E;
-		else	  dir=O;
+		if(sdx>0) dir=D_E;
+		else	  dir=D_O;
 	}
 	// - Vertical
 	else if(sdx==0)
 	{
-		if(sdy>0) dir=S;
-		else	  dir=N;
+		if(sdy>0) dir=D_S;
+		else	  dir=D_N;
 	}
 	// - m=dx/dy=1
 	else if(abs(sdx)==abs(sdy))
 	{
 		if(sdx>0)
 		{
-			if(sdy>0)	dir=SE;
-			else		dir=NE;
+			if(sdy>0)	dir=D_SE;
+			else		dir=D_NE;
 		}
 		else
 		{
-			if(sdy>0)	dir=SO;
-			else		dir=NO;
+			if(sdy>0)	dir=D_SO;
+			else		dir=D_NO;
 		}
 	}
 }
