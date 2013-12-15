@@ -92,3 +92,8 @@ bool cRectangle::isEmpty() const
 {
 	return x == y == w == h == 0;
 }
+
+bool cRectangle::isInside(int a_x, int a_y) const
+{
+	return  a_x >= x && a_x <= x + w && a_y >= y && a_y <= y + h;
+}

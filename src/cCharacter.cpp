@@ -111,3 +111,80 @@ bool cCharacter::Move(s32 xAmount, s32 yAmount)
 
 	return moveOk;
 }
+
+bool cCharacter::PossibleMovement(s32 a_x, s32 a_y, s32& a_final_x, s32& a_final_y)
+{
+	bool moveOk = false;
+	CharacterOrientation orientation;
+	if (a_x || a_y)
+	{
+		// Busco l'orientacio del moviment
+		if (a_y == 0)
+		{
+			if (a_x > 0)		orientation = ORIENTATION_E;
+			else if (a_x < 0)	orientation = ORIENTATION_O;
+		}
+		else if (a_y > 0)
+		{
+			if (a_x > 0)		orientation = ORIENTATION_SE;
+			else if (a_x < 0)	orientation = ORIENTATION_SO;
+			else				orientation = ORIENTATION_S;
+		}
+		else
+		{
+			if (a_x > 0)		orientation = ORIENTATION_NE;
+			else if (a_x < 0)	orientation = ORIENTATION_NO;
+			else				orientation = ORIENTATION_N;
+		}
+
+		int x, y;
+		GetPosition(x, y);
+
+		//Actualitzo el moviment segons orientacio
+		switch (orientation)
+		{
+		case ORIENTATION_N:
+			y -= m_vStraight;
+			break;
+		case ORIENTATION_NE:
+			y -= m_vDiagonal;
+			x += m_vDiagonal;
+			break;
+		case ORIENTATION_NO:
+			y -= m_vDiagonal;
+			x -= m_vDiagonal;
+			break;
+		case ORIENTATION_S:
+			y += m_vStraight;
+			break;
+		case ORIENTATION_SE:
+			y += m_vDiagonal;
+			x += m_vDiagonal;
+			break;
+		case ORIENTATION_SO:
+			y += m_vDiagonal;
+			x -= m_vDiagonal;
+			break;
+		case ORIENTATION_E:
+			x += m_vStraight;
+			break;
+		case ORIENTATION_O:
+			x -= m_vStraight;
+			break;
+		}
+
+		cRectangle destRect = GetCollisionRectAbsolute();
+		destRect.x = x;
+		destRect.y = y;
+
+		cGame* game = cGame::Instance();
+
+		if (game->Scene->m_map.isWalkable(destRect))
+		{
+			a_final_x = x, a_final_y = y;
+			moveOk = true;
+		}
+	}
+
+	return moveOk;
+}

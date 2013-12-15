@@ -1,4 +1,5 @@
 #include "cEnemyPersecutor.h"
+#include "cGame.h"
 
 cEnemyPersecutor::cEnemyPersecutor() :
 cCharacter("enemies", cRectangle(0, 0, 26, 30), 0, 0, 10, 3, 2, 3.0f),
@@ -43,33 +44,46 @@ void cEnemyPersecutor::Update()
 {
 	cBaseEntity::Update();
 
+	bool frameElapsed = false;
+
+	if (_anim_curr_frame <= _anim_frame_to_change)
+	{
+		_anim_curr_frame++;
+	}
+	else
+	{
+		frameElapsed = true;
+		_anim_curr_frame = 0;
+	}
+
 	switch (_state)
 	{
 		case IDLE:
-			break;
+		{
+			if (frameElapsed)
+				_state = PATROL;
+		}
+		break;
 		case PATROL:
-						
-			if (_anim_curr_frame <= _anim_frame_to_change)
-			{
-				_anim_curr_frame++;
-			}
-			else
-			{
+		{
+			if (frameElapsed)
 				ComputeNextMovement();
-				_anim_curr_frame = 0;
-			}
 			Move();
-			break;
-		case RUN:
-			break;
-		case ACTION:
-			break;
+		}
+		break;
+	case RUN:
+		break;
+	case ACTION:
+		break;
 	}
 }
 
 void cEnemyPersecutor::Render()
 {
 	cBaseEntity::Render();
+
+	if (IsColDebugMode())
+		RenderPatrolRectangle();
 }
 
 void cEnemyPersecutor::ComputeNextMovement()
@@ -87,6 +101,7 @@ void cEnemyPersecutor::Move()
 			break;
 		case M_UP:
 			x = 0, y = -1;
+			break;
 		case M_LEFT:
 			x = -1, y = 0;
 			break;
@@ -95,42 +110,76 @@ void cEnemyPersecutor::Move()
 			break;
 	}
 
+	s32 posx = 0, posy = 0;
+	GetPosition(posx, posy);
+
 	// Si m'haig de moure
 	if (x || y)
 	{
-		cCharacter::Move(x, y);
-
-		if (GetLastOrientation() != GetCurrentOrientation())
+		s32 pposx = 0, pposy = 0;
+		cCharacter::PossibleMovement(x, y, pposx, pposy);
+		if (!_patrol_rectangle.isInside(pposx, pposy))
 		{
-			auto orient = GetCurrentOrientation();
-			switch (orient)
+			ResetAnimation();
+			StopAnimation();
+			_state = IDLE;
+		}
+		else
+		{
+			bool move = cCharacter::Move(x, y);
+			if (GetLastOrientation() != GetCurrentOrientation())
 			{
-			case ORIENTATION_N:
-			case ORIENTATION_NE:
-			case ORIENTATION_NO:
-				SetAnimationSteps(_up_animation);
-				break;
-			case ORIENTATION_S:
-			case ORIENTATION_SE:
-			case ORIENTATION_SO:
-				SetAnimationSteps(_down_animation);
-				break;
-			case ORIENTATION_E:
-				SetAnimationSteps(_right_animation);
-				break;
-			case ORIENTATION_O:
-				SetAnimationSteps(_left_animation);
-				break;
-			default:
-				break;
+				auto orient = GetCurrentOrientation();
+				switch (orient)
+				{
+				case ORIENTATION_N:
+				case ORIENTATION_NE:
+				case ORIENTATION_NO:
+					SetAnimationSteps(_up_animation);
+					break;
+				case ORIENTATION_S:
+				case ORIENTATION_SE:
+				case ORIENTATION_SO:
+					SetAnimationSteps(_down_animation);
+					break;
+				case ORIENTATION_E:
+					SetAnimationSteps(_right_animation);
+					break;
+				case ORIENTATION_O:
+					SetAnimationSteps(_left_animation);
+					break;
+				default:
+					break;
+				}
+				PlayAnimation();
 			}
 		}
-
-		PlayAnimation();
 	}
 	else
 	{
 		ResetAnimation();
 		StopAnimation();
+	}
+}
+
+void cEnemyPersecutor::SetPatrol(u32 a_weight, u32 a_height)
+{
+	s32 posx = 0, posy = 0;
+	GetPosition(posx, posy);
+
+	_patrol_rectangle.x = posx - a_weight / 2;
+	_patrol_rectangle.y = posy - a_height / 2;
+	_patrol_rectangle.h = a_weight;
+	_patrol_rectangle.w = a_height;
+}
+
+void cEnemyPersecutor::RenderPatrolRectangle()
+{
+	if (IsCollidable())
+	{
+		s32 zIndex = 0;
+		GetZIndex(zIndex);
+		//Renderitzo el rectangle a Z+1 perque surti per sobre la textura sempre
+		cGame::Instance()->Graphics->DrawRect(_patrol_rectangle, 0x00FF00FF, zIndex + 1);
 	}
 }
