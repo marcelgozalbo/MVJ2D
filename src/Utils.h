@@ -37,7 +37,7 @@ namespace util
 		}
 
 		std::stringstream ss;
-		std::string input(in.substr(0 + beginPos, 0 + endPos));
+		std::string input(in.substr(beginPos, endPos - beginPos));
 		T out;
 
 		ss << std::hex << input;
