@@ -99,6 +99,11 @@ void cGraphicsLayer::LoadData()
 								0x00ff00ff, NULL, NULL, &buffer);
 	m_texturesmap["tileset1"] = buffer;
 
+	D3DXCreateTextureFromFileEx(g_pD3DDevice, "../media/tileset2.png", 0, 0, 1, 0, D3DFMT_UNKNOWN,
+		D3DPOOL_DEFAULT, D3DX_FILTER_NONE, D3DX_FILTER_NONE,
+		0x00ff00ff, NULL, NULL, &buffer);
+	m_texturesmap["tileset2"] = buffer;
+
 	//Characters
 	D3DXCreateTextureFromFileEx(g_pD3DDevice,"../media/characters.png",0,0,1,0,D3DFMT_UNKNOWN,
 								D3DPOOL_DEFAULT,D3DX_FILTER_NONE,D3DX_FILTER_NONE,
