@@ -2,7 +2,7 @@
 
 #include "cGame.h"
 cPlayer::cPlayer():
-	cCharacter("player", cRectangle(0, 0, 16, 24), 0, 0, 10,3, 2, 3.0f)
+	cCharacter("player", cRectangle(0, 0, 16, 24), 0, 0, 10,3, 2, 1.0f)
 {
 	m_StepsOrder = {5,6,5,4,1,0,1,2};
 	m_IdleStep = { 3 };
@@ -19,7 +19,8 @@ cPlayer::cPlayer():
 	LoadSteps(m_RightShield, 0, 195, 7, 64, 64);
 	LoadSteps(m_LeftShield, 0, 390, 7, 64, 64);
 	
-		
+	SetTextureSizeToCollisionRectRelative();
+	
 
 
 
@@ -30,6 +31,9 @@ cPlayer::cPlayer():
 
 	EnableDebugMode();
 	ChangeToIdle();
+
+	cRectangle r(24,24,14,16);
+	SetCollisionRectRelative(r);
 	
 }
 
@@ -158,7 +162,6 @@ void cPlayer::SetTextureFromOrientation()
 		
 	
 	}
-
 	
 
 
