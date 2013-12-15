@@ -338,8 +338,9 @@ void cPlayer::MovePlayer(s32 xAmount, s32 yAmount)
 
 
 
-		int x, y;
-		GetPosition(x, y);
+		int x = 0;
+		int y = 0;
+		
 
 		//Actualitzo el moviment segons orientacio
 		switch (m_orientation)
@@ -375,14 +376,16 @@ void cPlayer::MovePlayer(s32 xAmount, s32 yAmount)
 		}
 
 		cRectangle destRect = GetCollisionRectAbsolute();
-		destRect.x = x;
-		destRect.y = y;
+		destRect.x += x;
+		destRect.y += y;
 
 		cGame* game = cGame::Instance();
 
 		if (game->Scene->m_map.movePlayer(destRect))
 		{
-			SetPosition(x, y);
+			int xlast, ylast;
+			GetPosition(xlast, ylast);
+			SetPosition(x+xlast, y+ylast);
 		}
 	}
 }
