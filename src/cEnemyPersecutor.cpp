@@ -60,6 +60,14 @@ _movement(M_DOWN)
 	_attack_down_animation.push_back(cRectangle(x8, y3, w, h));
 	_attack_down_animation.push_back(cRectangle(x9, y3, w, h));
 
+º	_death_animation.push_back(cRectangle(x0, 460, w, h));
+	_death_animation.push_back(cRectangle(x1, 460, w, h));
+	_death_animation.push_back(cRectangle(x2, 460, w, h));
+	_death_animation.push_back(cRectangle(x3, 460, w, h));
+	_death_animation.push_back(cRectangle(x4, 460, w, h));
+	_death_animation.push_back(cRectangle(x5, 460, w, h));
+	_death_animation.push_back(cRectangle(x6, 460, w, h));
+
 	SetAnimationRects(_down_animation);
 	SetAnimationFramesPerStep(2);
 	EnableAnimation();
@@ -108,6 +116,8 @@ void cEnemyPersecutor::Update()
 		if (frameElapsed)
 			_state = IDLE;
 		break;
+	case DEATH:
+		break;
 	}
 
 	cBaseEntity::Update();
@@ -119,6 +129,14 @@ void cEnemyPersecutor::Render()
 		RenderPatrolRectangle();
 	
 	cBaseEntity::Render();
+}
+
+void cEnemyPersecutor::Die()
+{
+	SetAnimationRects(_death_animation);
+	PlayAnimationNoLoop();
+	SetAnimationFramesPerStep(4);
+	_state = DEATH;
 }
 
 void cEnemyPersecutor::UpdateIdle()

@@ -12,6 +12,7 @@ public:
 	void Update() override;
 	void Render() override;
 	void SetPatrol(u32 a_weight, u32 a_height);
+	void Die();
 
 private:
 	
@@ -25,12 +26,15 @@ private:
 	std::vector<cRectangle> _attack_right_animation;
 	std::vector<cRectangle> _attack_left_animation;
 
+	std::vector<cRectangle> _death_animation;
+
 	enum eState
 	{
 		IDLE,
 		PATROL,
 		RUN,
 		ACTION,
+		DEATH,
 	};
 
 	eState _state;
