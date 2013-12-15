@@ -51,6 +51,7 @@ public:
 	void SetAnimationOrderSteps(const std::vector<u32> &_steps_order);
 	void GetAnimationRects(std::vector<cRectangle> &_rect_steps);
 	void SetAnimationFramesPerStep(const std::size_t _timeperstep);
+	const std::size_t GetAnimationOrderStepsCount() const { return m_anim_steps_order.size(); };
 	std::size_t GetAnimationFramesPerStep() const;
 	const std::size_t GetAnimationFramesPerStep(const std::size_t _timeperstep);
 	std::size_t GetAnimationCurrentStep();

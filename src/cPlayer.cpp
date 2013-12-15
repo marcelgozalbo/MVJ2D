@@ -71,18 +71,65 @@ cPlayer::cPlayer():
 	m_LeftShield.push_back(cRectangle(118, 209, 17, 24));
 	m_LeftShield.push_back(cRectangle(141, 209, 17, 24));
 
+	
+	m_DownSword.push_back(cRectangle(0, 238, 20, 23));
+	m_DownSword.push_back(cRectangle(25, 238, 21, 30));
+	m_DownSword.push_back(cRectangle(54, 238, 20, 32));
+	m_DownSword.push_back(cRectangle(80, 238, 20, 33));
+	m_DownSword.push_back(cRectangle(104, 238, 28, 31));
+	m_DownSword.push_back(cRectangle(135, 238, 32, 29));
+	
 	SetAnimationRects(m_LeftShield);
 	SetAnimationOrderSteps(m_StepsOrder);
-	SetAnimationFramesPerStep(45);
+	SetAnimationFramesPerStep(5);
 	EnableAnimation();
 	PlayAnimation();	
 
 	EnableDebugMode();
+
+	
+	m_state = E_IDLE;
 }
 
 
 cPlayer::~cPlayer()
 {
+	
+
+}
+
+void cPlayer::UpdateIdle()
+{
+	
+
+	auto orient = GetCurrentOrientation();
+	switch (orient)
+	{
+	case ORIENTATION_N:
+	case ORIENTATION_NE:
+	case ORIENTATION_NO:
+		SetAnimationRects(m_Up);
+		break;
+	case ORIENTATION_S:
+	case ORIENTATION_SE:
+	case ORIENTATION_SO:
+		SetAnimationRects(m_Down);
+		break;
+	case ORIENTATION_E:
+		SetAnimationRects(m_Right);
+		break;
+	case ORIENTATION_O:
+		SetAnimationRects(m_Left);
+		break;
+	default:
+		break;
+	}
+	
+	//Setejo el Frame que esta quiet i paro
+	SetAnimationOrderSteps(m_IdleStep);
+
+
+
 
 }
 
@@ -90,22 +137,123 @@ void cPlayer::Update()
 {
 	cInputLayer  &input = cGame::Instance()->Input;
 
+
+	//Agafo Input segons estat
+	switch (m_state)
+	{
+	case E_IDLE:
+		{
+			if (input.KeyDown(DIK_W) || input.KeyDown(DIK_A) ||
+				input.KeyDown(DIK_D) || input.KeyDown(DIK_S))
+				m_state = E_MOVE;
+
+			if (input.KeyDown(DIK_SPACE))
+				m_state = E_ATTACKING;
+		}
+		break;
+	case E_MOVE:
+		if (input.KeyDown(DIK_W) || input.KeyDown(DIK_A) ||
+			input.KeyDown(DIK_D) || input.KeyDown(DIK_S))
+			m_state = E_MOVE;
+		else
+			m_state = E_IDLE;
+
+		if (input.KeyDown(DIK_SPACE))
+			m_state = E_ATTACKING;
+		break;
+	case E_ATTACKING:
+		if (GetAnimationCurrentStep() == GetAnimationOrderStepsCount() - 1)
+			m_state = E_IDLE;
+		break;
+
+	}
+
+
+	switch (m_state)
+	{
+	case E_IDLE:
+		UpdateIdle();
+		break;
+	case E_MOVE:
+		UpdateMovement();
+		break;
+	case E_ATTACKING:
+		UpdateAttack();
+		break;
+
+	}
+	
+
+
+
+	cBaseEntity::Update();
+}
+
+void cPlayer::UpdateAttack()
+{
+	cInputLayer  &input = cGame::Instance()->Input;
+	
+	/*{
+	int x, y, z;
+	GetPosition(x, y);
+	GetZIndex(z);
+	cGame::Instance()->Graphics->DrawFont("arial", "DINS O", z + 1, cRectangle(x - 40, y, 0, 0));
+	}*/
+	static bool started_attacking = false;
+
+	if (!started_attacking)
+	{
+		auto orient = GetCurrentOrientation();
+		switch (orient)
+		{
+		case ORIENTATION_N:
+		case ORIENTATION_NE:
+		case ORIENTATION_NO:
+			SetAnimationRects(m_DownSword);
+			break;
+		case ORIENTATION_S:
+		case ORIENTATION_SE:
+		case ORIENTATION_SO:
+			SetAnimationRects(m_DownSword);
+			break;
+		case ORIENTATION_E:
+			SetAnimationRects(m_DownSword);
+			break;
+		case ORIENTATION_O:
+			SetAnimationRects(m_DownSword);
+			break;
+		default:
+			break;
+		}
+		PlayAnimation();
+		started_attacking = true;
+	}
+	
+	
+	
+	
+}
+
+void cPlayer::UpdateMovement()
+{
+	cInputLayer  &input = cGame::Instance()->Input;
 	int vecx = 0;
 	int vecy = 0;
 
-	//Miro si haig de moure'm
 	if (input.KeyDown(DIK_W))	vecy--;
 	if (input.KeyDown(DIK_S))	vecy++;
 	if (input.KeyDown(DIK_A))	vecx--;
 	if (input.KeyDown(DIK_D))	vecx++;
 
+	//static bool last_stop = true;
 	// Si m'haig de moure
+	static bool first_enter = true;
 	if (vecx || vecy)
 	{
 		Move(vecx, vecy);
 
 		//CAnvio l'animacio segons l'orientacio
-		if ((GetLastOrientation() != GetCurrentOrientation()) || !IsPlayingAnimation())
+		if ((GetLastOrientation() != GetCurrentOrientation()) || first_enter)
 		{
 			/*{
 			int x, y, z;
@@ -113,44 +261,40 @@ void cPlayer::Update()
 			GetZIndex(z);
 			cGame::Instance()->Graphics->DrawFont("arial", "DINS O", z + 1, cRectangle(x - 40, y, 0, 0));
 			}*/
-			
+
 			auto orient = GetCurrentOrientation();
 			switch (orient)
 			{
-				case ORIENTATION_N:
-				case ORIENTATION_NE:
-				case ORIENTATION_NO:
-					SetAnimationRects(m_Up);
-					break;
-				case ORIENTATION_S:
-				case ORIENTATION_SE:
-				case ORIENTATION_SO:
-					SetAnimationRects(m_Down);
-					break;
-				case ORIENTATION_E:
-					SetAnimationRects(m_Right);
-					break;
-				case ORIENTATION_O:
-					SetAnimationRects(m_Left);
-					break;
-				default:
-					break;
+			case ORIENTATION_N:
+			case ORIENTATION_NE:
+			case ORIENTATION_NO:
+				SetAnimationRects(m_Up);
+				break;
+			case ORIENTATION_S:
+			case ORIENTATION_SE:
+			case ORIENTATION_SO:
+				SetAnimationRects(m_Down);
+				break;
+			case ORIENTATION_E:
+				SetAnimationRects(m_Right);
+				break;
+			case ORIENTATION_O:
+				SetAnimationRects(m_Left);
+				break;
+			default:
+				break;
 			}
 			//Setejo l'ordre.
 			SetAnimationOrderSteps(m_StepsOrder);
-			PlayAnimation();
+			first_enter = false;
 		}
-		
+
 	}
 	else
 	{
-		//Setejo el Frame que esta quiet i paro
-		SetAnimationOrderSteps(m_IdleStep);
-		StopAnimation();
-
+		first_enter = true;
 	}
-	
-	cBaseEntity::Update();
+
 }
 
 void cPlayer::Render()
