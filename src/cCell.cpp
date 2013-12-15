@@ -35,6 +35,7 @@ cCell::cCell(unsigned int _row, unsigned int _col, const sCellInfo& _cellInfo) :
 	{
 		SetCollisionRectRelative(cRectangle(0, 0, tileWidth, tileHeight));
 		EnableCollision();
+		EnableDebugMode();
 	}
 }
 
