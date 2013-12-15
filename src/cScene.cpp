@@ -55,6 +55,14 @@ void cScene::UpdateEnemyHit(const cRectangle &hitrect)
 	}
 }
 
+void cScene::UpdatePlayerHit(const cRectangle &hitrect)
+{
+	if (m_player.GetCollisionRectAbsolute().Intersects(hitrect))
+	{
+		m_player.decrementLife();
+	}
+}
+
 bool cScene::IsPlayerWon()
 {
 	bool allDead = true;

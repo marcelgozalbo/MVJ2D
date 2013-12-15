@@ -148,6 +148,7 @@ bool cGame::LoopProcess()
 						}
 						break;
 		case 	STATE_ENDGAMEGOOD:
+		case STATE_ENDGAMELOST:
 			if (Input.KeyDown(DIK_RETURN))
 			{
 				Scene->m_map.reset();
@@ -160,13 +161,6 @@ bool cGame::LoopProcess()
 
 				_state = STATE_MAIN;
 			
-			}
-			break;
-		case STATE_ENDGAMELOST:
-			if (Input.KeyDown(DIK_RETURN))
-			{
-				_state = STATE_MAIN;
-				
 			}
 			break;
 	}
