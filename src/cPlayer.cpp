@@ -253,13 +253,13 @@ void cPlayer::UpdateAttack()
 
 void cPlayer::ChangeToMove()
 {
-	{
+	/*{
 		int x, y, z;
 		GetPosition(x, y);
 		GetZIndex(z);
 		cGame::Instance()->Graphics->DrawFont("arial", "MOVE", z + 1, cRectangle(x - 40, y+40, 0, 0));
 	}
-
+	*/
 	
 	auto orient = GetCurrentOrientation();
 	switch (orient)
@@ -308,12 +308,12 @@ void cPlayer::UpdateMovement()
 
 		if (GetCurrentOrientation() != GetLastOrientation())
 		{
-			{
+			/*{
 			int x, y, z;
 			GetPosition(x, y);
 			GetZIndex(z);
 			cGame::Instance()->Graphics->DrawFont("arial", "DINS O", z + 1, cRectangle(x - 40, y, 0, 0));
-			}
+			}*/
 			auto orient = GetCurrentOrientation();
 			switch (orient)
 			{
