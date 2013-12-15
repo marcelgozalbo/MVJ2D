@@ -6,7 +6,7 @@ cPlayer::cPlayer():
 {
 	m_StepsOrder = {5,6,5,4,1,0,1,2};
 	m_IdleStep = { 3 };
-
+	m_life_count = 5;
 	
 
 	LoadSteps(m_DownSword, 0, 0, 6, 64, 64);
@@ -34,7 +34,17 @@ cPlayer::cPlayer():
 
 	cRectangle r(24,24,14,16);
 	SetCollisionRectRelative(r);
+
+
 	
+}
+void cPlayer::DrawLife()
+{
+
+	cRectangle r(456,1,32,28);	
+	for (int i = 0; i < m_life_count;i++)
+		cGame::Instance()->Graphics->DrawSprite("player", i*40, 0, 11, r);
+
 }
 
 void cPlayer::LoadSteps(std::vector<cRectangle> &outvec, int startx, int starty, int numsteps, int ampladaframe, int alturaframe)
@@ -307,6 +317,7 @@ void cPlayer::UpdateMovement()
 
 void cPlayer::Render()
 {
+	DrawLife();
 	cBaseEntity::Render();
 	
 }
