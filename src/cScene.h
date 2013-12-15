@@ -54,6 +54,7 @@ public:
 	cPlayer m_player;
 	cFont m_debugFont;
 	cFont m_debugCellFont;
+	cFont m_enemiesAlive;
 
 	std::vector<cEnemyPersecutor> m_enemies;
 
