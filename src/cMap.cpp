@@ -44,84 +44,6 @@ void cMap::load(const std::string& _filePath)
 
 void cMap::update()
 {
-	//if (cGame::Instance()->Input.KeyDown(DIK_O) && m_originCol + m_visibleCols < m_totalCols)
-	//{
-	//	m_originCol++;
-	//}
-
-	//if (cGame::Instance()->Input.KeyDown(DIK_I) && m_originCol > 0)
-	//{
-	//	m_originCol--;
-	//}
-
-	//if (cGame::Instance()->Input.KeyDown(DIK_L) && m_originRow + m_visibleRows < m_totalRows)
-	//{
-	//	m_originRow++;
-	//}
-
-	//if (cGame::Instance()->Input.KeyDown(DIK_K) && m_originRow > 0)
-	//{
-	//	m_originRow--;
-	//}
-
-	//const cPlayer& player = cGame::Instance()->Scene->m_player;
-	//cRectangle playerRect = player.GetCollisionRectAbsolute();
-
-	//if (playerRect.x != m_lastPlayerRect.x || playerRect.y != m_lastPlayerRect.y)
-	//{
-	//	s32 playerRow = (playerRect.y / cCell::tileHeight) + m_originRow;
-	//	s32 playerCol = (playerRect.x / cCell::tileWidth) + m_originCol;
-
-	//	cRectangle destRect = playerRect;
-	//	s32 colOffset = 0, rowOffset = 0;
-
-	//	if ((playerCol > m_originCol + (m_visibleCols / 2) + 1) && (m_originCol + m_visibleCols < m_totalCols) &&
-	//		(player.GetCurrentOrientation() == ORIENTATION_NE || player.GetCurrentOrientation() == ORIENTATION_SE || player.GetCurrentOrientation() == ORIENTATION_E))
-	//	{
-	//		colOffset++;
-	//	}
-
-	//	if ((playerCol < m_originCol + (m_visibleCols / 2) - 1) && (m_originCol > 0) &&
-	//		(player.GetCurrentOrientation() == ORIENTATION_NO || player.GetCurrentOrientation() == ORIENTATION_SO || player.GetCurrentOrientation() == ORIENTATION_O))
-	//	{
-	//		colOffset--;
-	//	}
-
-	//	if ((playerRow > m_originRow + (m_visibleRows / 2) + 1) && (m_originRow + m_visibleRows < m_totalRows) &&
-	//		(player.GetCurrentOrientation() == ORIENTATION_SO || player.GetCurrentOrientation() == ORIENTATION_SE || player.GetCurrentOrientation() == ORIENTATION_S))
-	//	{
-	//		rowOffset++;
-	//	}
-
-	//	if ((playerRow < m_originRow + (m_visibleRows / 2) - 1) && (m_originRow > 0) &&
-	//		(player.GetCurrentOrientation() == ORIENTATION_NO || player.GetCurrentOrientation() == ORIENTATION_NE || player.GetCurrentOrientation() == ORIENTATION_N))
-	//	{
-	//		rowOffset--;
-	//	}
-
-	//	if (colOffset || rowOffset)
-	//	{
-	//		destRect.x += colOffset * cCell::tileWidth;
-	//		destRect.y += rowOffset * cCell::tileHeight;
-
-	//		if (isWalkable(destRect))
-	//		{
-	//			m_originCol += colOffset;
-	//			m_originRow += rowOffset;
-
-	//			s32 enemyX, enemyY;
-	//			cEnemyPersecutor& enemy = cGame::Instance()->Scene->m_enemy;
-	//			enemy.GetPosition(enemyX, enemyY);
-	//			enemyX += (colOffset * cCell::tileWidth * -1);
-	//			enemyY += (rowOffset * cCell::tileHeight * -1);
-	//			enemy.SetPosition(enemyX, enemyY);
-	//		}
-	//	}
-
-	//	m_lastPlayerRect = playerRect;
-	//}
-
-	/***********************************/
 	cPlayer& player = cGame::Instance()->Scene->m_player;
 
 	cRectangle playerRect = player.GetCollisionRectAbsolute();
@@ -237,11 +159,6 @@ void cMap::update()
 
 	repositionEnemies(direction);
 
-	//if (playerRow == m_visibleRows)
-	//{
-	//	m_origin
-	//}
-
 	for (s32 row = m_originRow; row <= m_originRow + m_visibleRows; row++)
 	{
 		for (s32 col = m_originCol; col <= m_originCol + m_visibleCols; col++)
@@ -267,17 +184,6 @@ void cMap::render()
 			}
 		}
 	}
-
-	//for (s32 row = m_originRow; row <= m_originRow + m_visibleRows; row++)
-	//{
-	//	for (s32 col = m_originCol; col <= m_originCol + m_visibleCols; col++)
-	//	{
-	//		if (cCell* const cell = getCell(row, col))
-	//		{
-	//			cell->render();
-	//		}
-	//	}
-	//}
 }
 
 std::string cMap::getCellDebugString(u32 row, u32 col)
@@ -336,66 +242,6 @@ bool cMap::isWalkable(const cRectangle& position) const
 bool cMap::movePlayer(const cRectangle& position)
 {
 	return moveEnemy(position);
-
-	//const cPlayer& player = cGame::Instance()->Scene->m_player;
-	//cRectangle playerRect = player.GetCollisionRectAbsolute();	
-
-	//s32 playerRow = (playerRect.y / cCell::tileHeight) + m_originRow;
-	//s32 playerCol = (playerRect.x / cCell::tileWidth) + m_originCol;
-
-	//cRectangle destRect = playerRect;
-	//s32 colOffset = 0, rowOffset = 0;
-
-	//if ((playerCol > m_originCol + (m_visibleCols / 2) + 1) && (m_originCol + m_visibleCols < m_totalCols) &&
-	//	(player.GetCurrentOrientation() == ORIENTATION_NE || player.GetCurrentOrientation() == ORIENTATION_SE || player.GetCurrentOrientation() == ORIENTATION_E))
-	//{
-	//	colOffset++;
-	//}
-
-	//if ((playerCol < m_originCol + (m_visibleCols / 2) - 1) && (m_originCol > 0) &&
-	//	(player.GetCurrentOrientation() == ORIENTATION_NO || player.GetCurrentOrientation() == ORIENTATION_SO || player.GetCurrentOrientation() == ORIENTATION_O))
-	//{
-	//	colOffset--;
-	//}
-
-	//if ((playerRow > m_originRow + (m_visibleRows / 2) + 1) && (m_originRow + m_visibleRows < m_totalRows) &&
-	//	(player.GetCurrentOrientation() == ORIENTATION_SO || player.GetCurrentOrientation() == ORIENTATION_SE || player.GetCurrentOrientation() == ORIENTATION_S))
-	//{
-	//	rowOffset++;
-	//}
-
-	//if ((playerRow < m_originRow + (m_visibleRows / 2) - 1) && (m_originRow > 0) &&
-	//	(player.GetCurrentOrientation() == ORIENTATION_NO || player.GetCurrentOrientation() == ORIENTATION_NE || player.GetCurrentOrientation() == ORIENTATION_N))
-	//{
-	//	rowOffset--;
-	//}
-
-	//if (colOffset || rowOffset)
-	//{
-	//	if (isWalkableFor(playerRect, m_originRow + rowOffset, m_originCol + colOffset))
-	//	{
-	//		m_originCol += colOffset;
-	//		m_originRow += rowOffset;
-
-	//		s32 enemyX, enemyY;
-	//		cEnemyPersecutor& enemy = cGame::Instance()->Scene->m_enemy;
-	//		enemy.GetPosition(enemyX, enemyY);
-	//		enemyX += (colOffset * cCell::tileWidth * -1);
-	//		enemyY += (rowOffset * cCell::tileHeight * -1);
-	//		enemy.SetPosition(enemyX, enemyY);
-
-	//		return false;
-	//	}
-	//}
-	//else
-	//{
-	//	if (insideLimits(position) && isWalkable(position))
-	//	{
-	//		return true;
-	//	}
-	//}
-
-	//return false;
 }
 
 bool cMap::moveEnemy(const cRectangle& position)
