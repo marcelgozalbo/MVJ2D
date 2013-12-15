@@ -476,7 +476,7 @@ int* cMap::getVisibleCells()
 
 	for (s32 row = m_originRow; row < m_originRow + m_visibleRows; row++)
 	{
-		for (s32 col = m_originCol; col < m_originCol + m_visibleCols; col++)
+		for (s32 col = m_originCol; col < m_originCol + m_visibleCols; col++, idx++)
 		{
 			if (cCell* const cell = getCell(row, col))
 			{
@@ -488,15 +488,19 @@ int* cMap::getVisibleCells()
 				{
 					map[idx] = 0;
 				}
-
-				idx++;
 			}
 			else
 			{
-				fatalError("bad cell pos");
+				map[idx] = 0;
 			}
 		}
 	}
 
 	return map;
+}
+
+void cMap::getLimits(s32* limitX, s32* limitY)
+{
+	*limitX = m_totalCols * cCell::tileWidth;
+	*limitY = m_totalRows * cCell::tileHeight;
 }

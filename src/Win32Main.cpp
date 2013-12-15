@@ -1,5 +1,7 @@
 #include <windows.h>
 #include "cGame.h"
+#include <cstdlib>
+#include <ctime>
 
 LRESULT CALLBACK WindowFunc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -51,6 +53,8 @@ bool InitWindow(HINSTANCE hInst, HWND *hWnd, bool *exclusive)
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevIntance, LPSTR lpszArgs, int nWinMode)
 {
 	leakDetectionInit();
+
+	srand(time(NULL));
 
 	bool exclusive, res;
 	MSG msg;

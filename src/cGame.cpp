@@ -56,6 +56,7 @@ bool cGame::Init(HWND hWnd,HINSTANCE hInst,bool exclusive)
 
 	Scene = new cScene();
 	Scene->LoadMap("../media/map.txt");
+	Scene->LoadEnemies();
 
 	Menu.LoadData();
 
