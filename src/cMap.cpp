@@ -460,6 +460,7 @@ void cMap::repositionEnemies(eMovementDirection direction)
 	}
 
 	enemy.SetPosition(enemyX, enemyY);
+	enemy.UpdatePatrolRectangle();
 }
 
 int* cMap::getVisibleCells()
