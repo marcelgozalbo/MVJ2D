@@ -464,15 +464,15 @@ void cMap::loadAnimations(std::ifstream& file)
 					u32 duration = hexCharTo<u32>(line[5]);
 					u32 z = hexCharTo<u32>(line[7]);
 					u32 frameCount = hexCharTo<u32>(line[9]);
-					u32 strIndex = 11;
+					u32 strIndex = 10;
 
 					cCell::tFrameVec frameVec;
 					frameVec.reserve(frameCount);
 
 					for (u32 idx = 0; idx < frameCount; idx++)
 					{
-						u32 framePosX = hexCharTo<u32>(line[strIndex]);
-						u32 framePosY = hexCharTo<u32>(line[strIndex + 2]);
+						u32 framePosX = hexStrTo<u32>(line, strIndex, strIndex + 2);
+						u32 framePosY = hexStrTo<u32>(line, strIndex + 2, strIndex + 4);
 						strIndex += 4;
 
 						frameVec.push_back(cCell::sFrameInfo(framePosX, framePosY));
