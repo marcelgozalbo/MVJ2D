@@ -6,7 +6,7 @@ cPlayer::cPlayer():
 {
 	m_StepsOrder = {5,6,5,4,1,0,1,2};
 	m_IdleStep = { 3 };
-
+	m_life_count = 5;
 	
 
 	LoadSteps(m_DownSword, 0, 0, 6, 64, 64);
@@ -34,7 +34,17 @@ cPlayer::cPlayer():
 
 	cRectangle r(24,24,14,16);
 	SetCollisionRectRelative(r);
+
+
 	
+}
+void cPlayer::DrawLife()
+{
+
+	cRectangle r(456,1,32,28);	
+	for (int i = 0; i < m_life_count;i++)
+		cGame::Instance()->Graphics->DrawSprite("player", i*40, 0, 11, r);
+
 }
 
 void cPlayer::LoadSteps(std::vector<cRectangle> &outvec, int startx, int starty, int numsteps, int ampladaframe, int alturaframe)
@@ -91,34 +101,45 @@ void cPlayer::SetTextureFromOrientation()
 			SetAnimationOrderSteps(m_IdleStep);
 		}
 			break;
+
 		case E_ATTACKING:
 		{
+			auto recabsplayer = GetCollisionRectAbsolute();
 			switch (orient)
 			{
 
 			case ORIENTATION_N:
 			case ORIENTATION_NE:
 			case ORIENTATION_NO:
-		
 				SetAnimationRects(m_UpSword);
+				m_attack_col_rect.SetRect(recabsplayer.x, recabsplayer.y -30, recabsplayer.w, 30);
 				break;
 			case ORIENTATION_S:
 			case ORIENTATION_SE:
 			case ORIENTATION_SO:
 				SetAnimationRects(m_DownSword);
+				m_attack_col_rect.SetRect(recabsplayer.x, recabsplayer.y + recabsplayer.h, recabsplayer.w, 30);
 				break;
 			case ORIENTATION_E:
 				SetAnimationRects(m_RightSword);
+				m_attack_col_rect.SetRect(recabsplayer.x + recabsplayer.w, recabsplayer.y, 30, recabsplayer.h);
 				break;
 			case ORIENTATION_O:
 			{
 
 				SetAnimationRects(m_LeftSword);
-
+				//HAck per no canviar el png
 				std::vector<u32> buf;
 				for (int i = GetAnimationOrderStepsCount() - 1; i >= 0; i--)
 					buf.push_back(i);
 				SetAnimationOrderSteps(buf);
+
+				m_attack_col_rect.SetRect(recabsplayer.x - 30, recabsplayer.y, 30, recabsplayer.h);
+
+
+				
+
+
 			}
 				break;
 			default:
@@ -244,8 +265,15 @@ void cPlayer::Update()
 
 void cPlayer::UpdateAttack()
 {
-	cInputLayer  &input = cGame::Instance()->Input;
 	
+	cGame* game = cGame::Instance();
+	cScene *sc = cGame::Instance()->Scene;
+	
+	//Renderitzo el rectangle a Z+1 perque surti per sobre la textura sempre
+	int z;
+	GetZIndex(z);
+	cGame::Instance()->Graphics->DrawRect(m_attack_col_rect, 0x00FF00FF, z + 1);
+	sc->UpdateEnemyHit(m_attack_col_rect);
 	/*{
 	int x, y, z;
 	GetPosition(x, y);
@@ -307,6 +335,7 @@ void cPlayer::UpdateMovement()
 
 void cPlayer::Render()
 {
+	DrawLife();
 	cBaseEntity::Render();
 	
 }

@@ -52,6 +52,8 @@ public:
 	cFont m_debugFont;
 	cFont m_debugCellFont;
 
+
+	void UpdateEnemyHit(const cRectangle &hitrect);
 	int cx,cy;
 
 private:

@@ -18,7 +18,7 @@ public:
 
 	void Update() override;
 	void Render() override;
-
+	bool IsAlive() { if (m_life_count) return true; else return false; };
 private:
 	void SetTextureFromOrientation();
 	void LoadSteps(std::vector<cRectangle> &outvec, int startx, int starty, int numsteps, int ampladaframe, int alturaframe);
@@ -38,5 +38,12 @@ private:
 	std::vector<cRectangle> m_DownSword, m_UpSword, m_LeftSword, m_RightSword;
 	std::vector<u32> m_SwordSteps;
 	E_PLAYER_STATE m_state;
+	
+	//Attacking
+	cRectangle m_attack_col_rect;
 
+
+	// VIDA
+	int m_life_count;
+	void DrawLife();
 };
