@@ -20,6 +20,11 @@ private:
 	std::vector<cRectangle> _right_animation;
 	std::vector<cRectangle> _left_animation;
 
+	std::vector<cRectangle> _attack_down_animation;
+	std::vector<cRectangle> _attack_up_animation;
+	std::vector<cRectangle> _attack_right_animation;
+	std::vector<cRectangle> _attack_left_animation;
+
 	enum eState
 	{
 		IDLE,
@@ -45,6 +50,10 @@ private:
 	void ComputeNextMovement();
 	void Move();
 	void RenderPatrolRectangle();
+	void UpdateIdle();
+	void UpdatePatrol();
+	void UpdateRun();
+	void UpdateAction();
 
 	eMovement _movement;
 	cRectangle _patrol_rectangle;

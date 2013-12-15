@@ -3,35 +3,67 @@
 
 cEnemyPersecutor::cEnemyPersecutor() :
 cCharacter("enemies", cRectangle(0, 0, 26, 30), 0, 0, 10, 3, 2, 3.0f),
-_state(PATROL),
-_anim_frame_to_change(30),
+_state(IDLE),
+_anim_frame_to_change(24),
 _anim_curr_frame(0),
 _movement(M_DOWN)
 {
-	_down_animation.push_back(cRectangle(11, 315, 26, 30));
-	_down_animation.push_back(cRectangle(38, 315, 26, 30));
-	_down_animation.push_back(cRectangle(68, 315, 26, 30));
-	_down_animation.push_back(cRectangle(98, 315, 26, 30));
-
-	_up_animation.push_back(cRectangle(13, 233, 26, 32));
-	_up_animation.push_back(cRectangle(43, 233, 26, 32));
-	_up_animation.push_back(cRectangle(76, 233, 26, 32));
-	_up_animation.push_back(cRectangle(107, 233, 26, 32));
-
-	_left_animation.push_back(cRectangle(13, 184, 26, 31));
-	_left_animation.push_back(cRectangle(42, 184, 26, 31));
-	_left_animation.push_back(cRectangle(72, 184, 26, 31));
-	_left_animation.push_back(cRectangle(100, 184, 26, 31));
-
-	_right_animation.push_back(cRectangle(13, 273, 26, 30));
-	_right_animation.push_back(cRectangle(41, 273, 26, 30));
-	_right_animation.push_back(cRectangle(71, 273, 26, 30));
-	_right_animation.push_back(cRectangle(100, 273, 26, 30));
+	const u32 w = 60, h = 59;
+	const u32 x0 = 12, x1 = x0 + w, x2 = x1 + w, x3 = x2 + w, x4 = x3 + w, x5 = x4 + w, x6 = x5 + w, x7 = x6 + w, x8 = x7 + w, x9 = x8 + w;
+	const u32 y0 = 165, y1 = y0 + h, y2 = y1 + h, y3 = y2 + h;
 	
+	_left_animation.push_back(cRectangle(x0,	y0, w, h));
+	_left_animation.push_back(cRectangle(x1,	y0, w, h));
+	_left_animation.push_back(cRectangle(x2,	y0, w, h));
+	_left_animation.push_back(cRectangle(x3,	y0, w, h));
+
+	_attack_left_animation.push_back(cRectangle(x4, y0, w, h));
+	_attack_left_animation.push_back(cRectangle(x5, y0, w, h));
+	_attack_left_animation.push_back(cRectangle(x6, y0, w, h));
+	_attack_left_animation.push_back(cRectangle(x7, y0, w, h));
+	_attack_left_animation.push_back(cRectangle(x8, y0, w, h));
+	_attack_left_animation.push_back(cRectangle(x9, y0, w, h));
+
+	_up_animation.push_back(cRectangle(x0, y1, w, h));
+	_up_animation.push_back(cRectangle(x1, y1, w, h));
+	_up_animation.push_back(cRectangle(x2, y1, w, h));
+	_up_animation.push_back(cRectangle(x3, y1, w, h));
+
+	_attack_up_animation.push_back(cRectangle(x4, y1, w, h));
+	_attack_up_animation.push_back(cRectangle(x5, y1, w, h));
+	_attack_up_animation.push_back(cRectangle(x6, y1, w, h));
+	_attack_up_animation.push_back(cRectangle(x7, y1, w, h));
+	_attack_up_animation.push_back(cRectangle(x8, y1, w, h));
+	_attack_up_animation.push_back(cRectangle(x9, y1, w, h));
+
+	_right_animation.push_back(cRectangle(x0, y2, w, h));
+	_right_animation.push_back(cRectangle(x1, y2, w, h));
+	_right_animation.push_back(cRectangle(x2, y2, w, h));
+	_right_animation.push_back(cRectangle(x3, y2, w, h));
+
+	_attack_right_animation.push_back(cRectangle(x4, y2, w, h));
+	_attack_right_animation.push_back(cRectangle(x5, y2, w, h));
+	_attack_right_animation.push_back(cRectangle(x6, y2, w, h));
+	_attack_right_animation.push_back(cRectangle(x7, y2, w, h));
+	_attack_right_animation.push_back(cRectangle(x8, y2, w, h));
+	_attack_right_animation.push_back(cRectangle(x9, y2, w, h));
+
+	_down_animation.push_back(cRectangle(x0, y3, w, h));
+	_down_animation.push_back(cRectangle(x1, y3, w, h));
+	_down_animation.push_back(cRectangle(x2, y3, w, h));
+	_down_animation.push_back(cRectangle(x3, y3, w, h));
+
+	_attack_down_animation.push_back(cRectangle(x4, y3, w, h));
+	_attack_down_animation.push_back(cRectangle(x5, y3, w, h));
+	_attack_down_animation.push_back(cRectangle(x6, y3, w, h));
+	_attack_down_animation.push_back(cRectangle(x7, y3, w, h));
+	_attack_down_animation.push_back(cRectangle(x8, y3, w, h));
+	_attack_down_animation.push_back(cRectangle(x9, y3, w, h));
+
 	SetAnimationRects(_down_animation);
 	SetAnimationFramesPerStep(2);
 	EnableAnimation();
-	
+
 	EnableDebugMode();
 }
 
@@ -42,8 +74,6 @@ cEnemyPersecutor::~cEnemyPersecutor()
 
 void cEnemyPersecutor::Update()
 {
-	cBaseEntity::Update();
-
 	bool frameElapsed = false;
 
 	if (_anim_curr_frame <= _anim_frame_to_change)
@@ -59,55 +89,59 @@ void cEnemyPersecutor::Update()
 	switch (_state)
 	{
 		case IDLE:
-		{
+			UpdateIdle();
 			if (frameElapsed)
+			{
 				_state = PATROL;
-		}
+				ComputeNextMovement();
+			}
 		break;
 		case PATROL:
-		{
+			UpdatePatrol();
 			if (frameElapsed)
 				ComputeNextMovement();
-			Move();
-		}
 		break;
 	case RUN:
 		break;
 	case ACTION:
+		UpdateAction();
+		if (frameElapsed)
+			_state = IDLE;
 		break;
 	}
+
+	cBaseEntity::Update();
 }
 
 void cEnemyPersecutor::Render()
 {
-	cBaseEntity::Render();
-
 	if (IsColDebugMode())
 		RenderPatrolRectangle();
+	
+	cBaseEntity::Render();
 }
 
-void cEnemyPersecutor::ComputeNextMovement()
+void cEnemyPersecutor::UpdateIdle()
 {
-	_movement = static_cast<eMovement>(std::rand() % M_NUM_MOV);
 }
 
-void cEnemyPersecutor::Move()
+void cEnemyPersecutor::UpdatePatrol()
 {
 	s32 x = 0, y = 0;
 	switch (_movement)
 	{
-		case M_DOWN:
-			x = 0, y = 1;
-			break;
-		case M_UP:
-			x = 0, y = -1;
-			break;
-		case M_LEFT:
-			x = -1, y = 0;
-			break;
-		case M_RIGHT:
-			x = 1, y = 0;
-			break;
+	case M_DOWN:
+		x = 0, y = 1;
+		break;
+	case M_UP:
+		x = 0, y = -1;
+		break;
+	case M_LEFT:
+		x = -1, y = 0;
+		break;
+	case M_RIGHT:
+		x = 1, y = 0;
+		break;
 	}
 
 	s32 posx = 0, posy = 0;
@@ -122,7 +156,7 @@ void cEnemyPersecutor::Move()
 		{
 			ResetAnimation();
 			StopAnimation();
-			_state = IDLE;
+			_state = ACTION;
 		}
 		else
 		{
@@ -160,6 +194,43 @@ void cEnemyPersecutor::Move()
 		ResetAnimation();
 		StopAnimation();
 	}
+}
+
+void cEnemyPersecutor::UpdateRun()
+{
+
+}
+
+void cEnemyPersecutor::UpdateAction()
+{
+	auto orient = GetCurrentOrientation();
+	switch (orient)
+	{
+	case ORIENTATION_N:
+	case ORIENTATION_NE:
+	case ORIENTATION_NO:
+		SetAnimationRects(_attack_up_animation);
+		break;
+	case ORIENTATION_S:
+	case ORIENTATION_SE:
+	case ORIENTATION_SO:
+		SetAnimationRects(_attack_down_animation);
+		break;
+	case ORIENTATION_E:
+		SetAnimationRects(_attack_right_animation);
+		break;
+	case ORIENTATION_O:
+		SetAnimationRects(_attack_left_animation);
+		break;
+	default:
+		break;
+	}
+	PlayAnimation();
+}
+
+void cEnemyPersecutor::ComputeNextMovement()
+{
+	_movement = static_cast<eMovement>(std::rand() % M_NUM_MOV);
 }
 
 void cEnemyPersecutor::SetPatrol(u32 a_weight, u32 a_height)
