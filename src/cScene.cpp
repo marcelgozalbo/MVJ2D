@@ -10,7 +10,8 @@
 
 cScene::cScene() :
 	m_debugFont("arial", "", 100, cRectangle(0, 0, 300, 100), 0xFFFFFFFF, cFont::ALIGN_LEFT),
-	m_debugCellFont("arial", "", 100, cRectangle(0, 30, 300, 100), 0xFFFFFFFF, cFont::ALIGN_LEFT)
+	m_debugCellFont("arial", "", 100, cRectangle(0, 30, 300, 100), 0xFFFFFFFF, cFont::ALIGN_LEFT),
+	m_enemiesAlive("arial2", "", 100, cRectangle(SCREEN_RES_X - 200, 10, 200, 100), 0xFFFFFFFF, cFont::ALIGN_RIGHT)
 {
 	cx=0;
 	cy=0;
@@ -97,13 +98,22 @@ bool cScene::IsPlayerLost()
 
 void cScene::Update()
 {
+	s32 aliveEnemies = 0;
+
 	m_player.Update();
 
 	for (u32 idx = 0; idx < m_enemies.size(); idx++)
 	{
 		cEnemyPersecutor& enemy = m_enemies[idx];
 		enemy.Update();
+
+		if (enemy.IsAlive())
+		{
+			aliveEnemies++;
+		}
 	}
+
+	m_enemiesAlive.setText("enemies: " + util::toString(aliveEnemies) + "/" + util::toString(ENEMY_COUNT));
 
 	m_map.update();
 
@@ -139,6 +149,8 @@ void cScene::Render()
 		cEnemyPersecutor& enemy = m_enemies[idx];
 		enemy.Render();
 	}
+
+	m_enemiesAlive.render();
 
 	m_map.render();
 

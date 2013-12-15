@@ -160,6 +160,13 @@ void cGraphicsLayer::LoadData()
 		&buffer_font);
 
 	m_fontsmap["arial"] = buffer_font;
+
+	D3DXCreateFont(g_pD3DDevice, 32, 0, FW_BOLD, 0, FALSE,
+		DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY,
+		DEFAULT_PITCH | FF_DONTCARE, TEXT("Arial"),
+		&buffer_font);
+
+	m_fontsmap["arial2"] = buffer_font;
 }
 
 void cGraphicsLayer::GetTextureSizes(const std::string &text_id, int &h, int &w)
