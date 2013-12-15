@@ -17,6 +17,7 @@ public:
 	std::string toString() const;
 	void		reset();
 	bool		isEmpty() const;
+	bool		isInside(int a_x, int a_y) const;
 
 	~cRectangle();
 
