@@ -34,14 +34,17 @@ private:
 	void loadMap(std::ifstream& file);
 	void fatalError(const std::string& errorText);
 	cCell* getCell(u32 row, u32 col) const;
-	void updateMovementRect();
-	void updateVisibleRect();
 
 	tGrid m_grid;
 	tAnimations m_animations;
-	cRectangle m_visibleRect;
-	cRectangle m_movementRect;
-	cRectangle m_lastPlayerPos;
+
+	s32 m_originRow;
+	s32 m_originCol;
+	s32 m_visibleRows;
+	s32 m_visibleCols;
+	s32 m_totalRows;
+	s32 m_totalCols;
+	cRectangle m_lastPlayerRect;
 };
 
 #endif
