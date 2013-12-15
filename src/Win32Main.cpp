@@ -14,7 +14,7 @@ LRESULT CALLBACK WindowFunc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 bool InitWindow(HINSTANCE hInst, HWND *hWnd, bool *exclusive)
 {
 	WNDCLASSEX wcl;
-	char szWinName[] = "Project Silcharde 2D";
+	char szWinName[] = "Avanti 2D";
 	wcl.cbSize = sizeof(WNDCLASSEX);
 	wcl.hInstance = hInst;
 	wcl.lpszClassName = szWinName;

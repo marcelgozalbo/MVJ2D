@@ -118,8 +118,6 @@ void cEnemyPersecutor::Update()
 		break;
 		case ACTION:
 			UpdateAction();
-			if (frameElapsed)
-				ChangeToIdle();
 		break;
 		case DEATH:
 		break;
@@ -147,10 +145,33 @@ void cEnemyPersecutor::UpdateIdle()
 
 void cEnemyPersecutor::ChangeToIdle()
 {
+	SetPatrol(_patrol_rectangle.w, _patrol_rectangle.h);
+	
+	auto orient = GetCurrentOrientation();
+	switch (orient)
+	{
+		case ORIENTATION_N:
+		case ORIENTATION_NE:
+		case ORIENTATION_NO:
+			SetAnimationRects(_up_animation);
+			break;
+		case ORIENTATION_S:
+		case ORIENTATION_SE:
+		case ORIENTATION_SO:
+			SetAnimationRects(_down_animation);
+			break;
+		case ORIENTATION_E:
+			SetAnimationRects(_right_animation);
+			break;
+		case ORIENTATION_O:
+			SetAnimationRects(_left_animation);
+			break;
+		default:
+			break;
+	}
+
 	ResetAnimation();
 	StopAnimation();
-
-	SetPatrol(_patrol_rectangle.w, _patrol_rectangle.h);
 	_state = IDLE;
 }
 
@@ -203,6 +224,7 @@ void cEnemyPersecutor::UpdatePatrol()
 void cEnemyPersecutor::ChangeToPatrol()
 {
 	ComputeNextMovement();
+	PlayAnimation();
 	_state = PATROL;
 }
 
@@ -253,8 +275,8 @@ void cEnemyPersecutor::DoMovement()
 			default:
 				break;
 			}
-			PlayAnimation();
 		}
+		PlayAnimation();
 	}
 	else
 	{
@@ -305,7 +327,7 @@ void cEnemyPersecutor::UpdateRun()
 				_movement = NewMovement;
 				DoMovement();
 			}
-
+			
 			NewMovement = M_NOT_MOVE;
 			if (ydiff > 0) NewMovement = M_DOWN;
 			else if (ydiff < 0) NewMovement = M_UP;
@@ -325,7 +347,12 @@ void cEnemyPersecutor::ChangeToRun()
 
 void cEnemyPersecutor::UpdateAction()
 {
-	
+	// Comprovem la colisio amb el jugador per si la perdem
+	if (!HasCollision(cGame::Instance()->Scene->m_player))
+	{
+		ChangeToIdle();
+		return;
+	}
 }
 
 void cEnemyPersecutor::ChangeToAction()
@@ -352,7 +379,7 @@ void cEnemyPersecutor::ChangeToAction()
 	default:
 		break;
 	}
-	PlayAnimationNoLoop();
+	PlayAnimation();
 
 	_state = ACTION;
 }
