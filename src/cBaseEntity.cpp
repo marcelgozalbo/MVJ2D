@@ -284,8 +284,17 @@ void cBaseEntity::SetAnimationCurrentStep(const std::size_t &_anim_step)
 
 }
 
+
+void cBaseEntity::PlayAnimationNoLoop()
+{
+	m_anim_loop = false;
+	m_anim_run = true;
+}
+
+
 void cBaseEntity::PlayAnimation()
 {
+	m_anim_loop = true;
 	m_anim_run = true;
 }
 
@@ -324,6 +333,19 @@ const cRectangle & cBaseEntity::GetAnimationCurrentStepRectangle() const
 	return m_anim_rect_bystep[m_anim_steps_order[m_curr_anim_step]];
 }
 
+bool cBaseEntity::IsAnimationLoopFinished()
+{
+	if (!m_anim_loop)
+	{
+		if (m_curr_anim_step == (m_anim_steps_order.size() - 1))
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
 void cBaseEntity::UpdateAnimation()
 {
 	if (IsAnimationEnabled() && IsPlayingAnimation())
@@ -334,8 +356,19 @@ void cBaseEntity::UpdateAnimation()
 		}
 		else
 		{
-			m_curr_anim_step = (m_curr_anim_step + 1) % m_anim_steps_order.size();
-			m_anim_curr_time_frame=0;
+			if (m_anim_loop)
+			{
+				m_curr_anim_step = (m_curr_anim_step + 1) % m_anim_steps_order.size();
+			}
+			else
+			{
+				m_curr_anim_step = (m_curr_anim_step + 1);
+				if (m_curr_anim_step >= (m_anim_steps_order.size() - 1))
+				{
+					m_curr_anim_step = m_anim_steps_order.size() - 1;
+				}
+			}
+				m_anim_curr_time_frame=0;
 		}
 	}
 	

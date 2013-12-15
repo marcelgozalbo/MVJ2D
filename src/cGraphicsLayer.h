@@ -33,7 +33,7 @@ public:
 	void LoadData();
 	void UnLoadData();
 
-	void DrawSprite(const std::string &text_id, int posx, int posy, int posz, const cRectangle& Rect, float scalex = 1.0, float scaley = 1.0, float scalez = 1.0);
+	void DrawSprite(const std::string &text_id, int posx, int posy, int posz, const cRectangle& Rect, float scalex = 1.0, float scaley = 1.0, float scalez = 1.0, float rotx = 0.0, float roty = 0.0);
 	void DrawRect(const cRectangle &Rectangle, D3DCOLOR color, int posz);
 	void DrawFont(const std::string &a_text_id, const std::string& a_text, int posz, const cRectangle& a_rect, D3DCOLOR a_color = 0xFFFFFFFF, DWORD a_format = DT_LEFT);
 
@@ -104,8 +104,8 @@ private:
 	class TextureRenderer : public IRender
 	{
 	public:
-		TextureRenderer(LPDIRECT3DTEXTURE9 _textureid, int _posx, int _posy, const cRectangle& _rect, float _scalex, float _scaley, float _scalez) :
-			textureid(_textureid), posx(_posx), posy(_posy), scalex(_scalex), scaley(_scaley), scalez(_scalez), rect(_rect)
+		TextureRenderer(LPDIRECT3DTEXTURE9 _textureid, int _posx, int _posy, const cRectangle& _rect, float _scalex, float _scaley, float _scalez, float _rotx, float _roty) :
+			textureid(_textureid), posx(_posx), posy(_posy), scalex(_scalex), scaley(_scaley), scalez(_scalez), rect(_rect), rotx(_rotx), roty(_roty)
 		{
 
 		}
@@ -123,11 +123,16 @@ private:
 
 
 			
-			D3DXMATRIX matrixscale, matrixtranslation,matrixtransform;
+			D3DXMATRIX matrixscale, matrixtranslation, matrixtransform, matrixrotationX, matrixrotationY;
 			
+			D3DXMatrixRotationX(&matrixrotationX, D3DXToRadian(rotx));
+			D3DXMatrixRotationY(&matrixrotationY, D3DXToRadian(roty));
 			D3DXMatrixTranslation(&matrixtranslation, (float)posx,(float) posy, 0.0);
 			D3DXMatrixScaling(&matrixscale, scalex, scaley, scalez);
-			D3DXMatrixMultiply(&matrixtransform, &matrixscale, &matrixtranslation);
+
+			D3DXMatrixMultiply(&matrixtransform, &matrixrotationY, &matrixrotationX);
+			D3DXMatrixMultiply(&matrixtransform, &matrixtransform, &matrixscale);
+			D3DXMatrixMultiply(&matrixtransform, &matrixtransform, &matrixtranslation);
 			
 			spr->SetTransform(&matrixtransform);
 			
@@ -142,6 +147,7 @@ private:
 
 		int posx, posy;
 		float scalex, scaley, scalez;
+		float roty, rotx;
 		LPDIRECT3DTEXTURE9 textureid;
 		cRectangle rect;
 	};

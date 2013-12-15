@@ -57,8 +57,12 @@ public:
 	std::size_t GetAnimationCurrentStep();
 	const cRectangle & GetAnimationCurrentStepRectangle() const;
 	void SetAnimationCurrentStep(const std::size_t &_anim_step);
+	
 	void PlayAnimation();
 	void StopAnimation();
+	void PlayAnimationNoLoop();
+	bool IsAnimationLoopFinished();
+
 	bool IsPlayingAnimation() const;
 	void ResetAnimation();
 	void UpdateAnimation();
@@ -121,6 +125,7 @@ private:
 	static bool m_debug_anim;
 	bool m_debug_mode;
 	static bool m_debug_pos;
+	bool m_anim_loop;
 
 };
 

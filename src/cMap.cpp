@@ -181,6 +181,21 @@ bool cMap::insideLimits(const cRectangle& position)
 	return inside;
 }
 
+bool cMap::insideScreen(const cRectangle& position)
+{
+	bool inside = false;
+
+	s32 row = position.y / cCell::tileHeight;
+	s32 col = position.x / cCell::tileWidth;
+
+	if (row >= m_originRow && row <= m_originRow + m_visibleRows && col >= m_originCol && col <= m_originCol + m_visibleCols)
+	{
+		inside = true;
+	}
+
+	return inside;
+}
+
 bool cMap::isWalkable(const cRectangle& position) const
 {
 	return isWalkableFor(position, m_originRow, m_originCol);
@@ -223,9 +238,6 @@ bool cMap::movePlayer(const cRectangle& position)
 
 	if (colOffset || rowOffset)
 	{
-		//destRect.x += colOffset * cCell::tileWidth;
-		//destRect.y += rowOffset * cCell::tileHeight;
-
 		if (isWalkableFor(playerRect, m_originRow + rowOffset, m_originCol + colOffset))
 		{
 			m_originCol += colOffset;

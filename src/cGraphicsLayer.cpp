@@ -202,7 +202,7 @@ void cGraphicsLayer::Render()
 	
 }
 
-void cGraphicsLayer::DrawSprite(const std::string &text_id, int posx, int posy, int posz, const cRectangle& Rect, float scalex, float scaley, float scalez)
+void cGraphicsLayer::DrawSprite(const std::string &text_id, int posx, int posy, int posz, const cRectangle& Rect, float scalex, float scaley, float scalez, float rotx, float roty)
 {
 	auto text_it = m_texturesmap.find(text_id);
 
@@ -213,7 +213,7 @@ void cGraphicsLayer::DrawSprite(const std::string &text_id, int posx, int posy, 
 		return;
 	}
 
-	TextureRenderer *ptex = new TextureRenderer(text_it->second, posx, posy, Rect, scalex, scaley,scalez);
+	TextureRenderer *ptex = new TextureRenderer(text_it->second, posx, posy, Rect, scalex, scaley,scalez, rotx, roty);
 	auto rendit = m_renderframeinfo.find(posz);
 	if (rendit == m_renderframeinfo.end())
 	{
