@@ -133,7 +133,8 @@ void cMap::update()
 
 	//#todo: dibuixar algo al voltant de tot el mapa pq no surti negre
 
-	if (playerCol == (m_originCol + m_visibleCols - 2))
+	if (playerCol == (m_originCol + m_visibleCols - 2) && (
+		player.GetCurrentOrientation() == ORIENTATION_E || player.GetCurrentOrientation() == ORIENTATION_NE || player.GetCurrentOrientation() == ORIENTATION_SE))
 	{
 		if (m_originCol + m_visibleCols < m_totalCols)
 		{
@@ -154,7 +155,8 @@ void cMap::update()
 			}
 		}
 	}
-	else if (playerCol == m_originCol)
+	else if (playerCol == m_originCol && (
+		player.GetCurrentOrientation() == ORIENTATION_O || player.GetCurrentOrientation() == ORIENTATION_NO || player.GetCurrentOrientation() == ORIENTATION_SO))
 	{
 		if (m_originCol - m_visibleCols >= 0)
 		{
@@ -175,7 +177,8 @@ void cMap::update()
 
 	if (moveOk)
 	{
-		if (playerRow == (m_originRow + m_visibleRows - 2))
+		if (playerRow == (m_originRow + m_visibleRows - 2) && (
+			player.GetCurrentOrientation() == ORIENTATION_S || player.GetCurrentOrientation() == ORIENTATION_SO || player.GetCurrentOrientation() == ORIENTATION_SE))
 		{
 			if (m_originRow + m_visibleRows < m_totalRows)
 			{
@@ -191,7 +194,8 @@ void cMap::update()
 				}
 			}
 		}
-		else if (playerRow == m_originRow)
+		else if (playerRow == m_originRow && (
+			player.GetCurrentOrientation() == ORIENTATION_N || player.GetCurrentOrientation() == ORIENTATION_NO || player.GetCurrentOrientation() == ORIENTATION_NE))
 		{
 			if (m_originRow - m_visibleRows >= 0)
 			{
@@ -584,4 +588,37 @@ void cMap::repositionEnemies(eMovementDirection direction)
 	}
 
 	enemy.SetPosition(rect.x, rect.y);
+}
+
+int* cMap::getVisibleCells()
+{
+	s32 cellCount = m_visibleRows * m_visibleCols;
+	s32* map = new s32[cellCount];
+	s32 idx = 0;
+
+	for (s32 row = m_originRow; row < m_originRow + m_visibleRows; row++)
+	{
+		for (s32 col = m_originCol; col < m_originCol + m_visibleCols; col++)
+		{
+			if (cCell* const cell = getCell(row, col))
+			{
+				if (cell->isWalkable())
+				{
+					map[idx] = 1;
+				}
+				else
+				{
+					map[idx] = 0;
+				}
+
+				idx++;
+			}
+			else
+			{
+				fatalError("bad cell pos");
+			}
+		}
+	}
+
+	return map;
 }
