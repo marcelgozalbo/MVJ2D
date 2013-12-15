@@ -1,9 +1,12 @@
 #include "cMap.h"
 #include <string>
 #include <sstream>
+#include <algorithm>
 #include "cLog.h"
 #include "Utils.h"
 #include "cGame.h"
+
+#undef max
 
 using namespace util;
 
@@ -114,9 +117,9 @@ void cMap::update()
 				enemy.SetPosition(enemyX, enemyY);
 			}
 		}
-	}
 
-	m_lastPlayerRect = playerRect;
+		m_lastPlayerRect = playerRect;
+	}
 
 	for (s32 row = m_originRow; row <= m_originRow + m_visibleRows; row++)
 	{
@@ -310,8 +313,8 @@ void cMap::loadMap(std::ifstream& file)
 
 		currentRow++;
 
-		m_totalRows = currentRow;
-		m_totalCols = currentCol;
+		m_totalRows = std::max(currentRow, m_totalRows);
+		m_totalCols = std::max(currentCol, m_totalCols);
 
 		currentCol = 0;
 	}
