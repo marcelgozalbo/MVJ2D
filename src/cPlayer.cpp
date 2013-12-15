@@ -100,6 +100,11 @@ cPlayer::~cPlayer()
 
 void cPlayer::UpdateIdle()
 {
+	PlayAnimation();
+}
+
+void cPlayer::ChangeToIdle()
+{
 	
 
 	auto orient = GetCurrentOrientation();
@@ -128,10 +133,41 @@ void cPlayer::UpdateIdle()
 	//Setejo el Frame que esta quiet i paro
 	SetAnimationOrderSteps(m_IdleStep);
 
-
+	m_state = E_IDLE;
 
 
 }
+
+void cPlayer::ChangeToAttack()
+{
+	auto orient = GetCurrentOrientation();
+	switch (orient)
+	{
+	case ORIENTATION_N:
+	case ORIENTATION_NE:
+	case ORIENTATION_NO:
+		SetAnimationRects(m_DownSword);
+		break;
+	case ORIENTATION_S:
+	case ORIENTATION_SE:
+	case ORIENTATION_SO:
+		SetAnimationRects(m_DownSword);
+		break;
+	case ORIENTATION_E:
+		SetAnimationRects(m_DownSword);
+		break;
+	case ORIENTATION_O:
+		SetAnimationRects(m_DownSword);
+		break;
+	default:
+		break;
+	}
+	m_state = E_ATTACKING;
+
+}
+
+
+
 
 void cPlayer::Update()
 {
@@ -143,27 +179,28 @@ void cPlayer::Update()
 	{
 	case E_IDLE:
 		{
-			if (input.KeyDown(DIK_W) || input.KeyDown(DIK_A) ||
-				input.KeyDown(DIK_D) || input.KeyDown(DIK_S))
-				m_state = E_MOVE;
+				   if (input.KeyDown(DIK_W) || input.KeyDown(DIK_A) ||
+					   input.KeyDown(DIK_D) || input.KeyDown(DIK_S))
+					   ChangeToMove();
 
-			if (input.KeyDown(DIK_SPACE))
-				m_state = E_ATTACKING;
+				   if (input.KeyDown(DIK_SPACE))
+					   ChangeToAttack();
 		}
 		break;
 	case E_MOVE:
 		if (input.KeyDown(DIK_W) || input.KeyDown(DIK_A) ||
 			input.KeyDown(DIK_D) || input.KeyDown(DIK_S))
-			m_state = E_MOVE;
+		{}
 		else
-			m_state = E_IDLE;
+			ChangeToIdle();
 
 		if (input.KeyDown(DIK_SPACE))
-			m_state = E_ATTACKING;
+			ChangeToAttack();
+
 		break;
 	case E_ATTACKING:
-		if (GetAnimationCurrentStep() == GetAnimationOrderStepsCount() - 1)
-			m_state = E_IDLE;
+		if (IsAnimationLoopFinished())
+			ChangeToIdle();
 		break;
 
 	}
@@ -199,39 +236,58 @@ void cPlayer::UpdateAttack()
 	GetZIndex(z);
 	cGame::Instance()->Graphics->DrawFont("arial", "DINS O", z + 1, cRectangle(x - 40, y, 0, 0));
 	}*/
-	static bool started_attacking = false;
+	
 
-	if (!started_attacking)
+	
+
+
+
+		PlayAnimationNoLoop();
+	
+	
+	
+	
+	
+	
+}
+
+void cPlayer::ChangeToMove()
+{
 	{
-		auto orient = GetCurrentOrientation();
-		switch (orient)
-		{
-		case ORIENTATION_N:
-		case ORIENTATION_NE:
-		case ORIENTATION_NO:
-			SetAnimationRects(m_DownSword);
-			break;
-		case ORIENTATION_S:
-		case ORIENTATION_SE:
-		case ORIENTATION_SO:
-			SetAnimationRects(m_DownSword);
-			break;
-		case ORIENTATION_E:
-			SetAnimationRects(m_DownSword);
-			break;
-		case ORIENTATION_O:
-			SetAnimationRects(m_DownSword);
-			break;
-		default:
-			break;
-		}
-		PlayAnimation();
-		started_attacking = true;
+		int x, y, z;
+		GetPosition(x, y);
+		GetZIndex(z);
+		cGame::Instance()->Graphics->DrawFont("arial", "MOVE", z + 1, cRectangle(x - 40, y+40, 0, 0));
 	}
+
 	
-	
-	
-	
+	auto orient = GetCurrentOrientation();
+	switch (orient)
+	{
+	case ORIENTATION_N:
+	case ORIENTATION_NE:
+	case ORIENTATION_NO:
+		SetAnimationRects(m_Up);
+		break;
+	case ORIENTATION_S:
+	case ORIENTATION_SE:
+	case ORIENTATION_SO:
+		SetAnimationRects(m_Down);
+		break;
+	case ORIENTATION_E:
+		SetAnimationRects(m_Right);
+		break;
+	case ORIENTATION_O:
+		SetAnimationRects(m_Left);
+		break;
+	default:
+		break;
+	}
+	SetAnimationOrderSteps(m_StepsOrder);
+	PlayAnimation();
+	m_state = E_MOVE;
+
+
 }
 
 void cPlayer::UpdateMovement()
@@ -246,22 +302,18 @@ void cPlayer::UpdateMovement()
 	if (input.KeyDown(DIK_D))	vecx++;
 
 	//static bool last_stop = true;
-	// Si m'haig de moure
-	static bool first_enter = true;
 	if (vecx || vecy)
 	{
 		MovePlayer(vecx, vecy);
 
-		//CAnvio l'animacio segons l'orientacio
-		if ((GetLastOrientation() != GetCurrentOrientation()) || first_enter)
+		if (GetCurrentOrientation() != GetLastOrientation())
 		{
-			/*{
+			{
 			int x, y, z;
 			GetPosition(x, y);
 			GetZIndex(z);
 			cGame::Instance()->Graphics->DrawFont("arial", "DINS O", z + 1, cRectangle(x - 40, y, 0, 0));
-			}*/
-
+			}
 			auto orient = GetCurrentOrientation();
 			switch (orient)
 			{
@@ -284,15 +336,12 @@ void cPlayer::UpdateMovement()
 			default:
 				break;
 			}
-			//Setejo l'ordre.
-			SetAnimationOrderSteps(m_StepsOrder);
-			first_enter = false;
+		//Setejo l'ordre.
+		SetAnimationOrderSteps(m_StepsOrder);
+		PlayAnimation();
 		}
+		
 
-	}
-	else
-	{
-		first_enter = true;
 	}
 
 }

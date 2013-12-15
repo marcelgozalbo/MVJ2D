@@ -20,6 +20,10 @@ public:
 	void Render() override;
 
 private:
+	void ChangeToIdle();
+	void ChangeToAttack();
+	void ChangeToMove();
+
 	void UpdateIdle();
 	void UpdateAttack();
 	void UpdateMovement();
