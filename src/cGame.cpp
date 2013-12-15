@@ -195,11 +195,11 @@ bool cGame::Render()
 		Scene->Render();
 		break;
 	case 	STATE_ENDGAMEGOOD:
-			cGame::Instance()->Graphics->DrawSprite("win", 0, 0, 100, cRectangle(0, 0, 1024, 768),0.8,0.8);
+			cGame::Instance()->Graphics->DrawSprite("win", 0, 0, 100, cRectangle(0, 0, 1024, 768),0.8f,0.8f);
 		
 		break;
 	case STATE_ENDGAMELOST:
-		cGame::Instance()->Graphics->DrawSprite("lose", 0, 0, 100, cRectangle(0, 0, 1024, 768), 0.65, 0.8);
+		cGame::Instance()->Graphics->DrawSprite("lose", 0, 0, 100, cRectangle(0, 0, 1024, 768), 0.65f, 0.8f);
 			break;
 
 	}
