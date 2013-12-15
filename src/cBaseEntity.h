@@ -47,9 +47,9 @@ public:
 	bool HasCollision(const cBaseEntity &_baseentity);
 
 	//ANIMATION
-	void SetAnimationSteps(const std::vector<cRectangle> &_rect_steps);
-	void SetAnimationStepOrder(const std::vector<u32> &_steps_order);
-	void GetAnimationSteps(std::vector<cRectangle> &_rect_steps);
+	void SetAnimationRects(const std::vector<cRectangle> &_rect_steps);
+	void SetAnimationOrderSteps(const std::vector<u32> &_steps_order);
+	void GetAnimationRects(std::vector<cRectangle> &_rect_steps);
 	void SetAnimationFramesPerStep(const std::size_t _timeperstep);
 	std::size_t GetAnimationFramesPerStep() const;
 	const std::size_t GetAnimationFramesPerStep(const std::size_t _timeperstep);
