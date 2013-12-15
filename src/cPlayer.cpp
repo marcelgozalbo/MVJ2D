@@ -17,13 +17,13 @@ cPlayer::cPlayer():
 	LoadSteps(m_DownShield,0,65,7,64,64);
 	LoadSteps(m_UpShield, 0, 130, 7, 64, 64);
 	LoadSteps(m_RightShield, 0, 195, 7, 64, 64);
-	LoadSteps(m_LeftShield, 130, 390, 7, 64, 64);
+	LoadSteps(m_LeftShield, 0, 390, 7, 64, 64);
 	
 		
 
 
 
-	SetAnimationFramesPerStep(5);
+	SetAnimationFramesPerStep(3);
 
 	EnableAnimation();
 	PlayAnimation();	
@@ -107,14 +107,21 @@ void cPlayer::SetTextureFromOrientation()
 				SetAnimationRects(m_RightSword);
 				break;
 			case ORIENTATION_O:
+			{
+
 				SetAnimationRects(m_LeftSword);
+
+				std::vector<u32> buf;
+				for (int i = GetAnimationOrderStepsCount() - 1; i >= 0; i--)
+					buf.push_back(i);
+				SetAnimationOrderSteps(buf);
+			}
 				break;
 			default:
 				break;
 			}
+			PlayAnimationNoLoop();
 			
-			//Setejo el Frame 
-			//SetAnimationOrderSteps(m_SwordSteps);
 
 		}
 			break;
@@ -244,17 +251,6 @@ void cPlayer::UpdateAttack()
 	}*/
 	
 
-	
-
-
-
-		PlayAnimationNoLoop();
-	
-	
-	
-	
-	
-	
 }
 
 void cPlayer::ChangeToMove()
@@ -292,37 +288,13 @@ void cPlayer::UpdateMovement()
 
 		if (GetCurrentOrientation() != GetLastOrientation())
 		{
+			SetTextureFromOrientation();
 			/*{
 			int x, y, z;
 			GetPosition(x, y);
 			GetZIndex(z);
 			cGame::Instance()->Graphics->DrawFont("arial", "DINS O", z + 1, cRectangle(x - 40, y, 0, 0));
-			}*/
-			auto orient = GetCurrentOrientation();
-			switch (orient)
-			{
-			case ORIENTATION_N:
-			case ORIENTATION_NE:
-			case ORIENTATION_NO:
-				SetAnimationRects(m_UpShield);
-				break;
-			case ORIENTATION_S:
-			case ORIENTATION_SE:
-			case ORIENTATION_SO:
-				SetAnimationRects(m_DownShield);
-				break;
-			case ORIENTATION_E:
-				SetAnimationRects(m_RightShield);
-				break;
-			case ORIENTATION_O:
-				SetAnimationRects(m_RightShield);
-				break;
-			default:
-				break;
-			}
-		//Setejo l'ordre.
-		SetAnimationOrderSteps(m_StepsOrder);
-		PlayAnimation();
+			*/
 		}
 		
 

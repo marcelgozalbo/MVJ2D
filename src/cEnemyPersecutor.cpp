@@ -60,7 +60,7 @@ _movement(M_DOWN)
 	_attack_down_animation.push_back(cRectangle(x8, y3, w, h));
 	_attack_down_animation.push_back(cRectangle(x9, y3, w, h));
 
-º	_death_animation.push_back(cRectangle(x0, 460, w, h));
+	_death_animation.push_back(cRectangle(x0, 460, w, h));
 	_death_animation.push_back(cRectangle(x1, 460, w, h));
 	_death_animation.push_back(cRectangle(x2, 460, w, h));
 	_death_animation.push_back(cRectangle(x3, 460, w, h));
