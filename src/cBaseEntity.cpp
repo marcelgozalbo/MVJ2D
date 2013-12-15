@@ -393,6 +393,8 @@ std::size_t cBaseEntity::GetAnimationFramesPerStep() const
 
 void cBaseEntity::RenderAnimInfoDebug()
 {
+	if (IsAnimationEnabled())
+	{
 	std::string text("AnimInfo Steps: " + util::toString(m_anim_steps_order.size()) + " | CurStep: " + util::toString(m_curr_anim_step) + " RectIndex: "+ util::toString(m_anim_steps_order[m_curr_anim_step])+"\n" 
 		+ GetAnimationCurrentStepRectangle().toString());
 	auto rec = GetCollisionRectAbsolute();
@@ -400,6 +402,7 @@ void cBaseEntity::RenderAnimInfoDebug()
 	rec.w = 0;
 	rec.h = 0;
 	cGame::Instance()->Graphics->DrawFont("arial", text, m_posz + 1, rec);
+	}
 
 }
 
