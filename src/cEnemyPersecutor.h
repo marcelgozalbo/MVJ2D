@@ -11,6 +11,7 @@ public:
 
 	void Update() override;
 	void Render() override;
+	void SetPatrol(u32 a_weight, u32 a_height);
 
 private:
 	
@@ -43,8 +44,10 @@ private:
 
 	void ComputeNextMovement();
 	void Move();
+	void RenderPatrolRectangle();
 
 	eMovement _movement;
+	cRectangle _patrol_rectangle;
 };
 
 #endif

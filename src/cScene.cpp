@@ -13,6 +13,7 @@ cScene::cScene() :
 	cy=0;
 
 	m_enemy.SetPosition(200, 200);
+	m_enemy.SetPatrol(150, 150);
 }
 
 cScene::~cScene()

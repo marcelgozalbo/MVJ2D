@@ -31,6 +31,7 @@ public:
 	CharacterOrientation GetLastOrientation() const { return m_last_orientation; };
 protected:
 	virtual bool Move(s32 xAmount, s32 yAmount) final;
+	bool PossibleMovement(s32 a_x, s32 a_y, s32& a_final_x, s32& a_final_y);
 
 	CharacterOrientation m_orientation, m_last_orientation;
 	s32 m_vStraight;
