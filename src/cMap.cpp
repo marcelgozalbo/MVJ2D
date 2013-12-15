@@ -8,9 +8,14 @@
 using namespace util;
 
 cMap::cMap() :
-	m_visibleRect(0, 0, SCREEN_RES_X, SCREEN_RES_Y)
+	m_originRow(0),
+	m_originCol(0),
+	m_visibleRows(SCREEN_RES_Y / cCell::tileHeight),
+	m_visibleCols(SCREEN_RES_X / cCell::tileWidth),
+	m_totalRows(0),
+	m_totalCols(0)
 {
-	updateMovementRect();
+
 }
 
 cMap::~cMap()
@@ -36,32 +41,104 @@ void cMap::load(const std::string& _filePath)
 
 void cMap::update()
 {
-	// #todo: solo logica de los visibles?
-	for (auto& row : m_grid)
+	if (cGame::Instance()->Input.KeyDown(DIK_O) && m_originCol + m_visibleCols < m_totalCols)
 	{
-		for (auto* cell : row)
+		m_originCol++;
+	}
+
+	if (cGame::Instance()->Input.KeyDown(DIK_I) && m_originCol > 0)
+	{
+		m_originCol--;
+	}
+
+	if (cGame::Instance()->Input.KeyDown(DIK_L) && m_originRow + m_visibleRows < m_totalRows)
+	{
+		m_originRow++;
+	}
+
+	if (cGame::Instance()->Input.KeyDown(DIK_K) && m_originRow > 0)
+	{
+		m_originRow--;
+	}
+
+	const cPlayer& player = cGame::Instance()->Scene->m_player;
+	cRectangle playerRect = player.GetCollisionRectAbsolute();
+
+	if (playerRect.x != m_lastPlayerRect.x || playerRect.y != m_lastPlayerRect.y)
+	{
+		s32 playerRow = (playerRect.y / cCell::tileHeight) + m_originRow;
+		s32 playerCol = (playerRect.x / cCell::tileWidth) + m_originCol;
+
+		cRectangle destRect = playerRect;
+		s32 colOffset = 0, rowOffset = 0;
+
+		if ((playerCol > m_originCol + (m_visibleCols / 2) + 1) && (m_originCol + m_visibleCols < m_totalCols) &&
+			(player.GetCurrentOrientation() == ORIENTATION_NE || player.GetCurrentOrientation() == ORIENTATION_SE || player.GetCurrentOrientation() == ORIENTATION_E))
 		{
-			cell->update();
+			colOffset++;
+		}
+
+		if ((playerCol < m_originCol + (m_visibleCols / 2) - 1) && (m_originCol > 0) &&
+			(player.GetCurrentOrientation() == ORIENTATION_NO || player.GetCurrentOrientation() == ORIENTATION_SO || player.GetCurrentOrientation() == ORIENTATION_O))
+		{
+			colOffset--;
+		}
+
+		if ((playerRow > m_originRow + (m_visibleRows / 2) + 1) && (m_originRow + m_visibleRows < m_totalRows) &&
+			(player.GetCurrentOrientation() == ORIENTATION_SO || player.GetCurrentOrientation() == ORIENTATION_SE || player.GetCurrentOrientation() == ORIENTATION_S))
+		{
+			rowOffset++;
+		}
+
+		if ((playerRow < m_originRow + (m_visibleRows / 2) - 1) && (m_originRow > 0) &&
+			(player.GetCurrentOrientation() == ORIENTATION_NO || player.GetCurrentOrientation() == ORIENTATION_NE || player.GetCurrentOrientation() == ORIENTATION_N))
+		{
+			rowOffset--;
+		}
+
+		if (colOffset || rowOffset)
+		{
+			destRect.x += colOffset * cCell::tileWidth;
+			destRect.y += rowOffset * cCell::tileHeight;
+
+			if (isWalkable(destRect))
+			{
+				m_originCol += colOffset;
+				m_originRow += rowOffset;
+
+				s32 enemyX, enemyY;
+				cEnemyPersecutor& enemy = cGame::Instance()->Scene->m_enemy;
+				enemy.GetPosition(enemyX, enemyY);
+				enemyX += (colOffset * cCell::tileWidth * -1);
+				enemyY += (rowOffset * cCell::tileHeight * -1);
+				enemy.SetPosition(enemyX, enemyY);
+			}
 		}
 	}
 
-	updateVisibleRect();
-	updateMovementRect();
+	m_lastPlayerRect = playerRect;
+
+	for (s32 row = m_originRow; row <= m_originRow + m_visibleRows; row++)
+	{
+		for (s32 col = m_originCol; col <= m_originCol + m_visibleCols; col++)
+		{
+			if (cCell* const cell = getCell(row, col))
+			{
+				cell->update();
+			}
+		}
+	}
 }
 
 void cMap::render()
 {
-	s32 firstRow, firstCol, lastRow, lastCol;
-
-	toCellCoord(m_visibleRect.x, m_visibleRect.y, &firstRow, &firstCol);
-	toCellCoord(m_visibleRect.x + m_visibleRect.w, m_visibleRect.y + m_visibleRect.h, &lastRow, &lastCol);
-
-	for (s32 row = firstRow; row <= lastRow; row++)
+	for (s32 row = m_originRow, y = 0; row <= m_originRow + m_visibleRows; row++, y += cCell::tileHeight)
 	{
-		for (s32 col = firstCol; col <= lastCol; col++)
+		for (s32 col = m_originCol, x = 0; col <= m_originCol + m_visibleCols; col++, x += cCell::tileWidth)
 		{
 			if (cCell* const cell = getCell(row, col))
 			{
+				cell->SetPosition(x, y);
 				cell->render();
 			}
 		}
@@ -90,10 +167,10 @@ bool cMap::isWalkable(const cRectangle& position) const
 {
 	bool walkable = true;
 
-	s32 firstRow, firstCol, lastRow, lastCol;
-
-	toCellCoord(position.x, position.y, &firstRow, &firstCol);
-	toCellCoord(position.x + position.w, position.y + position.h, &lastRow, &lastCol);
+	s32 firstRow = (position.y / cCell::tileHeight) + m_originRow;
+	s32 firstCol = (position.x / cCell::tileWidth) + m_originCol;
+	s32 lastRow = ((position.y + position.h) / cCell::tileHeight) + m_originRow;
+	s32 lastCol = ((position.x + position.w) / cCell::tileWidth) + m_originCol;
 
 	for (s32 row = firstRow; walkable && row <= lastRow; row++)
 	{
@@ -137,6 +214,7 @@ void cMap::clear()
 
 	m_grid.clear();
 	m_animations.clear();
+	m_originRow = m_originCol = m_totalRows = m_totalCols = 0;
 }
 
 void cMap::loadAnimations(std::ifstream& file)
@@ -231,6 +309,10 @@ void cMap::loadMap(std::ifstream& file)
 		}
 
 		currentRow++;
+
+		m_totalRows = currentRow;
+		m_totalCols = currentCol;
+
 		currentCol = 0;
 	}
 }
@@ -258,42 +340,3 @@ cCell* cMap::getCell(u32 row, u32 col) const
 	return cell;
 }
 
-void cMap::updateMovementRect()
-{
-	m_movementRect.SetRect(m_visibleRect.w / 4, m_visibleRect.h / 4, m_visibleRect.w / 2, m_visibleRect.h / 2);
-}
-
-void cMap::updateVisibleRect()
-{
-	cGame* game = cGame::Instance();
-	cRectangle playerRect = game->Scene->m_player.GetCollisionRectAbsolute();
-
-	if (playerRect.Intersects(m_movementRect))
-	{
-		if (!m_lastPlayerPos.isEmpty())
-		{
-			m_visibleRect.x += playerRect.x - m_lastPlayerPos.x;
-			m_visibleRect.y += playerRect.y - m_lastPlayerPos.y;
-
-			if (m_visibleRect.x < game->globals.limits.minX)
-			{
-				m_visibleRect.x = game->globals.limits.minX;
-			}
-			else if (m_visibleRect.x > game->globals.limits.maxX)
-			{
-				m_visibleRect.x = game->globals.limits.maxX;
-			}
-
-			if (m_visibleRect.y < game->globals.limits.minY)
-			{
-				m_visibleRect.y = game->globals.limits.minY;
-			}
-			else if (m_visibleRect.y > game->globals.limits.maxY)
-			{
-				m_visibleRect.y = game->globals.limits.maxY;
-			}
-		}
-	}
-
-	m_lastPlayerPos = playerRect;
-}

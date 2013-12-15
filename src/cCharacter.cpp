@@ -102,10 +102,13 @@ bool cCharacter::Move(s32 xAmount, s32 yAmount)
 
 		cGame* game = cGame::Instance();
 
-		if (game->Scene->m_map.isWalkable(destRect))
+		if (game->globals.limits.inside(x, y))
 		{
-			SetPosition(x, y);
-			moveOk = true;
+			if (game->Scene->m_map.isWalkable(destRect))
+			{
+				SetPosition(x, y);
+				moveOk = true;
+			}
 		}
 	}
 
