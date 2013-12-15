@@ -34,7 +34,7 @@ public:
 	void SetTextureSizesToTextureRect();
 	void SetTextureScale(float _scale);
 	void SetTextureScale(float _scalex, float _scaley, float _scalez);
-
+	void SetTextureRotation(const float rotx, const float roty);
 	//COLLISION
 	void SetCollisionRectRelative(const cRectangle &_rec);
 	const cRectangle& GetCollisionRectRelative() const;
@@ -103,6 +103,8 @@ private:
 	int m_posx, m_posy;
 	int m_posz;
 
+	// rotation texture
+	float m_rotx, m_roty;
 	// texture id
 	std::string m_text_id;
 	cRectangle m_rect_texture; // Rect de seleccio de sprite dins de textura
