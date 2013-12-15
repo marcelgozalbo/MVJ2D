@@ -53,7 +53,7 @@ void cScene::Render()
 	// TESTING SHIT
 	m_map.render();
 	m_player.Render();
-	//m_enemy.Render();
+	m_enemy.Render();
 
 	//m_debugFont.render();
 	//m_debugCellFont.render();
