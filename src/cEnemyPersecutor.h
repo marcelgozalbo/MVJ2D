@@ -18,6 +18,7 @@ public:
 
 	bool IsAlive(){ if (_state == DEATH) return false; else return true; };
 	void respawn();
+	
 private:
 	
 	std::vector<cRectangle> _down_animation;
@@ -75,6 +76,9 @@ private:
 	cRectangle _patrol_rectangle;
 	cPath Path;
 	u32 _attack_area;
+
+	
+	
 };
 
 #endif
