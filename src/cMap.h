@@ -23,6 +23,7 @@ public:
 	bool insideScreen(const cRectangle& position);
 	int* getVisibleCells();
 	void getLimits(s32* limitX, s32* limitY);
+	void reset();
 
 	//debug
 	std::string getCellDebugString(u32 row, u32 col);
@@ -61,7 +62,6 @@ private:
 	s32 m_visibleCols;
 	s32 m_totalRows;
 	s32 m_totalCols;
-	cRectangle m_lastPlayerRect;
 };
 
 #endif
