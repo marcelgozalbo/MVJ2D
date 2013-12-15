@@ -132,14 +132,34 @@ bool cGame::LoopProcess()
 							_state = STATE_PAUSED;
 							Sound.SetVolumeSound(_loop_sound_id, 0.1f);
 						}
+						if (Scene->IsPlayerLost())
+							_state = STATE_ENDGAMELOST;
+
+						if (Scene->IsPlayerWon())
+							_state = STATE_ENDGAMEGOOD;
+							
 						break;
 		case STATE_PAUSED:
-						if (Input.KeyUpDown(DIK_P))
+						if (Input.KeyUpDown(DIK_RETURN))
 						{
 							_state = STATE_GAME;
 							Sound.SetVolumeSound(_loop_sound_id, 1.0f);
 						}
 						break;
+		case 	STATE_ENDGAMEGOOD:
+			if (Input.KeyDown(DIK_RETURN))
+			{
+				_state = STATE_MAIN;
+			
+			}
+			break;
+		case STATE_ENDGAMELOST:
+			if (Input.KeyDown(DIK_RETURN))
+			{
+				_state = STATE_MAIN;
+				
+			}
+			break;
 	}
 
 	if (Input.KeyDown(DIK_ESCAPE))
@@ -174,6 +194,14 @@ bool cGame::Render()
 	case STATE_GAME:
 		Scene->Render();
 		break;
+	case 	STATE_ENDGAMEGOOD:
+			cGame::Instance()->Graphics->DrawSprite("win", 0, 0, 100, cRectangle(0, 0, 1024, 768),0.8,0.8);
+		
+		break;
+	case STATE_ENDGAMELOST:
+		cGame::Instance()->Graphics->DrawSprite("lose", 0, 0, 100, cRectangle(0, 0, 1024, 768), 0.65, 0.8);
+			break;
+
 	}
 	Graphics->Render();
 	return true;

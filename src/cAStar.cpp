@@ -70,7 +70,7 @@ void cAStar::LoadMap(int *map)
 	{
 		for(i=0;i<mapWidth;i++)
 		{
-			walkability[i][j]=(map[k]==0);
+			walkability[i][j]=(map[k]!=0);
 			k++;
 		}
 	}
@@ -518,7 +518,7 @@ void cAStar::ReadPath(int pathfinderID,int currentX,int currentY,
 //-----------------------------------------------------------------------------
 int cAStar::ReadPathX(int pathfinderID,int pathLocation)
 {
-	int x;
+	int x = 0;
 	if (pathLocation <= pathLength[pathfinderID])
 	{
 
@@ -542,7 +542,7 @@ int cAStar::ReadPathX(int pathfinderID,int pathLocation)
 //-----------------------------------------------------------------------------
 int cAStar::ReadPathY(int pathfinderID,int pathLocation)
 {
-	int y;
+	int y = 0;
 	if (pathLocation <= pathLength[pathfinderID])
 	{
 

@@ -2,7 +2,7 @@
 #include "cGame.h"
 
 cEnemyPersecutor::cEnemyPersecutor() :
-cCharacter("enemies", cRectangle(0, 0, 60, 59), 0, 0, 10, 3, 2, 2.0f),
+cCharacter("enemies", cRectangle(0, 0, 60, 59), 0, 0, 10, 2, 2, 2.0f),
 _state(IDLE),
 _anim_frame_to_change(24),
 _anim_curr_frame(0),
@@ -104,8 +104,7 @@ void cEnemyPersecutor::Update()
 			UpdateIdle();
 			if (frameElapsed)
 			{
-				_state = PATROL;
-				ComputeNextMovement();
+				ChangeToPatrol();
 			}
 		break;
 		case PATROL:
@@ -113,14 +112,15 @@ void cEnemyPersecutor::Update()
 			if (frameElapsed)
 				ComputeNextMovement();
 		break;
-	case RUN:
+		case RUN:
+			UpdateRun();
 		break;
-	case ACTION:
-		UpdateAction();
-		if (frameElapsed)
-			_state = IDLE;
+		case ACTION:
+			UpdateAction();
+			if (frameElapsed)
+				ChangeToIdle();
 		break;
-	case DEATH:
+		case DEATH:
 		break;
 	}
 
@@ -137,17 +137,75 @@ void cEnemyPersecutor::Render()
 
 void cEnemyPersecutor::Die()
 {
-	SetAnimationRects(_death_animation);
-	PlayAnimationNoLoop();
-	SetAnimationFramesPerStep(4);
-	_state = DEATH;
+	ChangeToDie();
 }
 
 void cEnemyPersecutor::UpdateIdle()
 {
 }
 
+void cEnemyPersecutor::ChangeToIdle()
+{
+	ResetAnimation();
+	StopAnimation();
+	_state = IDLE;
+}
+
 void cEnemyPersecutor::UpdatePatrol()
+{
+	// Comprovem si estem a l'abast de l'enemic
+	s32 posx = 0, posy = 0, posplayerx = 0, posplayery = 0;
+	GetPosition(posx, posy);
+	cGame::Instance()->Scene->m_player.GetPosition(posplayerx, posplayery);
+
+	double radi = sqrt((posplayerx - posx)*(posplayerx - posx) + (posplayery - posy)*(posplayery - posy));
+	if (radi < 100)
+	{
+		int* map = cGame::Instance()->Scene->m_map.getVisibleCells();
+		Path.Make(map, posx / cCell::tileWidth, posy / cCell::tileHeight, posplayerx / cCell::tileWidth, posplayery / cCell::tileHeight);
+		delete map;
+		ChangeToRun();
+		return;
+	}
+	
+	// Comprovem si el seguent moviment surt dels limits de la patrulla
+	s32 x = 0, y = 0;
+	switch (_movement)
+	{
+	case M_DOWN:
+		x = 0, y = 1;
+		break;
+	case M_UP:
+		x = 0, y = -1;
+		break;
+	case M_LEFT:
+		x = -1, y = 0;
+		break;
+	case M_RIGHT:
+		x = 1, y = 0;
+		break;
+	}
+	
+	s32 pposx = 0, pposy = 0;
+	cCharacter::PossibleMovement(x, y, pposx, pposy);
+	if (!_patrol_rectangle.isInside(pposx, pposy))
+	{
+		ResetAnimation();
+		StopAnimation();
+	}
+	else
+	{
+		DoMovement();
+	}
+}
+
+void cEnemyPersecutor::ChangeToPatrol()
+{
+	ComputeNextMovement();
+	_state = PATROL;
+}
+
+void cEnemyPersecutor::DoMovement()
 {
 	s32 x = 0, y = 0;
 	switch (_movement)
@@ -166,49 +224,35 @@ void cEnemyPersecutor::UpdatePatrol()
 		break;
 	}
 
-	s32 posx = 0, posy = 0;
-	GetPosition(posx, posy);
-
 	// Si m'haig de moure
 	if (x || y)
 	{
-		s32 pposx = 0, pposy = 0;
-		cCharacter::PossibleMovement(x, y, pposx, pposy);
-		if (!_patrol_rectangle.isInside(pposx, pposy))
+		bool move = cCharacter::Move(x, y);
+		if (GetLastOrientation() != GetCurrentOrientation())
 		{
-			ResetAnimation();
-			StopAnimation();
-			_state = ACTION;
-		}
-		else
-		{
-			bool move = cCharacter::Move(x, y);
-			if (GetLastOrientation() != GetCurrentOrientation())
+			auto orient = GetCurrentOrientation();
+			switch (orient)
 			{
-				auto orient = GetCurrentOrientation();
-				switch (orient)
-				{
-				case ORIENTATION_N:
-				case ORIENTATION_NE:
-				case ORIENTATION_NO:
-					SetAnimationRects(_up_animation);
-					break;
-				case ORIENTATION_S:
-				case ORIENTATION_SE:
-				case ORIENTATION_SO:
-					SetAnimationRects(_down_animation);
-					break;
-				case ORIENTATION_E:
-					SetAnimationRects(_right_animation);
-					break;
-				case ORIENTATION_O:
-					SetAnimationRects(_left_animation);
-					break;
-				default:
-					break;
-				}
-				PlayAnimation();
+			case ORIENTATION_N:
+			case ORIENTATION_NE:
+			case ORIENTATION_NO:
+				SetAnimationRects(_up_animation);
+				break;
+			case ORIENTATION_S:
+			case ORIENTATION_SE:
+			case ORIENTATION_SO:
+				SetAnimationRects(_down_animation);
+				break;
+			case ORIENTATION_E:
+				SetAnimationRects(_right_animation);
+				break;
+			case ORIENTATION_O:
+				SetAnimationRects(_left_animation);
+				break;
+			default:
+				break;
 			}
+			PlayAnimation();
 		}
 	}
 	else
@@ -220,10 +264,52 @@ void cEnemyPersecutor::UpdatePatrol()
 
 void cEnemyPersecutor::UpdateRun()
 {
+	if (!Path.IsDone())
+	{
+		s32 posx = 0, posy = 0;
+		GetPosition(posx, posy);
 
+		s32 nposx = posx, nposy = posy, cx = posx / cCell::tileWidth, cy = posy / cCell::tileHeight;
+		int mov = Path.NextStep(&nposx, &nposy, &cx, &cy);
+
+		if (mov == ARRIVE)
+		{
+			Path.Done();
+			int* map = (int *)malloc(sizeof(int)*(25 * 18));
+			ZeroMemory(map, (25 * 18)*sizeof(int));
+			Path.Make(map, posx / cCell::tileWidth, posy / cCell::tileHeight, 10, 10);
+			delete map;
+		}
+		else if (mov == CONTINUE)
+		{
+
+			int xdiff = nposx - posx;
+			int ydiff = nposy - posy;
+			eMovement NewMovement = M_NOT_MOVE;
+			if (xdiff > 0) NewMovement = M_RIGHT;
+			else if (xdiff < 0) NewMovement = M_LEFT;
+			else if (ydiff > 0) NewMovement = M_DOWN;
+			else if (ydiff < 0) NewMovement = M_UP;
+			if (NewMovement != M_NOT_MOVE)
+			{
+				_movement = NewMovement;
+				DoMovement();
+			}
+		}
+	}
+}
+
+void cEnemyPersecutor::ChangeToRun()
+{
+	_state = RUN;
 }
 
 void cEnemyPersecutor::UpdateAction()
+{
+	
+}
+
+void cEnemyPersecutor::ChangeToAction()
 {
 	auto orient = GetCurrentOrientation();
 	switch (orient)
@@ -247,7 +333,21 @@ void cEnemyPersecutor::UpdateAction()
 	default:
 		break;
 	}
-	PlayAnimation();
+	PlayAnimationNoLoop();
+
+	_state = ACTION;
+}
+
+void cEnemyPersecutor::ChangeToDie()
+{
+	SetAnimationRects(_death_animation);
+	PlayAnimationNoLoop();
+	SetAnimationFramesPerStep(4);
+	_state = DEATH;
+}
+
+void cEnemyPersecutor::UpdateDie()
+{
 }
 
 void cEnemyPersecutor::ComputeNextMovement()

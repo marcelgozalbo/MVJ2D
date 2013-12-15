@@ -5,14 +5,14 @@
 #include "cAStar.h"
 
 //Direction
-#define N		1
-#define S		2
-#define E		3
-#define O		4
-#define NE		5
-#define NO		6
-#define SE		7
-#define SO		8
+#define D_N		1
+#define D_S		2
+#define D_E		3
+#define D_O		4
+#define D_NE	5
+#define D_NO	6
+#define D_SE	7
+#define D_SO	8
 
 //Going
 #define STOP		0
@@ -39,13 +39,13 @@ public:
 	void Make(int *map,int cx,int cy,int cxdest,int cydest);	//Make new path
 	void ReMake(int *map,int cxdest,int cydest);				//Make new path overlapping previous
 	int  NextStep(int *px,int *py,int *cx,int *cy);				//Calculate next step position
-	int  NextCell();										//Calculate next cell
 
 	int  Faced();
 	bool IsDone();
 	void Done();
 
 private:
+	int  NextCell();											//Calculate next cell
 	void CalcDir(int x1,int y1,int x2,int y2);
 };
 

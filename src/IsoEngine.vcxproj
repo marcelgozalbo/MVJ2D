@@ -170,7 +170,6 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
     </ClCompile>
     <ClCompile Include="cSound.cpp" />
-    <ClCompile Include="cTrajectory.cpp" />
     <ClCompile Include="DebugUtils.cpp" />
     <ClCompile Include="Win32Main.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
@@ -198,7 +197,6 @@
     <ClInclude Include="cRectangle.h" />
     <ClInclude Include="cScene.h" />
     <ClInclude Include="cSound.h" />
-    <ClInclude Include="cTrajectory.h" />
     <ClInclude Include="DebugUtils.h" />
     <ClInclude Include="types.h" />
     <ClInclude Include="Utils.h" />

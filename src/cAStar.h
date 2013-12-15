@@ -2,8 +2,8 @@
 #ifndef __ASTAR_H__
 #define __ASTAR_H__
 
-#define mapWidth		32
-#define mapHeight		32
+#define mapWidth		25
+#define mapHeight		18
 #define numberPeople	3
 
 class cAStar  

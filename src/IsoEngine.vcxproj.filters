@@ -36,9 +36,6 @@
     <ClCompile Include="cScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cTrajectory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Win32Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -102,9 +99,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cScene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="cTrajectory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cSound.h">
