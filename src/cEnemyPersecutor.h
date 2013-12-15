@@ -12,6 +12,7 @@ public:
 	void Update() override;
 	void Render() override;
 	void SetPatrol(u32 a_weight, u32 a_height);
+	void Die();
 
 private:
 	
@@ -20,12 +21,20 @@ private:
 	std::vector<cRectangle> _right_animation;
 	std::vector<cRectangle> _left_animation;
 
+	std::vector<cRectangle> _attack_down_animation;
+	std::vector<cRectangle> _attack_up_animation;
+	std::vector<cRectangle> _attack_right_animation;
+	std::vector<cRectangle> _attack_left_animation;
+
+	std::vector<cRectangle> _death_animation;
+
 	enum eState
 	{
 		IDLE,
 		PATROL,
 		RUN,
 		ACTION,
+		DEATH,
 	};
 
 	eState _state;
@@ -45,6 +54,10 @@ private:
 	void ComputeNextMovement();
 	void Move();
 	void RenderPatrolRectangle();
+	void UpdateIdle();
+	void UpdatePatrol();
+	void UpdateRun();
+	void UpdateAction();
 
 	eMovement _movement;
 	cRectangle _patrol_rectangle;
