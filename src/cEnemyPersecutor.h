@@ -14,7 +14,7 @@ public:
 	void Render() override;
 	void SetPatrol(u32 a_weight, u32 a_height);
 	void Die();
-
+	bool IsAlive(){ if (_state == DEATH) return false; else return true; };
 private:
 	
 	std::vector<cRectangle> _down_animation;
@@ -71,6 +71,8 @@ private:
 	eMovement _movement;
 	cRectangle _patrol_rectangle;
 	cPath Path;
+
+	
 };
 
 #endif

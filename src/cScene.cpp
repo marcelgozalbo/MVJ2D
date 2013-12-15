@@ -30,6 +30,22 @@ void cScene::UpdateEnemyHit(const cRectangle &hitrect)
 
 }
 
+bool cScene::IsPlayerWon()
+{
+	if (m_player.IsAlive() && !m_enemy.IsAlive())
+		return true;
+	
+	return false;
+}
+
+bool cScene::IsPlayerLost()
+{
+	if (!m_player.IsAlive() && m_enemy.IsAlive())
+		return true;
+
+	return false;
+}
+
 void cScene::Update()
 {
 	m_player.Update();

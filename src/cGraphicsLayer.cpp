@@ -135,6 +135,18 @@ void cGraphicsLayer::LoadData()
 								0x00ff00ff, NULL, NULL, &buffer);
 	m_texturesmap["paused"] = buffer;
 
+	//Paused
+	D3DXCreateTextureFromFileEx(g_pD3DDevice, "../media/Win.jpg", 0, 0, 1, 0, D3DFMT_UNKNOWN,
+		D3DPOOL_DEFAULT, D3DX_FILTER_NONE, D3DX_FILTER_NONE,
+		0x00ff00ff, NULL, NULL, &buffer);
+	m_texturesmap["win"] = buffer;
+
+	//Paused
+	D3DXCreateTextureFromFileEx(g_pD3DDevice, "../media/lose.jpg", 0, 0, 1, 0, D3DFMT_UNKNOWN,
+		D3DPOOL_DEFAULT, D3DX_FILTER_NONE, D3DX_FILTER_NONE,
+		0x00ff00ff, NULL, NULL, &buffer);
+	m_texturesmap["lose"] = buffer;
+
 	LPD3DXFONT buffer_font = nullptr;
 
 	D3DXCreateFont(g_pD3DDevice, 16, 0, FW_BOLD, 0, FALSE,

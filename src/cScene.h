@@ -46,6 +46,9 @@ public:
 	void MoveByRadar(int x,int y);
 	bool Visible(int cellx,int celly);
 
+	bool IsPlayerWon();
+	bool IsPlayerLost();
+
 	cMap m_map;
 	cPlayer m_player;
 	cEnemyPersecutor m_enemy; // just to test: we will have more than one enemy
