@@ -76,6 +76,7 @@ private:
 	cRectangle _patrol_rectangle;
 	cPath Path;
 	u32 _attack_area;
+	cRectangle m_attack_col_rect;
 
 	
 	

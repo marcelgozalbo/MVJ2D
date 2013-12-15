@@ -148,25 +148,19 @@ bool cGame::LoopProcess()
 						}
 						break;
 		case 	STATE_ENDGAMEGOOD:
-			if (Input.KeyDown(DIK_RETURN))
-			{
-				Scene->m_player.respawn();
-				Scene->m_player.SetPosition(0, 0);
-
-				for (u32 idx = 0; idx < Scene->m_enemies.size(); idx++)
-				{
-					Scene->m_enemies[idx].respawn();
-				}
-
-				_state = STATE_MAIN;
-			
-			}
-			break;
 		case STATE_ENDGAMELOST:
 			if (Input.KeyDown(DIK_RETURN))
 			{
+				Scene->m_map.reset();
+
+				Scene->m_player.respawn();
+				Scene->m_player.SetPosition(0, 0);
+
+				Scene->m_enemies.clear();
+				Scene->LoadEnemies();
+
 				_state = STATE_MAIN;
-				
+			
 			}
 			break;
 	}

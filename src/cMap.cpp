@@ -26,6 +26,12 @@ cMap::~cMap()
 	clear();
 }
 
+void cMap::reset()
+{
+	m_originRow = 0;
+	m_originCol = 0;
+}
+
 void cMap::load(const std::string& _filePath)
 {
 	std::ifstream file;

@@ -347,34 +347,47 @@ void cEnemyPersecutor::ChangeToRun()
 
 void cEnemyPersecutor::UpdateAction()
 {
+	cGame* game = cGame::Instance();
+	cScene *sc = cGame::Instance()->Scene;
+
+	//Renderitzo el rectangle a Z+1 perque surti per sobre la textura sempre
+	int z;
+	GetZIndex(z);
+	cGame::Instance()->Graphics->DrawRect(m_attack_col_rect, 0x00FF00FF, z + 1);
+	sc->UpdatePlayerHit(m_attack_col_rect);
+	
 	// Comprovem la colisio amb el jugador per si la perdem
 	if (!HasCollision(cGame::Instance()->Scene->m_player))
 	{
 		ChangeToIdle();
 		return;
-	}
-}
+	}}
 
 void cEnemyPersecutor::ChangeToAction()
 {
 	auto orient = GetCurrentOrientation();
+	auto recEnemy = GetCollisionRectAbsolute();
 	switch (orient)
 	{
 	case ORIENTATION_N:
 	case ORIENTATION_NE:
 	case ORIENTATION_NO:
 		SetAnimationRects(_attack_up_animation);
+		m_attack_col_rect.SetRect(recEnemy.x, recEnemy.y - 30, recEnemy.w, 30);
 		break;
 	case ORIENTATION_S:
 	case ORIENTATION_SE:
 	case ORIENTATION_SO:
 		SetAnimationRects(_attack_down_animation);
+		m_attack_col_rect.SetRect(recEnemy.x, recEnemy.y + recEnemy.h, recEnemy.w, 30);
 		break;
 	case ORIENTATION_E:
 		SetAnimationRects(_attack_right_animation);
+		m_attack_col_rect.SetRect(recEnemy.x + recEnemy.w, recEnemy.y, 30, recEnemy.h);
 		break;
 	case ORIENTATION_O:
 		SetAnimationRects(_attack_left_animation);
+		m_attack_col_rect.SetRect(recEnemy.x - 30, recEnemy.y, 30, recEnemy.h);
 		break;
 	default:
 		break;

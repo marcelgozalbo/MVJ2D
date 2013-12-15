@@ -29,8 +29,8 @@ void cScene::LoadEnemies()
 	for (u32 idx = 0; idx < ENEMY_COUNT; idx++)
 	{
 		cRectangle rect;
-		rect.w = 150;
-		rect.h = 150;
+		rect.w = 300;
+		rect.h = 300;
 		do
 		{
 			rect.x = rand() % limitX;
@@ -52,6 +52,14 @@ void cScene::UpdateEnemyHit(const cRectangle &hitrect)
 
 		if (enemy.GetCollisionRectAbsolute().Intersects(hitrect))
 			enemy.Die();
+	}
+}
+
+void cScene::UpdatePlayerHit(const cRectangle &hitrect)
+{
+	if (m_player.GetCollisionRectAbsolute().Intersects(hitrect))
+	{
+		m_player.decrementLife();
 	}
 }
 

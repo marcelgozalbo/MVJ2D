@@ -59,6 +59,7 @@ public:
 
 
 	void UpdateEnemyHit(const cRectangle &hitrect);
+	void UpdatePlayerHit(const cRectangle &hitrect);
 	int cx,cy;
 
 private:

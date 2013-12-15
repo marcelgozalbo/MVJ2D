@@ -20,6 +20,7 @@ public:
 	void Render() override;
 	bool IsAlive() { if (m_life_count) return true; else return false; };
 	void respawn();
+	void decrementLife();
 private:
 	void SetTextureFromOrientation();
 	void LoadSteps(std::vector<cRectangle> &outvec, int startx, int starty, int numsteps, int ampladaframe, int alturaframe);
@@ -42,7 +43,7 @@ private:
 	
 	//Attacking
 	cRectangle m_attack_col_rect;
-
+	time_t lifeTime;
 
 	// VIDA
 	int m_life_count;

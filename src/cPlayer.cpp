@@ -35,7 +35,7 @@ cPlayer::cPlayer():
 	cRectangle r(24,24,14,16);
 	SetCollisionRectRelative(r);
 
-
+	time(&lifeTime);
 	
 }
 void cPlayer::DrawLife()
@@ -422,4 +422,17 @@ void cPlayer::MovePlayer(s32 xAmount, s32 yAmount)
 void cPlayer::respawn()
 {
 	m_life_count = 5;
+	time(&lifeTime);
+}
+
+void cPlayer::decrementLife()
+{
+	if (m_life_count > 0)
+	{
+		if (time(NULL) >= lifeTime + 1)
+		{
+			m_life_count--;
+			time(&lifeTime);
+		}
+	}
 }
