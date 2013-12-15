@@ -23,6 +23,7 @@ private:
 	void UpdateIdle();
 	void UpdateAttack();
 	void UpdateMovement();
+	void MovePlayer(s32 xAmount, s32 yAmount);
 
 	std::vector<cRectangle> m_DownSword, m_Down, m_DownShield, m_Up, m_UpShield, m_Right, m_RightShield, m_Left, m_LeftShield;
 	std::vector<u32> m_StepsOrder;

@@ -64,62 +64,62 @@ void cMap::update()
 		m_originRow--;
 	}
 
-	const cPlayer& player = cGame::Instance()->Scene->m_player;
-	cRectangle playerRect = player.GetCollisionRectAbsolute();
+	//const cPlayer& player = cGame::Instance()->Scene->m_player;
+	//cRectangle playerRect = player.GetCollisionRectAbsolute();
 
-	if (playerRect.x != m_lastPlayerRect.x || playerRect.y != m_lastPlayerRect.y)
-	{
-		s32 playerRow = (playerRect.y / cCell::tileHeight) + m_originRow;
-		s32 playerCol = (playerRect.x / cCell::tileWidth) + m_originCol;
+	//if (playerRect.x != m_lastPlayerRect.x || playerRect.y != m_lastPlayerRect.y)
+	//{
+	//	s32 playerRow = (playerRect.y / cCell::tileHeight) + m_originRow;
+	//	s32 playerCol = (playerRect.x / cCell::tileWidth) + m_originCol;
 
-		cRectangle destRect = playerRect;
-		s32 colOffset = 0, rowOffset = 0;
+	//	cRectangle destRect = playerRect;
+	//	s32 colOffset = 0, rowOffset = 0;
 
-		if ((playerCol > m_originCol + (m_visibleCols / 2) + 1) && (m_originCol + m_visibleCols < m_totalCols) &&
-			(player.GetCurrentOrientation() == ORIENTATION_NE || player.GetCurrentOrientation() == ORIENTATION_SE || player.GetCurrentOrientation() == ORIENTATION_E))
-		{
-			colOffset++;
-		}
+	//	if ((playerCol > m_originCol + (m_visibleCols / 2) + 1) && (m_originCol + m_visibleCols < m_totalCols) &&
+	//		(player.GetCurrentOrientation() == ORIENTATION_NE || player.GetCurrentOrientation() == ORIENTATION_SE || player.GetCurrentOrientation() == ORIENTATION_E))
+	//	{
+	//		colOffset++;
+	//	}
 
-		if ((playerCol < m_originCol + (m_visibleCols / 2) - 1) && (m_originCol > 0) &&
-			(player.GetCurrentOrientation() == ORIENTATION_NO || player.GetCurrentOrientation() == ORIENTATION_SO || player.GetCurrentOrientation() == ORIENTATION_O))
-		{
-			colOffset--;
-		}
+	//	if ((playerCol < m_originCol + (m_visibleCols / 2) - 1) && (m_originCol > 0) &&
+	//		(player.GetCurrentOrientation() == ORIENTATION_NO || player.GetCurrentOrientation() == ORIENTATION_SO || player.GetCurrentOrientation() == ORIENTATION_O))
+	//	{
+	//		colOffset--;
+	//	}
 
-		if ((playerRow > m_originRow + (m_visibleRows / 2) + 1) && (m_originRow + m_visibleRows < m_totalRows) &&
-			(player.GetCurrentOrientation() == ORIENTATION_SO || player.GetCurrentOrientation() == ORIENTATION_SE || player.GetCurrentOrientation() == ORIENTATION_S))
-		{
-			rowOffset++;
-		}
+	//	if ((playerRow > m_originRow + (m_visibleRows / 2) + 1) && (m_originRow + m_visibleRows < m_totalRows) &&
+	//		(player.GetCurrentOrientation() == ORIENTATION_SO || player.GetCurrentOrientation() == ORIENTATION_SE || player.GetCurrentOrientation() == ORIENTATION_S))
+	//	{
+	//		rowOffset++;
+	//	}
 
-		if ((playerRow < m_originRow + (m_visibleRows / 2) - 1) && (m_originRow > 0) &&
-			(player.GetCurrentOrientation() == ORIENTATION_NO || player.GetCurrentOrientation() == ORIENTATION_NE || player.GetCurrentOrientation() == ORIENTATION_N))
-		{
-			rowOffset--;
-		}
+	//	if ((playerRow < m_originRow + (m_visibleRows / 2) - 1) && (m_originRow > 0) &&
+	//		(player.GetCurrentOrientation() == ORIENTATION_NO || player.GetCurrentOrientation() == ORIENTATION_NE || player.GetCurrentOrientation() == ORIENTATION_N))
+	//	{
+	//		rowOffset--;
+	//	}
 
-		if (colOffset || rowOffset)
-		{
-			destRect.x += colOffset * cCell::tileWidth;
-			destRect.y += rowOffset * cCell::tileHeight;
+	//	if (colOffset || rowOffset)
+	//	{
+	//		destRect.x += colOffset * cCell::tileWidth;
+	//		destRect.y += rowOffset * cCell::tileHeight;
 
-			if (isWalkable(destRect))
-			{
-				m_originCol += colOffset;
-				m_originRow += rowOffset;
+	//		if (isWalkable(destRect))
+	//		{
+	//			m_originCol += colOffset;
+	//			m_originRow += rowOffset;
 
-				s32 enemyX, enemyY;
-				cEnemyPersecutor& enemy = cGame::Instance()->Scene->m_enemy;
-				enemy.GetPosition(enemyX, enemyY);
-				enemyX += (colOffset * cCell::tileWidth * -1);
-				enemyY += (rowOffset * cCell::tileHeight * -1);
-				enemy.SetPosition(enemyX, enemyY);
-			}
-		}
+	//			s32 enemyX, enemyY;
+	//			cEnemyPersecutor& enemy = cGame::Instance()->Scene->m_enemy;
+	//			enemy.GetPosition(enemyX, enemyY);
+	//			enemyX += (colOffset * cCell::tileWidth * -1);
+	//			enemyY += (rowOffset * cCell::tileHeight * -1);
+	//			enemy.SetPosition(enemyX, enemyY);
+	//		}
+	//	}
 
-		m_lastPlayerRect = playerRect;
-	}
+	//	m_lastPlayerRect = playerRect;
+	//}
 
 	for (s32 row = m_originRow; row <= m_originRow + m_visibleRows; row++)
 	{
@@ -166,31 +166,102 @@ void cMap::toCellCoord(s32 x, s32 y, s32* row, s32* col) const
 	*col = x / cCell::tileWidth;
 }
 
+bool cMap::insideLimits(const cRectangle& position)
+{
+	bool inside = false;
+
+	const s32 limitX = m_totalCols * cCell::tileWidth;
+	const s32 limitY = m_totalRows * cCell::tileHeight;
+
+	if (position.x >= 0 && position.x <= limitX && position.y >= 0 && position.y <= limitY)
+	{
+		inside = true;
+	}
+
+	return inside;
+}
+
 bool cMap::isWalkable(const cRectangle& position) const
 {
-	bool walkable = true;
+	return isWalkableFor(position, m_originRow, m_originCol);
+}
 
-	s32 firstRow = (position.y / cCell::tileHeight) + m_originRow;
-	s32 firstCol = (position.x / cCell::tileWidth) + m_originCol;
-	s32 lastRow = ((position.y + position.h) / cCell::tileHeight) + m_originRow;
-	s32 lastCol = ((position.x + position.w) / cCell::tileWidth) + m_originCol;
+bool cMap::movePlayer(const cRectangle& position)
+{
+	const cPlayer& player = cGame::Instance()->Scene->m_player;
+	cRectangle playerRect = player.GetCollisionRectAbsolute();	
 
-	for (s32 row = firstRow; walkable && row <= lastRow; row++)
+	s32 playerRow = (playerRect.y / cCell::tileHeight) + m_originRow;
+	s32 playerCol = (playerRect.x / cCell::tileWidth) + m_originCol;
+
+	cRectangle destRect = playerRect;
+	s32 colOffset = 0, rowOffset = 0;
+
+	if ((playerCol > m_originCol + (m_visibleCols / 2) + 1) && (m_originCol + m_visibleCols < m_totalCols) &&
+		(player.GetCurrentOrientation() == ORIENTATION_NE || player.GetCurrentOrientation() == ORIENTATION_SE || player.GetCurrentOrientation() == ORIENTATION_E))
 	{
-		for (s32 col = firstCol; walkable && col <= lastCol; col++)
+		colOffset++;
+	}
+
+	if ((playerCol < m_originCol + (m_visibleCols / 2) - 1) && (m_originCol > 0) &&
+		(player.GetCurrentOrientation() == ORIENTATION_NO || player.GetCurrentOrientation() == ORIENTATION_SO || player.GetCurrentOrientation() == ORIENTATION_O))
+	{
+		colOffset--;
+	}
+
+	if ((playerRow > m_originRow + (m_visibleRows / 2) + 1) && (m_originRow + m_visibleRows < m_totalRows) &&
+		(player.GetCurrentOrientation() == ORIENTATION_SO || player.GetCurrentOrientation() == ORIENTATION_SE || player.GetCurrentOrientation() == ORIENTATION_S))
+	{
+		rowOffset++;
+	}
+
+	if ((playerRow < m_originRow + (m_visibleRows / 2) - 1) && (m_originRow > 0) &&
+		(player.GetCurrentOrientation() == ORIENTATION_NO || player.GetCurrentOrientation() == ORIENTATION_NE || player.GetCurrentOrientation() == ORIENTATION_N))
+	{
+		rowOffset--;
+	}
+
+	if (colOffset || rowOffset)
+	{
+		//destRect.x += colOffset * cCell::tileWidth;
+		//destRect.y += rowOffset * cCell::tileHeight;
+
+		if (isWalkableFor(playerRect, m_originRow + rowOffset, m_originCol + colOffset))
 		{
-			if (cCell* const cell = getCell(row, col))
-			{
-				walkable = walkable && cell->isWalkable();
-			}
-			else
-			{
-				walkable = false;
-			}
+			m_originCol += colOffset;
+			m_originRow += rowOffset;
+
+			s32 enemyX, enemyY;
+			cEnemyPersecutor& enemy = cGame::Instance()->Scene->m_enemy;
+			enemy.GetPosition(enemyX, enemyY);
+			enemyX += (colOffset * cCell::tileWidth * -1);
+			enemyY += (rowOffset * cCell::tileHeight * -1);
+			enemy.SetPosition(enemyX, enemyY);
+
+			return false;
+		}
+	}
+	else
+	{
+		if (insideLimits(position) && isWalkable(position))
+		{
+			return true;
 		}
 	}
 
-	return walkable;
+	return false;
+}
+
+bool cMap::moveEnemy(const cRectangle& position)
+{
+	bool moveOk = false;
+
+	if (insideLimits(position) && isWalkable(position))
+	{
+		moveOk = true;
+	}
+
+	return moveOk;
 }
 
 u32 cMap::divAddRemainder(u32 dividend, u32 divisor)
@@ -343,3 +414,29 @@ cCell* cMap::getCell(u32 row, u32 col) const
 	return cell;
 }
 
+bool cMap::isWalkableFor(const cRectangle& position, s32 originRow, s32 originCol) const
+{
+	bool walkable = true;
+
+	s32 firstRow = (position.y / cCell::tileHeight) + originRow;
+	s32 firstCol = (position.x / cCell::tileWidth) + originCol;
+	s32 lastRow = ((position.y + position.h) / cCell::tileHeight) + originRow;
+	s32 lastCol = ((position.x + position.w) / cCell::tileWidth) + originCol;
+
+	for (s32 row = firstRow; walkable && row <= lastRow; row++)
+	{
+		for (s32 col = firstCol; walkable && col <= lastCol; col++)
+		{
+			if (cCell* const cell = getCell(row, col))
+			{
+				walkable = walkable && cell->isWalkable();
+			}
+			else
+			{
+				walkable = false;
+			}
+		}
+	}
+
+	return walkable;
+}

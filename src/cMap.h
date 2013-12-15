@@ -17,6 +17,9 @@ public:
 	void update();
 	void render();
 	bool isWalkable(const cRectangle& position) const;
+	bool movePlayer(const cRectangle& position);
+	bool moveEnemy(const cRectangle& position);
+	bool insideLimits(const cRectangle& position);
 
 	//debug
 	std::string getCellDebugString(u32 row, u32 col);
@@ -34,6 +37,7 @@ private:
 	void loadMap(std::ifstream& file);
 	void fatalError(const std::string& errorText);
 	cCell* getCell(u32 row, u32 col) const;
+	bool isWalkableFor(const cRectangle& position, s32 originRow, s32 originCol) const;
 
 	tGrid m_grid;
 	tAnimations m_animations;

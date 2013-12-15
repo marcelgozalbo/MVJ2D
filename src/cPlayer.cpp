@@ -250,7 +250,7 @@ void cPlayer::UpdateMovement()
 	static bool first_enter = true;
 	if (vecx || vecy)
 	{
-		Move(vecx, vecy);
+		MovePlayer(vecx, vecy);
 
 		//CAnvio l'animacio segons l'orientacio
 		if ((GetLastOrientation() != GetCurrentOrientation()) || first_enter)
@@ -301,4 +301,80 @@ void cPlayer::Render()
 {
 	cBaseEntity::Render();
 	
+}
+
+void cPlayer::MovePlayer(s32 xAmount, s32 yAmount)
+{
+	m_last_orientation = m_orientation;
+
+	if (xAmount || yAmount)
+	{
+		// Busco l'orientacio del moviment
+		if (yAmount == 0)
+		{
+			if (xAmount > 0)		m_orientation = ORIENTATION_E;
+			else if (xAmount < 0)	m_orientation = ORIENTATION_O;
+		}
+		else if (yAmount > 0)
+		{
+			if (xAmount > 0)		m_orientation = ORIENTATION_SE;
+			else if (xAmount < 0)	m_orientation = ORIENTATION_SO;
+			else				m_orientation = ORIENTATION_S;
+		}
+		else
+		{
+			if (xAmount > 0)		m_orientation = ORIENTATION_NE;
+			else if (xAmount < 0)	m_orientation = ORIENTATION_NO;
+			else				m_orientation = ORIENTATION_N;
+		}
+
+
+
+		int x, y;
+		GetPosition(x, y);
+
+		//Actualitzo el moviment segons orientacio
+		switch (m_orientation)
+		{
+		case ORIENTATION_N:
+			y -= m_vStraight;
+			break;
+		case ORIENTATION_NE:
+			y -= m_vDiagonal;
+			x += m_vDiagonal;
+			break;
+		case ORIENTATION_NO:
+			y -= m_vDiagonal;
+			x -= m_vDiagonal;
+			break;
+		case ORIENTATION_S:
+			y += m_vStraight;
+			break;
+		case ORIENTATION_SE:
+			y += m_vDiagonal;
+			x += m_vDiagonal;
+			break;
+		case ORIENTATION_SO:
+			y += m_vDiagonal;
+			x -= m_vDiagonal;
+			break;
+		case ORIENTATION_E:
+			x += m_vStraight;
+			break;
+		case ORIENTATION_O:
+			x -= m_vStraight;
+			break;
+		}
+
+		cRectangle destRect = GetCollisionRectAbsolute();
+		destRect.x = x;
+		destRect.y = y;
+
+		cGame* game = cGame::Instance();
+
+		if (game->Scene->m_map.movePlayer(destRect))
+		{
+			SetPosition(x, y);
+		}
+	}
 }
