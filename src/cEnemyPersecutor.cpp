@@ -2,7 +2,7 @@
 #include "cGame.h"
 
 cEnemyPersecutor::cEnemyPersecutor() :
-cCharacter("enemies", cRectangle(0, 0, 26, 30), 0, 0, 10, 3, 2, 3.0f),
+cCharacter("enemies", cRectangle(0, 0, 60, 59), 0, 0, 10, 3, 2, 2.0f),
 _state(IDLE),
 _anim_frame_to_change(24),
 _anim_curr_frame(0),
@@ -71,6 +71,10 @@ _movement(M_DOWN)
 	SetAnimationRects(_down_animation);
 	SetAnimationFramesPerStep(2);
 	EnableAnimation();
+
+
+	cRectangle r(24, 24, 14, 16);
+	SetCollisionRectRelative(r);
 
 	EnableDebugMode();
 }
