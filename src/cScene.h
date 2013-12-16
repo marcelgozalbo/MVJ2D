@@ -6,6 +6,7 @@
 #include "cMap.h"
 #include "cEnemyPersecutor.h"
 #include "cFont.h"
+#include "cHeart.h"
 
 //Resolution
 #define SCREEN_RES_X	800
@@ -46,6 +47,7 @@ public:
 	void MoveByRadar(int x,int y);
 	bool Visible(int cellx,int celly);
 	void LoadEnemies();
+	void LoadHearts();
 
 	bool IsPlayerWon();
 	bool IsPlayerLost();
@@ -57,6 +59,7 @@ public:
 	cFont m_enemiesAlive;
 
 	std::vector<cEnemyPersecutor> m_enemies;
+	std::list<cHeart> m_hearts;
 
 
 	void UpdateEnemyHit(const cRectangle &hitrect);

@@ -147,6 +147,7 @@
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
     </ClCompile>
+    <ClCompile Include="cHeart.cpp" />
     <ClCompile Include="cInputLayer.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -186,6 +187,7 @@
     <ClInclude Include="cFont.h" />
     <ClInclude Include="cGame.h" />
     <ClInclude Include="cGraphicsLayer.h" />
+    <ClInclude Include="cHeart.h" />
     <ClInclude Include="cInputLayer.h" />
     <ClInclude Include="cKeyboard.h" />
     <ClInclude Include="cLog.h" />
