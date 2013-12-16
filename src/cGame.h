@@ -54,6 +54,8 @@ public:
 	cGraphicsLayer *Graphics;
 	cMenu Menu;
 
+	cSound Sound;
+
 private:
 	cGame();
 	static cGame* _instance; //singleton
@@ -61,9 +63,10 @@ private:
 	bool LoopProcess();
 	bool LoopOutput();
 
-	cSound Sound;
 	eGameStates _state;
 	cSound::tSoundId _loop_sound_id;
+	cSound::tSoundId _win_sound;
+	cSound::tSoundId _lose_sound;
  
 	bool Render();
 };

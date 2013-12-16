@@ -7,6 +7,7 @@
 #include "Utils.h"
 
 #define ENEMY_COUNT 5
+#define HEART_COUNT 5
 
 cScene::cScene() :
 	m_debugFont("arial", "", 100, cRectangle(0, 0, 300, 100), 0xFFFFFFFF, cFont::ALIGN_LEFT),
@@ -41,6 +42,28 @@ void cScene::LoadEnemies()
 		m_enemies.push_back(cEnemyPersecutor());
 		m_enemies.back().SetPosition(rect.x, rect.y);
 		m_enemies.back().SetPatrol(150, 150);
+	}
+}
+
+void cScene::LoadHearts()
+{
+	m_hearts.clear();
+
+	s32 limitX, limitY;
+	m_map.getLimits(&limitX, &limitY);
+
+	for (u32 idx = 0; idx < HEART_COUNT; idx++)
+	{
+		cRectangle rect;
+		rect.w = 300;
+		rect.h = 300;
+		do
+		{
+			rect.x = rand() % limitX;
+			rect.y = rand() % limitY;
+		} while (!m_map.isWalkable(rect));
+
+		m_hearts.push_back(cHeart(rect.x, rect.y));
 	}
 }
 
@@ -113,6 +136,24 @@ void cScene::Update()
 		}
 	}
 
+	for (std::list<cHeart>::iterator it = m_hearts.begin(); it != m_hearts.end(); )
+	{
+		cHeart& heart = *it;
+		cRectangle heartRect = heart.GetCollisionRectAbsolute();
+
+		heart.Update();
+
+		if (heartRect.Intersects(m_player.GetCollisionRectAbsolute()))
+		{
+			m_player.incrementLife();
+			it = m_hearts.erase(it);
+		}
+		else
+		{
+			it++;
+		}
+	}
+
 	m_enemiesAlive.setText("enemies: " + util::toString(aliveEnemies) + "/" + util::toString(ENEMY_COUNT));
 
 	m_map.update();
@@ -148,6 +189,11 @@ void cScene::Render()
 	{
 		cEnemyPersecutor& enemy = m_enemies[idx];
 		enemy.Render();
+	}
+
+	for (std::list<cHeart>::iterator it = m_hearts.begin(); it != m_hearts.end(); it++)
+	{
+		it->Render();
 	}
 
 	m_enemiesAlive.render();

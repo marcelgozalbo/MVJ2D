@@ -92,7 +92,7 @@ void cMap::update()
 			}
 		}
 	}
-	else if (playerCol == m_originCol && (
+	else if (playerCol == m_originCol - 1 && (
 		player.GetCurrentOrientation() == ORIENTATION_O || player.GetCurrentOrientation() == ORIENTATION_NO || player.GetCurrentOrientation() == ORIENTATION_SO))
 	{
 		if (m_originCol - m_visibleCols >= 0)
@@ -141,7 +141,7 @@ void cMap::update()
 				}
 			}
 		}
-		else if (playerRow == m_originRow && (
+		else if (playerRow == m_originRow - 1 && (
 			player.GetCurrentOrientation() == ORIENTATION_N || player.GetCurrentOrientation() == ORIENTATION_NO || player.GetCurrentOrientation() == ORIENTATION_NE))
 		{
 			if (m_originRow - m_visibleRows >= 0)
@@ -163,7 +163,7 @@ void cMap::update()
 		}
 	}
 
-	repositionEnemies(direction);
+	repositionStuff(direction);
 
 	for (s32 row = m_originRow; row <= m_originRow + m_visibleRows; row++)
 	{
@@ -439,9 +439,10 @@ bool cMap::isWalkableFor(const cRectangle& position, s32 originRow, s32 originCo
 	return walkable;
 }
 
-void cMap::repositionEnemies(eMovementDirection direction)
+void cMap::repositionStuff(eMovementDirection direction)
 {
 	std::vector<cEnemyPersecutor>& enemies = cGame::Instance()->Scene->m_enemies;
+	std::list<cHeart>& hearts = cGame::Instance()->Scene->m_hearts;
 
 	for (u32 idx = 0; idx < enemies.size(); idx++)
 	{
@@ -471,6 +472,35 @@ void cMap::repositionEnemies(eMovementDirection direction)
 
 		enemy.SetPosition(enemyX, enemyY);
 		enemy.UpdatePatrolRectangle();
+	}
+
+	for (std::list<cHeart>::iterator it = hearts.begin(); it != hearts.end(); it++)
+	{
+		cHeart& heart = *it;
+
+		s32 heartX, heartY;
+		heart.GetPosition(heartX, heartY);
+
+		switch (direction)
+		{
+		case DIRECTION_EAST:
+			heartX -= m_visibleCols * cCell::tileWidth;
+			break;
+
+		case DIRECTION_WEST:
+			heartX += m_visibleCols * cCell::tileWidth;
+			break;
+
+		case DIRECTION_SOUTH:
+			heartY -= m_visibleRows * cCell::tileHeight;
+			break;
+
+		case DIRECTION_NORTH:
+			heartY += m_visibleRows * cCell::tileHeight;
+			break;
+		}
+
+		heart.SetPosition(heartX, heartY);
 	}
 }
 

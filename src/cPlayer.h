@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cCharacter.h"
+#include "cSound.h"
 
 class cPlayer: public cCharacter
 {
@@ -23,6 +24,7 @@ public:
 	bool IsAlive();
 	void respawn();
 	void decrementLife();
+	void incrementLife();
 private:
 	void SetTextureFromOrientation();
 	void LoadSteps(std::vector<cRectangle> &outvec, int startx, int starty, int numsteps, int ampladaframe, int alturaframe);
@@ -57,6 +59,9 @@ private:
 	std::vector<cRectangle> m_HitSteps;
 	std::vector<u32> m_hituporder, m_hitdownorder, m_hitrightorder, m_hitleftorder;
 	time_t hitanimtime;
+
+	cSound::tSoundId _sound_attack;
+	cSound::tSoundId _sound_hit;
 
 	//DIE ANIM
 	time_t dieanimtime;
