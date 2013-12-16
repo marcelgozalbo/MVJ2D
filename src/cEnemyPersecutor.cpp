@@ -362,6 +362,7 @@ void cEnemyPersecutor::UpdateAction()
 	// Comprovem la colisio amb el jugador per si la perdem
 	if (!HasCollision(cGame::Instance()->Scene->m_player))
 	{
+		
 		ChangeToIdle();
 		return;
 	}
@@ -420,11 +421,12 @@ void cEnemyPersecutor::ChangeToAction()
 
 	if (_sound_action == 0)
 	{
-		_sound_action = cGame::Instance()->Sound.LoadSound("../media/sword2.wav");
+		_sound_action = cGame::Instance()->Sound.LoadSound("../media/sword1.wav");
 		cGame::Instance()->Sound.SetVolumeSound(_sound_action, 1.0f);
+
 	}
 
-	cGame::Instance()->Sound.PlayGameSound(_sound_action);
+	cGame::Instance()->Sound.PlayGameSound(_sound_action,true);
 	_state = ACTION;
 }
 

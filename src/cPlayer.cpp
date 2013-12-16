@@ -8,7 +8,7 @@ cPlayer::cPlayer():
 {
 	m_StepsOrder = {5,6,5,4,1,0,1,2};
 	m_IdleStep = { 3 };
-	m_life_count = 3;
+	
 	
 	m_hituporder = { 1 };
 	m_hitdownorder = { 0 };
@@ -39,9 +39,9 @@ cPlayer::cPlayer():
 
 	EnableAnimation();
 	PlayAnimation();	
+	ChangeToIdle();
 
 	EnableDebugMode();
-	ChangeToIdle();
 
 	cRectangle r(24,24,14,16);
 	SetCollisionRectRelative(r);
@@ -53,6 +53,8 @@ cPlayer::cPlayer():
 
 	_sound_hit = cGame::Instance()->Sound.LoadSound("../media/hit.wav");
 	cGame::Instance()->Sound.SetVolumeSound(_sound_hit, 1.0f);
+
+	respawn();
 	
 }
 
@@ -532,8 +534,11 @@ void cPlayer::MovePlayer(s32 xAmount, s32 yAmount)
 
 void cPlayer::respawn()
 {
+	SetAnimationFramesPerStep(3);
+	EnableAnimation();
+	PlayAnimation();
 	ChangeToIdle();
-	m_life_count = 5;
+	m_life_count = 3;
 	time(&lifeTime);
 }
 
