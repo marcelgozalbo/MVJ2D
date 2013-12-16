@@ -16,8 +16,6 @@ cHeart::cHeart(s32 x, s32 y) :
 
 	EnableCollision();
 
-	//SetTextureSizeToCollisionRectRelative();
-
 	SetCollisionRectRelative(collRect);
 	
 
