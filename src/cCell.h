@@ -31,8 +31,8 @@ public:
 		sCellInfo(const std::string& tileSet, const tFrameVec& frames, bool w = true, unsigned int d = 0, unsigned int cz = 1) : tileSet(tileSet), frameVec(frames), walkable(w), duration(d), z(cz) { }
 	};
 
-	static const unsigned int tileWidth = 32;
-	static const unsigned int tileHeight = 32;
+	static const int tileWidth = 32;
+	static const int tileHeight = 32;
 
 	cCell(unsigned int _row, unsigned int _col, const sCellInfo& _cellInfo);
 	~cCell();

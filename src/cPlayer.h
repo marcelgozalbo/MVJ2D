@@ -10,7 +10,8 @@ public:
 	{
 		E_IDLE = 0,
 		E_MOVE,
-		E_ATTACKING
+		E_ATTACKING,
+		E_HITANIM
 
 	};
 	cPlayer();
@@ -27,10 +28,12 @@ private:
 	void ChangeToIdle();
 	void ChangeToAttack();
 	void ChangeToMove();
+	void ChangeToHitAnim();
 
 	void UpdateIdle();
 	void UpdateAttack();
 	void UpdateMovement();
+	void UpdateHitAnim();
 	void MovePlayer(s32 xAmount, s32 yAmount);
 
 	std::vector<cRectangle> m_DownShield, m_UpShield, m_RightShield, m_LeftShield;
@@ -48,4 +51,7 @@ private:
 	// VIDA
 	int m_life_count;
 	void DrawLife();
+	std::vector<cRectangle> m_HitSteps;
+	std::vector<u32> m_hituporder, m_hitdownorder, m_hitrightorder, m_hitleftorder;
+	time_t hitanimtime;
 };
