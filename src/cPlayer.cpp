@@ -6,13 +6,16 @@ cPlayer::cPlayer():
 {
 	m_StepsOrder = {5,6,5,4,1,0,1,2};
 	m_IdleStep = { 3 };
-	m_life_count = 5;
+	m_life_count = 2;
 	
 	m_hituporder = { 1 };
 	m_hitdownorder = { 0 };
 	m_hitrightorder = { 2 };
 	m_hitleftorder = { 3 };
 	LoadSteps(m_HitSteps, 0, 520, 4, 64, 64);
+
+	LoadSteps(m_DieRects, 260, 520, 3, 64, 64);
+
 
 
 	LoadSteps(m_DownSword, 0, 0, 6, 64, 64);
@@ -44,6 +47,15 @@ cPlayer::cPlayer():
 	time(&lifeTime);
 	
 }
+
+bool cPlayer::IsAlive() 
+{
+	if (m_state == E_PLAYERDIED) 
+		return false;
+	else 
+		return true;
+}
+
 void cPlayer::DrawLife()
 {
 
@@ -58,7 +70,7 @@ void cPlayer::LoadSteps(std::vector<cRectangle> &outvec, int startx, int starty,
 	int offsetquadratx = ampladaframe + 1;
 	int offsetquadraty = alturaframe + 1;
 	for (int i = 0; i < numsteps; i++)
-		outvec.push_back(cRectangle((i*offsetquadratx) + 2, starty + 2, ampladaframe - 2, alturaframe - 2));
+		outvec.push_back(cRectangle((i*offsetquadratx) + 2 + startx, starty + 2, ampladaframe - 2, alturaframe - 2));
 }
 
 
@@ -214,15 +226,29 @@ void cPlayer::SetTextureFromOrientation()
 		}
 			break;
 		
-	
+		case E_DIEANIM:
+		{
+
+			SetAnimationRects(m_DieRects);
+			SetAnimationFramesPerStep(8);
+			PlayAnimationNoLoop();
+		}
+		break;
 	}
 	
 
 
 }
+
+
+
 void cPlayer::ChangeToIdle()
 {
 	
+	SetAnimationFramesPerStep(3);
+	EnableAnimation();
+	PlayAnimation();
+
 	m_state = E_IDLE;
 	SetTextureFromOrientation();
 
@@ -244,6 +270,12 @@ void cPlayer::ChangeToHitAnim()
 }
 
 
+void cPlayer::ChangeToDieAnim()
+{
+	m_state = E_DIEANIM;
+	SetTextureFromOrientation();
+	time(&dieanimtime);
+}
 
 void cPlayer::Update()
 {
@@ -286,6 +318,16 @@ void cPlayer::Update()
 			}
 		}
 		break;
+	case E_DIEANIM:
+		if (IsAnimationLoopFinished())
+		{
+			if (time(NULL) >= dieanimtime + 3.0)
+			{
+				m_state = E_PLAYERDIED;
+			}
+		}
+			break;
+	
 	}
 
 
@@ -303,6 +345,9 @@ void cPlayer::Update()
 	case E_HITANIM:
 		UpdateHitAnim();
 		break;
+	case E_DIEANIM:
+		UpdateDieAnim();
+		break;
 
 	}
 	
@@ -312,6 +357,10 @@ void cPlayer::Update()
 	cBaseEntity::Update();
 }
 
+void cPlayer::UpdateDieAnim()
+{
+
+}
 void cPlayer::UpdateHitAnim()
 {
 
@@ -475,6 +524,7 @@ void cPlayer::MovePlayer(s32 xAmount, s32 yAmount)
 
 void cPlayer::respawn()
 {
+	ChangeToIdle();
 	m_life_count = 5;
 	time(&lifeTime);
 }
@@ -488,7 +538,10 @@ void cPlayer::decrementLife()
 
 			m_life_count--;
 			time(&lifeTime);
-			ChangeToHitAnim();
+			if (m_life_count > 0)
+				ChangeToHitAnim();
+			else
+				ChangeToDieAnim();
 		}
 	}
 }
