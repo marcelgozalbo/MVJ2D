@@ -2,7 +2,9 @@
 
 #include "cGame.h"
 cPlayer::cPlayer():
-	cCharacter("player", cRectangle(0, 0, 16, 24), 0, 0, 10,3, 2, 2.0f)
+	cCharacter("player", cRectangle(0, 0, 16, 24), 0, 0, 10,3, 2, 2.0f),
+	_sound_attack(0),
+	_sound_hit(0)
 {
 	m_StepsOrder = {5,6,5,4,1,0,1,2};
 	m_IdleStep = { 3 };
@@ -36,6 +38,12 @@ cPlayer::cPlayer():
 	SetCollisionRectRelative(r);
 
 	time(&lifeTime);
+
+	_sound_attack = cGame::Instance()->Sound.LoadSound("../media/sword1.wav");
+	cGame::Instance()->Sound.SetVolumeSound(_sound_attack, 1.0f);
+
+	_sound_hit = cGame::Instance()->Sound.LoadSound("../media/hit.wav");
+	cGame::Instance()->Sound.SetVolumeSound(_sound_hit, 1.0f);
 	
 }
 void cPlayer::DrawLife()
@@ -200,7 +208,7 @@ void cPlayer::ChangeToAttack()
 {
 	m_state = E_ATTACKING;
 	SetTextureFromOrientation();
-
+	cGame::Instance()->Sound.PlayGameSound(_sound_attack);
 }
 
 
@@ -433,6 +441,7 @@ void cPlayer::decrementLife()
 		{
 			m_life_count--;
 			time(&lifeTime);
+			cGame::Instance()->Sound.PlayGameSound(_sound_hit);
 		}
 	}
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cCharacter.h"
+#include "cSound.h"
 
 class cPlayer: public cCharacter
 {
@@ -48,4 +49,7 @@ private:
 	// VIDA
 	int m_life_count;
 	void DrawLife();
+
+	cSound::tSoundId _sound_attack;
+	cSound::tSoundId _sound_hit;
 };
