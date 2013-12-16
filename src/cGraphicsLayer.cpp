@@ -205,7 +205,7 @@ void cGraphicsLayer::UnLoadData()
 
 void cGraphicsLayer::Render()
 {
-	g_pD3DDevice->Clear(0, NULL, D3DCLEAR_TARGET , 0xFF000000, 1.0f, 0);
+	g_pD3DDevice->Clear(0, NULL, D3DCLEAR_TARGET, 0xFF489848, 1.0f, 0);
 	g_pD3DDevice->BeginScene();
 
 	//Start Rendering by Z order
