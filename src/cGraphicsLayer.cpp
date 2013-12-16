@@ -33,7 +33,7 @@ bool cGraphicsLayer::Init(HWND hWnd, bool exclusive)
 	hr = g_pD3D->CreateDevice(D3DADAPTER_DEFAULT,
 		D3DDEVTYPE_HAL,
 		hWnd, // exclusive ? hWnd : NULL,
-		D3DCREATE_SOFTWARE_VERTEXPROCESSING,
+		D3DCREATE_HARDWARE_VERTEXPROCESSING,
 		&d3dpp,
 		&g_pD3DDevice);
 	if (FAILED(hr))

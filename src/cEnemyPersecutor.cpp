@@ -2,7 +2,7 @@
 #include "cGame.h"
 
 cEnemyPersecutor::cEnemyPersecutor() :
-cCharacter("enemies", cRectangle(0, 0, 60, 59), 0, 0, 10, 2, 0, 2.0f),
+cCharacter("enemies", cRectangle(0, 0, 60, 59), 0, 0, 10, 2, 1, 2.0f),
 _state(IDLE),
 _anim_frame_to_change(12),
 _anim_curr_frame(0),
@@ -220,7 +220,7 @@ void cEnemyPersecutor::UpdatePatrol()
 	}
 	else
 	{
-		DoMovement();
+		MoveEnemy(x,y);
 	}
 }
 
@@ -231,25 +231,8 @@ void cEnemyPersecutor::ChangeToPatrol()
 	_state = PATROL;
 }
 
-void cEnemyPersecutor::DoMovement()
+void cEnemyPersecutor::MoveEnemy(const int x, const int y)
 {
-	s32 x = 0, y = 0;
-	switch (_movement)
-	{
-	case M_DOWN:
-		x = 0, y = 1;
-		break;
-	case M_UP:
-		x = 0, y = -1;
-		break;
-	case M_LEFT:
-		x = -1, y = 0;
-		break;
-	case M_RIGHT:
-		x = 1, y = 0;
-		break;
-	}
-
 	// Si m'haig de moure
 	if (x || y)
 	{
@@ -322,23 +305,14 @@ void cEnemyPersecutor::UpdateRun()
 
 			int xdiff = nposx - posx;
 			int ydiff = nposy - posy;
-			eMovement NewMovement = M_NOT_MOVE;
-			if (xdiff > 0) NewMovement = M_RIGHT;
-			else if (xdiff < 0) NewMovement = M_LEFT;
-			if (NewMovement != M_NOT_MOVE)
-			{
-				_movement = NewMovement;
-				DoMovement();
-			}
+			int x = 0, y = 0;
+
+			if (xdiff > 0) x++;
+			else if (xdiff < 0) x--;
 			
-			NewMovement = M_NOT_MOVE;
-			if (ydiff > 0) NewMovement = M_DOWN;
-			else if (ydiff < 0) NewMovement = M_UP;
-			if (NewMovement != M_NOT_MOVE)
-			{
-				_movement = NewMovement;
-				DoMovement();
-			}
+			if (ydiff > 0) y++;
+			else if (ydiff < 0) y--;
+			MoveEnemy(x,y);
 		}
 	}
 }

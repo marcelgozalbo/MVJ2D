@@ -58,7 +58,7 @@ private:
 		M_NOT_MOVE
 	};
 	
-	void DoMovement();
+	void MoveEnemy(const int x, const int y);
 	void ComputeNextMovement();
 	void Move();
 	void RenderPatrolRectangle();
