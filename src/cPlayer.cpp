@@ -4,7 +4,8 @@
 cPlayer::cPlayer():
 	cCharacter("player", cRectangle(0, 0, 16, 24), 0, 0, 10,3, 2, 2.0f),
 	_sound_attack(0),
-	_sound_hit(0)
+	_sound_hit(0),
+	_sound_death(0)
 {
 	m_StepsOrder = {5,6,5,4,1,0,1,2};
 	m_IdleStep = { 3 };
@@ -53,7 +54,9 @@ cPlayer::cPlayer():
 
 	_sound_hit = cGame::Instance()->Sound.LoadSound("../media/hit.wav");
 	cGame::Instance()->Sound.SetVolumeSound(_sound_hit, 1.0f);
-	
+
+	_sound_death = cGame::Instance()->Sound.LoadSound("../media/player_death.wav");
+	cGame::Instance()->Sound.SetVolumeSound(_sound_death, 1.0f);
 }
 
 bool cPlayer::IsAlive() 
@@ -283,6 +286,7 @@ void cPlayer::ChangeToDieAnim()
 	m_state = E_DIEANIM;
 	SetTextureFromOrientation();
 	time(&dieanimtime);
+	cGame::Instance()->Sound.PlayGameSound(_sound_death);
 }
 
 void cPlayer::Update()
