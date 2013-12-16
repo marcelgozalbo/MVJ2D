@@ -17,9 +17,10 @@ cGame* cGame::Instance()
 
 cGame::cGame() :
 	_state(STATE_MAIN),
-	_loop_sound_id(0)
+	_loop_sound_id(0),
+	_win_sound(0),
+	_lose_sound(0)
 {
-
 }
 
 cGame::~cGame()
@@ -65,6 +66,12 @@ bool cGame::Init(HWND hWnd,HINSTANCE hInst,bool exclusive)
 	Sound.PlayGameSound(_loop_sound_id, true);
 	Sound.SetVolumeSound(_loop_sound_id, 1.0);
 	Sound.PauseSound(_loop_sound_id);
+
+	_win_sound = Sound.LoadSound("../media/win.wav");
+	Sound.SetVolumeSound(_win_sound, 1.0f);
+
+	_lose_sound = Sound.LoadSound("../media/lose.mp3");
+	Sound.SetVolumeSound(_lose_sound, 1.0f);
 
 	return true;
 }
@@ -135,11 +142,16 @@ bool cGame::LoopProcess()
 							Sound.SetVolumeSound(_loop_sound_id, 0.1f);
 						}
 						if (Scene->IsPlayerLost())
+						{
+							cGame::Instance()->Sound.PlayGameSound(_lose_sound);
 							_state = STATE_ENDGAMELOST;
+						}
 
 						if (Scene->IsPlayerWon())
+						{
+							cGame::Instance()->Sound.PlayGameSound(_win_sound);
 							_state = STATE_ENDGAMEGOOD;
-							
+						}
 						break;
 		case STATE_PAUSED:
 						if (Input.KeyUpDown(DIK_RETURN))

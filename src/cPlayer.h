@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cCharacter.h"
+#include "cSound.h"
 
 class cPlayer: public cCharacter
 {
@@ -55,4 +56,7 @@ private:
 	std::vector<cRectangle> m_HitSteps;
 	std::vector<u32> m_hituporder, m_hitdownorder, m_hitrightorder, m_hitleftorder;
 	time_t hitanimtime;
+
+	cSound::tSoundId _sound_attack;
+	cSound::tSoundId _sound_hit;
 };

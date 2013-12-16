@@ -7,7 +7,9 @@ _state(IDLE),
 _anim_frame_to_change(12),
 _anim_curr_frame(0),
 _movement(M_DOWN),
-_attack_area(100)
+_attack_area(100),
+_sound_action(0),
+_sound_death(0)
 {
 	const u32 w = 60, h = 59;
 	const u32 x0 = 12, x1 = x0 + w, x2 = x1 + w, x3 = x2 + w, x4 = x3 + w, x5 = x4 + w, x6 = x5 + w, x7 = x6 + w, x8 = x7 + w, x9 = x8 + w;
@@ -362,7 +364,8 @@ void cEnemyPersecutor::UpdateAction()
 	{
 		ChangeToIdle();
 		return;
-	}}
+	}
+}
 
 void cEnemyPersecutor::ChangeToAction()
 {
@@ -415,6 +418,13 @@ void cEnemyPersecutor::ChangeToAction()
 	}
 	PlayAnimation();
 
+	if (_sound_action == 0)
+	{
+		_sound_action = cGame::Instance()->Sound.LoadSound("../media/sword2.wav");
+		cGame::Instance()->Sound.SetVolumeSound(_sound_action, 1.0f);
+	}
+
+	cGame::Instance()->Sound.PlayGameSound(_sound_action);
 	_state = ACTION;
 }
 
@@ -423,6 +433,12 @@ void cEnemyPersecutor::ChangeToDie()
 	SetAnimationRects(_death_animation);
 	PlayAnimationNoLoop();
 	SetAnimationFramesPerStep(4);
+	if (_sound_death == 0)
+	{
+		_sound_death = cGame::Instance()->Sound.LoadSound("../media/death.wav");
+		cGame::Instance()->Sound.SetVolumeSound(_sound_death, 1.0f);
+	}
+	cGame::Instance()->Sound.PlayGameSound(_sound_death);
 	_state = DEATH;
 }
 

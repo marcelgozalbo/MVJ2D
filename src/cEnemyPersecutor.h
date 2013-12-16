@@ -3,6 +3,7 @@
 
 #include "cCharacter.h"
 #include "cPath.h"
+#include "cSound.h"
 
 class cEnemyPersecutor : public cCharacter
 {
@@ -78,7 +79,8 @@ private:
 	u32 _attack_area;
 	cRectangle m_attack_col_rect;
 
-	
+	cSound::tSoundId _sound_action;
+	cSound::tSoundId _sound_death;
 	
 };
 
