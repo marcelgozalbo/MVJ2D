@@ -6,7 +6,7 @@
 #include "cGame.h"
 #include "Utils.h"
 
-#define ENEMY_COUNT 5
+#define ENEMY_COUNT 10
 #define HEART_COUNT 5
 
 cScene::cScene() :

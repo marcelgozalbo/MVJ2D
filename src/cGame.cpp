@@ -64,7 +64,7 @@ bool cGame::Init(HWND hWnd,HINSTANCE hInst,bool exclusive)
 
 	_loop_sound_id = Sound.LoadSound("../media/back_music.mp3");
 	Sound.PlayGameSound(_loop_sound_id, true);
-	Sound.SetVolumeSound(_loop_sound_id, 0.3);
+	Sound.SetVolumeSound(_loop_sound_id, 0.3f);
 	Sound.PauseSound(_loop_sound_id);
 
 	_win_sound = Sound.LoadSound("../media/win.wav");
