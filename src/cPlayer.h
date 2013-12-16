@@ -12,15 +12,16 @@ public:
 		E_IDLE = 0,
 		E_MOVE,
 		E_ATTACKING,
-		E_HITANIM
-
+		E_HITANIM,
+		E_DIEANIM,
+		E_PLAYERDIED
 	};
 	cPlayer();
 	~cPlayer();
 
 	void Update() override;
 	void Render() override;
-	bool IsAlive() { if (m_life_count) return true; else return false; };
+	bool IsAlive();
 	void respawn();
 	void decrementLife();
 	void incrementLife();
@@ -31,11 +32,13 @@ private:
 	void ChangeToAttack();
 	void ChangeToMove();
 	void ChangeToHitAnim();
+	void ChangeToDieAnim();
 
 	void UpdateIdle();
 	void UpdateAttack();
 	void UpdateMovement();
 	void UpdateHitAnim();
+	void UpdateDieAnim();
 	void MovePlayer(s32 xAmount, s32 yAmount);
 
 	std::vector<cRectangle> m_DownShield, m_UpShield, m_RightShield, m_LeftShield;
@@ -59,4 +62,9 @@ private:
 
 	cSound::tSoundId _sound_attack;
 	cSound::tSoundId _sound_hit;
+
+	//DIE ANIM
+	time_t dieanimtime;
+	std::vector<cRectangle> m_DieRects;
+	
 };
