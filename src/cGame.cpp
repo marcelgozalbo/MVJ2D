@@ -156,6 +156,7 @@ bool cGame::LoopProcess()
 
 				Scene->m_player.respawn();
 				Scene->m_player.SetPosition(0, 0);
+				Scene->m_player.reset();
 
 				Scene->m_enemies.clear();
 				Scene->LoadEnemies();

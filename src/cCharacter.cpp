@@ -20,6 +20,14 @@ cCharacter::~cCharacter()
 
 }
 
+void cCharacter::reset()
+{
+	SetPosition(0, 0);
+	m_orientation = ORIENTATION_S;
+	m_last_orientation = ORIENTATION_S;
+	ResetAnimation();
+}
+
 void cCharacter::Init(const std::string& textureId, const cRectangle& textureRect, s32 x, s32 y, s32 z, s32 vStraight, s32 vDiagonal, f32 textureScale)
 {
 	SetPosition(x, y);
