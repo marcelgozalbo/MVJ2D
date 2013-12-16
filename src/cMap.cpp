@@ -92,7 +92,7 @@ void cMap::update()
 			}
 		}
 	}
-	else if (playerCol == m_originCol && (
+	else if (playerCol == m_originCol - 1 && (
 		player.GetCurrentOrientation() == ORIENTATION_O || player.GetCurrentOrientation() == ORIENTATION_NO || player.GetCurrentOrientation() == ORIENTATION_SO))
 	{
 		if (m_originCol - m_visibleCols >= 0)
@@ -141,7 +141,7 @@ void cMap::update()
 				}
 			}
 		}
-		else if (playerRow == m_originRow && (
+		else if (playerRow == m_originRow - 1 && (
 			player.GetCurrentOrientation() == ORIENTATION_N || player.GetCurrentOrientation() == ORIENTATION_NO || player.GetCurrentOrientation() == ORIENTATION_NE))
 		{
 			if (m_originRow - m_visibleRows >= 0)
