@@ -62,6 +62,7 @@ private:
 
 	cSound::tSoundId _sound_attack;
 	cSound::tSoundId _sound_hit;
+	cSound::tSoundId _sound_death;
 
 	//DIE ANIM
 	time_t dieanimtime;
