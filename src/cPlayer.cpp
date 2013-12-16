@@ -501,3 +501,8 @@ void cPlayer::decrementLife()
 		}
 	}
 }
+
+void cPlayer::incrementLife()
+{
+	m_life_count++;
+}

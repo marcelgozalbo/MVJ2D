@@ -58,6 +58,7 @@ bool cGame::Init(HWND hWnd,HINSTANCE hInst,bool exclusive)
 	Scene = new cScene();
 	Scene->LoadMap("../media/map.txt");
 	Scene->LoadEnemies();
+	Scene->LoadHearts();
 
 	Menu.LoadData();
 
@@ -171,6 +172,8 @@ bool cGame::LoopProcess()
 
 				Scene->m_enemies.clear();
 				Scene->LoadEnemies();
+
+				Scene->LoadHearts();
 
 				_state = STATE_MAIN;
 			

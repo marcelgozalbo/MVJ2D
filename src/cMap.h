@@ -51,7 +51,7 @@ private:
 	void fatalError(const std::string& errorText);
 	cCell* getCell(u32 row, u32 col) const;
 	bool isWalkableFor(const cRectangle& position, s32 originRow, s32 originCol) const;
-	void repositionEnemies(eMovementDirection direction);
+	void repositionStuff(eMovementDirection direction);
 
 	tGrid m_grid;
 	tAnimations m_animations;

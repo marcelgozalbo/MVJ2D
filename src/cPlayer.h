@@ -23,6 +23,7 @@ public:
 	bool IsAlive() { if (m_life_count) return true; else return false; };
 	void respawn();
 	void decrementLife();
+	void incrementLife();
 private:
 	void SetTextureFromOrientation();
 	void LoadSteps(std::vector<cRectangle> &outvec, int startx, int starty, int numsteps, int ampladaframe, int alturaframe);
