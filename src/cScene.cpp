@@ -145,7 +145,9 @@ void cScene::Update()
 
 		if (heartRect.Intersects(m_player.GetCollisionRectAbsolute()))
 		{
+			heart.get();
 			m_player.incrementLife();
+
 			it = m_hearts.erase(it);
 		}
 		else

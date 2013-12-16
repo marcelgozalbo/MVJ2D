@@ -1,9 +1,9 @@
 #include "cHeart.h"
-#include "Utils.h"
-#include "cLog.h"
+#include "cGame.h"
 
 cHeart::cHeart(s32 x, s32 y) :
-	cBaseEntity()
+	cBaseEntity(),
+	_heart_sound(0)
 {
 	cRectangle textureRect(456, 1, 32, 28);
 	cRectangle collRect(0, 0, 32, 28);
@@ -23,10 +23,16 @@ cHeart::cHeart(s32 x, s32 y) :
 	EnableColDebugMode();
 	EnableDebugPosMode();
 
-	LOG("heart posx: " + util::toString(x) + " posy: " + util::toString(y));
+	_heart_sound = cGame::Instance()->Sound.LoadSound("../media/heart.wav");
+	cGame::Instance()->Sound.SetVolumeSound(_heart_sound, 1.0f);
 }
 
 cHeart::~cHeart()
 {
 
+}
+
+void cHeart::get()
+{
+	cGame::Instance()->Sound.PlayGameSound(_heart_sound);
 }
