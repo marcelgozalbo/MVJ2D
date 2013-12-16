@@ -372,11 +372,11 @@ void cEnemyPersecutor::ChangeToAction()
 	// Calculem la orientacio de l'atac segons el jugador
 	s32 posx = GetCollisionRectAbsolute().x, posy = GetCollisionRectAbsolute().y, posplayerx = cGame::Instance()->Scene->m_player.GetCollisionRectAbsolute().x, posplayery = cGame::Instance()->Scene->m_player.GetCollisionRectAbsolute().y;
 	s32 maxposx = posx + GetCollisionRectAbsolute().w, maxposy = posy + GetCollisionRectAbsolute().h, maxposplayerx = posplayerx + cGame::Instance()->Scene->m_player.GetCollisionRectAbsolute().w, maxposplayery = posplayery + cGame::Instance()->Scene->m_player.GetCollisionRectAbsolute().h;
-	if (posx >= maxposplayerx)
+	if (posx+5 >= maxposplayerx)
 	{
 		m_orientation = ORIENTATION_O;
 	}
-	else if (maxposx <= posplayerx)
+	else if (maxposx <= posplayerx+5)
 	{
 		m_orientation = ORIENTATION_E;
 	}
