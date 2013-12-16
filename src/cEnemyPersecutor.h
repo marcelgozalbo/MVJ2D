@@ -57,7 +57,7 @@ private:
 		M_NUM_MOV,
 		M_NOT_MOVE
 	};
-
+	
 	void DoMovement();
 	void ComputeNextMovement();
 	void Move();

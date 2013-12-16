@@ -9,7 +9,7 @@ cPlayer::cPlayer():
 {
 	m_StepsOrder = {5,6,5,4,1,0,1,2};
 	m_IdleStep = { 3 };
-	m_life_count = 3;
+	
 	
 	m_hituporder = { 1 };
 	m_hitdownorder = { 0 };
@@ -40,9 +40,9 @@ cPlayer::cPlayer():
 
 	EnableAnimation();
 	PlayAnimation();	
+	ChangeToIdle();
 
 	EnableDebugMode();
-	ChangeToIdle();
 
 	cRectangle r(24,24,14,16);
 	SetCollisionRectRelative(r);
@@ -57,6 +57,9 @@ cPlayer::cPlayer():
 
 	_sound_death = cGame::Instance()->Sound.LoadSound("../media/player_death.wav");
 	cGame::Instance()->Sound.SetVolumeSound(_sound_death, 1.0f);
+
+	respawn();
+	
 }
 
 bool cPlayer::IsAlive() 
@@ -278,6 +281,7 @@ void cPlayer::ChangeToHitAnim()
 	m_state = E_HITANIM;
 	SetTextureFromOrientation();
 	time(&hitanimtime);
+	cGame::Instance()->Sound.PlayGameSound(_sound_hit);
 }
 
 
@@ -286,6 +290,7 @@ void cPlayer::ChangeToDieAnim()
 	m_state = E_DIEANIM;
 	SetTextureFromOrientation();
 	time(&dieanimtime);
+	cGame::Instance()->Sound.PauseSound(_sound_hit);
 	cGame::Instance()->Sound.PlayGameSound(_sound_death);
 }
 
@@ -536,8 +541,11 @@ void cPlayer::MovePlayer(s32 xAmount, s32 yAmount)
 
 void cPlayer::respawn()
 {
+	SetAnimationFramesPerStep(3);
+	EnableAnimation();
+	PlayAnimation();
 	ChangeToIdle();
-	m_life_count = 5;
+	m_life_count = 3;
 	time(&lifeTime);
 }
 
@@ -554,7 +562,6 @@ void cPlayer::decrementLife()
 				ChangeToHitAnim();
 			else
 				ChangeToDieAnim();
-			cGame::Instance()->Sound.PlayGameSound(_sound_hit);
 		}
 	}
 }

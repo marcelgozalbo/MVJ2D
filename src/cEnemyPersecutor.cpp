@@ -354,14 +354,16 @@ void cEnemyPersecutor::UpdateAction()
 	cScene *sc = cGame::Instance()->Scene;
 
 	//Renderitzo el rectangle a Z+1 perque surti per sobre la textura sempre
-	int z;
+	/*int z;
 	GetZIndex(z);
 	cGame::Instance()->Graphics->DrawRect(m_attack_col_rect, 0x00FF00FF, z + 1);
+	*/
 	sc->UpdatePlayerHit(m_attack_col_rect);
-	
+
 	// Comprovem la colisio amb el jugador per si la perdem
 	if (!HasCollision(cGame::Instance()->Scene->m_player))
 	{
+		
 		ChangeToIdle();
 		return;
 	}
@@ -420,11 +422,12 @@ void cEnemyPersecutor::ChangeToAction()
 
 	if (_sound_action == 0)
 	{
-		_sound_action = cGame::Instance()->Sound.LoadSound("../media/sword2.wav");
+		_sound_action = cGame::Instance()->Sound.LoadSound("../media/sword1.wav");
 		cGame::Instance()->Sound.SetVolumeSound(_sound_action, 1.0f);
+
 	}
 
-	cGame::Instance()->Sound.PlayGameSound(_sound_action);
+	cGame::Instance()->Sound.PlayGameSound(_sound_action,true);
 	_state = ACTION;
 }
 
