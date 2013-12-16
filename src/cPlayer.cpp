@@ -278,6 +278,7 @@ void cPlayer::ChangeToHitAnim()
 	m_state = E_HITANIM;
 	SetTextureFromOrientation();
 	time(&hitanimtime);
+	cGame::Instance()->Sound.PlayGameSound(_sound_hit);
 }
 
 
@@ -286,6 +287,7 @@ void cPlayer::ChangeToDieAnim()
 	m_state = E_DIEANIM;
 	SetTextureFromOrientation();
 	time(&dieanimtime);
+	cGame::Instance()->Sound.PauseSound(_sound_hit);
 	cGame::Instance()->Sound.PlayGameSound(_sound_death);
 }
 
@@ -554,7 +556,6 @@ void cPlayer::decrementLife()
 				ChangeToHitAnim();
 			else
 				ChangeToDieAnim();
-			cGame::Instance()->Sound.PlayGameSound(_sound_hit);
 		}
 	}
 }
