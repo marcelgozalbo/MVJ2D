@@ -10,6 +10,12 @@ cPlayer::cPlayer():
 	m_IdleStep = { 3 };
 	m_life_count = 5;
 	
+	m_hituporder = { 1 };
+	m_hitdownorder = { 0 };
+	m_hitrightorder = { 2 };
+	m_hitleftorder = { 3 };
+	LoadSteps(m_HitSteps, 0, 520, 4, 64, 64);
+
 
 	LoadSteps(m_DownSword, 0, 0, 6, 64, 64);
 	LoadSteps(m_UpSword, 0, 325, 6, 64, 64);
@@ -187,7 +193,34 @@ void cPlayer::SetTextureFromOrientation()
 		}
 			break;
 
+		case E_HITANIM:
+		{
+			SetAnimationRects(m_HitSteps);
+			switch (orient)
+			{
 
+			case ORIENTATION_N:
+			case ORIENTATION_NE:
+			case ORIENTATION_NO:
+				SetAnimationOrderSteps(m_hituporder);
+				break;
+			case ORIENTATION_S:
+			case ORIENTATION_SE:
+			case ORIENTATION_SO:
+				SetAnimationOrderSteps(m_hitdownorder);
+				break;
+			case ORIENTATION_E:
+				SetAnimationOrderSteps(m_hitrightorder);
+				break;
+			case ORIENTATION_O:
+				SetAnimationOrderSteps(m_hitleftorder);
+				break;
+			default:
+				break;
+			}
+			
+		}
+			break;
 		
 	
 	}
@@ -211,6 +244,12 @@ void cPlayer::ChangeToAttack()
 	cGame::Instance()->Sound.PlayGameSound(_sound_attack);
 }
 
+void cPlayer::ChangeToHitAnim()
+{
+	m_state = E_HITANIM;
+	SetTextureFromOrientation();
+	time(&hitanimtime);
+}
 
 
 
@@ -247,7 +286,14 @@ void cPlayer::Update()
 		if (IsAnimationLoopFinished())
 			ChangeToIdle();
 		break;
-
+	case E_HITANIM:
+		{
+			if (time(NULL) >= hitanimtime + 0.2)
+			{
+				m_state = E_IDLE;
+			}
+		}
+		break;
 	}
 
 
@@ -262,6 +308,9 @@ void cPlayer::Update()
 	case E_ATTACKING:
 		UpdateAttack();
 		break;
+	case E_HITANIM:
+		UpdateHitAnim();
+		break;
 
 	}
 	
@@ -271,6 +320,11 @@ void cPlayer::Update()
 	cBaseEntity::Update();
 }
 
+void cPlayer::UpdateHitAnim()
+{
+
+}
+
 void cPlayer::UpdateAttack()
 {
 	
@@ -278,9 +332,9 @@ void cPlayer::UpdateAttack()
 	cScene *sc = cGame::Instance()->Scene;
 	
 	//Renderitzo el rectangle a Z+1 perque surti per sobre la textura sempre
-	int z;
-	GetZIndex(z);
-	cGame::Instance()->Graphics->DrawRect(m_attack_col_rect, 0x00FF00FF, z + 1);
+	//int z;
+	//GetZIndex(z);
+	//cGame::Instance()->Graphics->DrawRect(m_attack_col_rect, 0x00FF00FF, z + 1);
 	sc->UpdateEnemyHit(m_attack_col_rect);
 	/*{
 	int x, y, z;
@@ -437,11 +491,13 @@ void cPlayer::decrementLife()
 {
 	if (m_life_count > 0)
 	{
-		if (time(NULL) >= lifeTime + 1)
+		if (time(NULL) >= lifeTime + 1.1)
 		{
+
 			m_life_count--;
 			time(&lifeTime);
 			cGame::Instance()->Sound.PlayGameSound(_sound_hit);
+			ChangeToHitAnim();
 		}
 	}
 }
